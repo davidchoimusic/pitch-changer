@@ -362,9 +362,17 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <label className="text-base font-medium">Pitch Shift</label>
-            <span className="text-2xl font-bold text-accent">
-              {pitchShiftValue > 0 ? '+' : ''}{pitchShiftValue} semitones
-            </span>
+            <div className="text-right">
+              <span className="text-2xl font-bold text-accent block">
+                {pitchShiftValue > 0 ? '+' : ''}{pitchShiftValue} semitones
+              </span>
+              {!preserveDuration && pitchShiftValue !== 0 && (
+                <span className="text-sm text-gray-400 block mt-1">
+                  Playback: {(Math.pow(2, pitchShiftValue / 12) * 100).toFixed(1)}% speed
+                  {pitchShiftValue > 0 ? ' (faster)' : ' (slower)'}
+                </span>
+              )}
+            </div>
           </div>
           <div className="relative px-2">
             <input
