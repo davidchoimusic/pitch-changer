@@ -335,11 +335,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     const baseName = file.name.replace(/\.[^/.]+$/, '')
     let suffix = ''
     if (pitchShiftValue > 0) {
-      suffix = ' - SPED UP - pitchchanger.io'
+      suffix = ' - SPED UP - PitchChanger.io'
     } else if (pitchShiftValue < 0) {
-      suffix = ' - SLOWED - pitchchanger.io'
+      suffix = ' - SLOWED - PitchChanger.io'
     } else {
-      suffix = ' - pitchchanger.io'
+      suffix = ' - PitchChanger.io'
     }
 
     a.download = `${baseName}${suffix}.wav`
@@ -710,7 +710,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 </Button>
               </div>
               <p className="text-xs text-gray-400 text-center">
-                Thank you for supporting pitchchanger.io! 🙏
+                Thank you for supporting PitchChanger.io! 🙏
               </p>
             </div>
           )}
