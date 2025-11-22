@@ -558,8 +558,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           </div>
           <p className="text-xs text-gray-500 text-center">
             Press <kbd className="px-2 py-1 bg-gray-700 rounded text-white">Spacebar</kbd> to play/pause
-            {preserveDuration && ' • Using Tone.js (duration preserved)'}
-            {!preserveDuration && ' • Using native playback (duration changes)'}
           </p>
         </div>
 
