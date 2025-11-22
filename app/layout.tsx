@@ -44,11 +44,14 @@ export default function RootLayout({
           {/* Main Content */}
           <div className="flex-1 flex flex-col">
             <header className="border-b border-white/10 bg-bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-              <div className="container mx-auto px-4 py-4">
+              <div className="container mx-auto px-4 py-6">
                 <div className="flex items-center justify-between">
-                  <h1 className="text-xl font-semibold">
-                    pitchchanger.io
-                  </h1>
+                  <div>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">
+                      Pitch Changer Tool
+                    </h1>
+                    <p className="text-sm text-gray-400 mt-1">pitchchanger.io</p>
+                  </div>
                 </div>
               </div>
             </header>
