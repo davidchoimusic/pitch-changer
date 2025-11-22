@@ -578,7 +578,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             disabled={!audioBufferRef.current || !isReady || pitchShiftValue === 0}
             variant="download"
             className="w-full"
-            size="lg"
+            size="md"
           >
             ⬇ Download Processed Audio (WAV)
           </Button>
