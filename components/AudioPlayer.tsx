@@ -710,7 +710,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 </Button>
               </div>
               <p className="text-xs text-gray-400 text-center">
-                Thank you for supporting our sponsors! 🙏
+                Thank you for supporting pitchchanger.io! 🙏
               </p>
             </div>
           )}
