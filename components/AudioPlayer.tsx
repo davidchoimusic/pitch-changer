@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Button } from './ui/Button'
+import { pitchShift, encodeToWav } from '@/utils/audio/pitchShift'
 
 interface AudioPlayerProps {
   file: File
@@ -12,24 +13,37 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [pitchShift, setPitchShift] = useState(0)
+  const [pitchShiftValue, setPitchShiftValue] = useState(0)
   const [preserveDuration, setPreserveDuration] = useState(true)
-  const [isProcessing, setIsProcessing] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
+  const [processedBuffer, setProcessedBuffer] = useState<AudioBuffer | null>(null)
 
   const audioContextRef = useRef<AudioContext | null>(null)
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null)
   const audioBufferRef = useRef<AudioBuffer | null>(null)
+  const animationFrameRef = useRef<number | null>(null)
   const startTimeRef = useRef<number>(0)
-  const pauseTimeRef = useRef<number>(0)
+  const offsetRef = useRef<number>(0)
+  const lastCurrentTimeRef = useRef<number>(0)
 
-  // Load audio file
+  // Load audio file and simulate upload
   useEffect(() => {
     const loadAudio = async () => {
       try {
         setUploadProgress(0)
+
+        // Simulate upload progress
+        const uploadInterval = setInterval(() => {
+          setUploadProgress(prev => {
+            if (prev >= 90) {
+              clearInterval(uploadInterval)
+              return prev
+            }
+            return prev + 10
+          })
+        }, 100)
+
         const arrayBuffer = await file.arrayBuffer()
-        setUploadProgress(50)
 
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
         audioContextRef.current = audioContext
@@ -37,6 +51,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
         audioBufferRef.current = audioBuffer
         setDuration(audioBuffer.duration)
+
+        clearInterval(uploadInterval)
         setUploadProgress(100)
       } catch (error) {
         console.error('Error loading audio:', error)
@@ -45,69 +61,107 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     loadAudio()
 
     return () => {
-      if (sourceNodeRef.current) {
-        sourceNodeRef.current.stop()
+      stopPlayback()
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
       }
     }
   }, [file])
 
-  // Update current time during playback
+  // Spacebar to play/pause
   useEffect(() => {
-    if (!isPlaying) return
-
-    const interval = setInterval(() => {
-      if (audioContextRef.current && startTimeRef.current > 0) {
-        const elapsed = audioContextRef.current.currentTime - startTimeRef.current + pauseTimeRef.current
-
-        // Adjust for pitch shift if not preserving duration
-        const adjustedElapsed = preserveDuration ? elapsed : elapsed / Math.pow(2, pitchShift / 12)
-
-        setCurrentTime(adjustedElapsed)
-
-        if (adjustedElapsed >= duration) {
-          setIsPlaying(false)
-          setCurrentTime(0)
-          pauseTimeRef.current = 0
-        }
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.code === 'Space' && uploadProgress === 100) {
+        e.preventDefault()
+        handlePlayPause()
       }
-    }, 100)
+    }
 
-    return () => clearInterval(interval)
-  }, [isPlaying, duration, pitchShift, preserveDuration])
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [isPlaying, uploadProgress])
+
+  // Update current time during playback
+  const updateTime = () => {
+    if (!audioContextRef.current || !isPlaying) return
+
+    const elapsed = audioContextRef.current.currentTime - startTimeRef.current + offsetRef.current
+
+    const newTime = Math.min(elapsed, duration)
+    setCurrentTime(newTime)
+    lastCurrentTimeRef.current = newTime
+
+    if (elapsed >= duration) {
+      stopPlayback()
+      setCurrentTime(0)
+      offsetRef.current = 0
+      lastCurrentTimeRef.current = 0
+    } else {
+      animationFrameRef.current = requestAnimationFrame(updateTime)
+    }
+  }
+
+  useEffect(() => {
+    if (isPlaying) {
+      animationFrameRef.current = requestAnimationFrame(updateTime)
+    } else {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
+  }, [isPlaying, duration])
+
+  const stopPlayback = () => {
+    if (sourceNodeRef.current) {
+      try {
+        sourceNodeRef.current.stop()
+      } catch (e) {
+        // Already stopped
+      }
+      sourceNodeRef.current.disconnect()
+      sourceNodeRef.current = null
+    }
+    setIsPlaying(false)
+  }
 
   const handlePlayPause = () => {
     if (!audioBufferRef.current || !audioContextRef.current) return
 
     if (isPlaying) {
-      // Pause
-      if (sourceNodeRef.current) {
-        sourceNodeRef.current.stop()
-        sourceNodeRef.current = null
-      }
-      pauseTimeRef.current = currentTime
-      setIsPlaying(false)
+      // Pause - save current position
+      stopPlayback()
+      offsetRef.current = lastCurrentTimeRef.current
     } else {
-      // Play
+      // Play from saved position
       const source = audioContextRef.current.createBufferSource()
       source.buffer = audioBufferRef.current
 
       // Apply pitch shift (real-time)
-      const playbackRate = Math.pow(2, pitchShift / 12)
+      const playbackRate = Math.pow(2, pitchShiftValue / 12)
       source.playbackRate.value = preserveDuration ? 1 : playbackRate
 
       source.connect(audioContextRef.current.destination)
 
-      const startOffset = pauseTimeRef.current
+      const startOffset = offsetRef.current
       source.start(0, startOffset)
 
-      startTimeRef.current = audioContextRef.current.currentTime - pauseTimeRef.current
+      startTimeRef.current = audioContextRef.current.currentTime
       sourceNodeRef.current = source
       setIsPlaying(true)
 
       source.onended = () => {
-        setIsPlaying(false)
-        setCurrentTime(0)
-        pauseTimeRef.current = 0
+        if (lastCurrentTimeRef.current < duration) {
+          stopPlayback()
+          setCurrentTime(0)
+          offsetRef.current = 0
+          lastCurrentTimeRef.current = 0
+        }
       }
     }
   }
@@ -115,45 +169,80 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value)
     setCurrentTime(newTime)
-    pauseTimeRef.current = newTime
+    offsetRef.current = newTime
+    lastCurrentTimeRef.current = newTime
 
-    if (isPlaying && sourceNodeRef.current) {
-      sourceNodeRef.current.stop()
-      sourceNodeRef.current = null
+    if (isPlaying) {
+      stopPlayback()
 
+      // Restart playback at new position
       if (audioBufferRef.current && audioContextRef.current) {
         const source = audioContextRef.current.createBufferSource()
         source.buffer = audioBufferRef.current
-        const playbackRate = Math.pow(2, pitchShift / 12)
+        const playbackRate = Math.pow(2, pitchShiftValue / 12)
         source.playbackRate.value = preserveDuration ? 1 : playbackRate
         source.connect(audioContextRef.current.destination)
         source.start(0, newTime)
-        startTimeRef.current = audioContextRef.current.currentTime - newTime
+        startTimeRef.current = audioContextRef.current.currentTime
         sourceNodeRef.current = source
+        setIsPlaying(true)
+
+        source.onended = () => {
+          stopPlayback()
+          setCurrentTime(0)
+          offsetRef.current = 0
+          lastCurrentTimeRef.current = 0
+        }
       }
     }
   }
 
   const handlePitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPitch = parseInt(e.target.value)
-    setPitchShift(newPitch)
+    setPitchShiftValue(newPitch)
 
     // If playing, restart with new pitch
-    if (isPlaying && sourceNodeRef.current) {
-      sourceNodeRef.current.stop()
-      sourceNodeRef.current = null
+    if (isPlaying && audioBufferRef.current && audioContextRef.current) {
+      const currentOffset = lastCurrentTimeRef.current
 
-      if (audioBufferRef.current && audioContextRef.current) {
-        const source = audioContextRef.current.createBufferSource()
-        source.buffer = audioBufferRef.current
-        const playbackRate = Math.pow(2, newPitch / 12)
-        source.playbackRate.value = preserveDuration ? 1 : playbackRate
-        source.connect(audioContextRef.current.destination)
-        source.start(0, currentTime)
-        startTimeRef.current = audioContextRef.current.currentTime - currentTime
-        sourceNodeRef.current = source
+      stopPlayback()
+
+      const source = audioContextRef.current.createBufferSource()
+      source.buffer = audioBufferRef.current
+      const playbackRate = Math.pow(2, newPitch / 12)
+      source.playbackRate.value = preserveDuration ? 1 : playbackRate
+      source.connect(audioContextRef.current.destination)
+      source.start(0, currentOffset)
+      startTimeRef.current = audioContextRef.current.currentTime
+      offsetRef.current = currentOffset
+      sourceNodeRef.current = source
+      setIsPlaying(true)
+
+      source.onended = () => {
+        stopPlayback()
+        setCurrentTime(0)
+        offsetRef.current = 0
+        lastCurrentTimeRef.current = 0
       }
     }
+  }
+
+  const handleDownload = async () => {
+    if (!audioBufferRef.current) return
+
+    // Process audio with pitch shift
+    const processed = await pitchShift(audioBufferRef.current, {
+      semitones: pitchShiftValue,
+      mode: preserveDuration ? 'preserve-duration' : 'simple'
+    })
+
+    const blob = encodeToWav(processed)
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `pitch-shifted-${file.name.replace(/\.[^/.]+$/, '')}.wav`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   const formatTime = (seconds: number) => {
@@ -199,7 +288,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           <div className="flex items-center justify-between">
             <label className="text-base font-medium">Pitch Shift</label>
             <span className="text-xl font-semibold text-accent">
-              {pitchShift > 0 ? '+' : ''}{pitchShift} semitones
+              {pitchShiftValue > 0 ? '+' : ''}{pitchShiftValue} semitones
             </span>
           </div>
           <div className="relative">
@@ -208,7 +297,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               min="-12"
               max="12"
               step="1"
-              value={pitchShift}
+              value={pitchShiftValue}
               onChange={handlePitchChange}
               className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
                          [&::-webkit-slider-thumb]:appearance-none
@@ -257,7 +346,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           <div className="flex items-center gap-4">
             <Button
               onClick={handlePlayPause}
-              disabled={!audioBufferRef.current}
+              disabled={!audioBufferRef.current || uploadProgress < 100}
               className="w-24"
             >
               {isPlaying ? 'Pause' : 'Play'}
@@ -271,6 +360,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 step="0.1"
                 value={currentTime}
                 onChange={handleSeek}
+                disabled={uploadProgress < 100}
                 className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
                            [&::-webkit-slider-thumb]:appearance-none
                            [&::-webkit-slider-thumb]:w-4
@@ -287,6 +377,19 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               <span className="text-sm text-gray-400 w-12">{formatTime(duration)}</span>
             </div>
           </div>
+          <p className="text-xs text-gray-500 text-center">Press Spacebar to play/pause</p>
+        </div>
+
+        {/* Download Button */}
+        <div className="pt-4 border-t border-white/10">
+          <Button
+            onClick={handleDownload}
+            disabled={!audioBufferRef.current || uploadProgress < 100}
+            className="w-full"
+            size="lg"
+          >
+            Download Processed Audio (WAV)
+          </Button>
         </div>
       </div>
     </div>
