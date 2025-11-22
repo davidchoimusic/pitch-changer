@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR:** MVP completed - Next.js audio pitch-shifting app with dual-mode processing, running locally | 2025-11-22 02:54
+**TL;DR:** Fully functional pitch-shifting app with real-time Tone.js processing, dual modes, 250MB support | 2025-11-22 21:30
 
 ---
 
@@ -11,7 +11,7 @@
 - **Domain:** pitchchanger.io (owned, DNS not yet configured)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** abbaa44 (Initial commit with core features)
+- **Current Commit:** 6fee440 (Real-time pitch shifting with Tone.js, dual modes)
 - **Open PRs/Issues:** None
 - **Local Dev:** Running at http://localhost:3001
 
@@ -111,16 +111,20 @@ Provide musicians, audio engineers, and creators with a free, fast, browser-base
 ## Current State
 
 ### Working Features
-✅ File upload with drag-and-drop (MP3/WAV, max 25MB)
+✅ File upload with drag-and-drop (MP3/WAV, max 250MB)
 ✅ File validation (type, size)
-✅ Pitch shifting ±12 semitones
-✅ Two processing modes:
-  - Simple/Fast (time-coupled)
-  - Preserve Duration (granular synthesis)
-✅ Audio preview playback
+✅ Real-time pitch shifting ±12 semitones with Tone.js
+✅ Two playback modes:
+  - Preserve Duration (Tone.js): Pitch changes, length stays same
+  - Simple Mode (Native): Pitch + speed change together
+✅ Seamless mode switching while playing
+✅ Live audio preview with play/pause controls
+✅ Spacebar keyboard shortcut
+✅ Dynamic timecode (adjusts based on pitch in simple mode)
+✅ Playback speed percentage indicator
 ✅ WAV export/download
-✅ Dark minimalist UI with electric blue accent (#00D4FF)
-✅ Responsive mobile design
+✅ Modern dark blue UI with gradient play button
+✅ Responsive mobile design with ad spaces
 ✅ Client-side processing (no server costs)
 
 ### Working Flows
