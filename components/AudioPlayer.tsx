@@ -414,15 +414,15 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                          [&::-moz-range-thumb]:hover:scale-110
                          [&::-moz-range-thumb]:transition-transform"
             />
-            <div className="flex justify-between text-sm text-gray-500 mt-3 px-1">
-              <span className="font-semibold">-12</span>
-              <span>-6</span>
-              <div className="flex flex-col items-center -mt-2">
+            <div className="relative w-full mt-3 h-8">
+              <span className="absolute left-0 font-semibold text-sm text-gray-500" style={{ transform: 'translateX(-50%)' }}>-12</span>
+              <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '25%', transform: 'translateX(-50%)' }}>-6</span>
+              <div className="absolute flex flex-col items-center" style={{ left: '50%', transform: 'translateX(-50%)', top: '-0.5rem' }}>
                 <span className="text-xs text-accent font-medium mb-1">Original Key</span>
                 <span className="font-bold text-accent text-base">0</span>
               </div>
-              <span>+6</span>
-              <span className="font-semibold">+12</span>
+              <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '75%', transform: 'translateX(-50%)' }}>+6</span>
+              <span className="absolute right-0 font-semibold text-sm text-gray-500" style={{ transform: 'translateX(50%)' }}>+12</span>
             </div>
           </div>
         </div>
