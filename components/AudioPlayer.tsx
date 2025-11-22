@@ -374,7 +374,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               )}
             </div>
           </div>
-          <div className="relative px-2">
+          <div className="relative">
             <input
               type="range"
               min="-12"
@@ -414,15 +414,15 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                          [&::-moz-range-thumb]:hover:scale-110
                          [&::-moz-range-thumb]:transition-transform"
             />
-            <div className="relative w-full mt-3 h-8">
-              <span className="absolute left-0 font-semibold text-sm text-gray-500" style={{ transform: 'translateX(-50%)' }}>-12</span>
+            <div className="relative w-full mt-3 h-8" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+              <span className="absolute left-0 font-semibold text-sm text-gray-500">-12</span>
               <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '25%', transform: 'translateX(-50%)' }}>-6</span>
               <div className="absolute flex flex-col items-center" style={{ left: '50%', transform: 'translateX(-50%)', top: '-0.5rem' }}>
                 <span className="text-xs text-accent font-medium mb-1">Original Key</span>
                 <span className="font-bold text-accent text-base">0</span>
               </div>
               <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '75%', transform: 'translateX(-50%)' }}>+6</span>
-              <span className="absolute right-0 font-semibold text-sm text-gray-500" style={{ transform: 'translateX(50%)' }}>+12</span>
+              <span className="absolute right-0 font-semibold text-sm text-gray-500" style={{ transform: 'translateX(0)' }}>+12</span>
             </div>
           </div>
         </div>
