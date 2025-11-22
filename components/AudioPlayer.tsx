@@ -18,6 +18,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [preserveDuration, setPreserveDuration] = useState(true)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [isReady, setIsReady] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [processProgress, setProcessProgress] = useState(0)
+  const [processedBlob, setProcessedBlob] = useState<Blob | null>(null)
 
   const tonePlayerRef = useRef<Tone.Player | null>(null)
   const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
@@ -28,6 +31,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const startTimeRef = useRef<number>(0)
   const offsetRef = useRef<number>(0)
   const lastCurrentTimeRef = useRef<number>(0)
+  const downloadSectionRef = useRef<HTMLDivElement | null>(null)
 
   // Load audio file
   useEffect(() => {
@@ -195,15 +199,12 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     if (isPlaying) {
       stopPlayback()
       if (preserveDuration) {
-        // Save position for Tone.js
         offsetRef.current = currentTime
       } else {
-        // Save position for native
         offsetRef.current = lastCurrentTimeRef.current
       }
     } else {
       if (preserveDuration) {
-        // Use Tone.js for preserved duration
         if (!tonePlayerRef.current) return
 
         if (pitchShiftRef.current) {
@@ -217,7 +218,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         }
         setIsPlaying(true)
       } else {
-        // Use native Web Audio for simple mode (pitch + duration change)
         if (!audioBufferRef.current || !audioContextRef.current) return
 
         const source = audioContextRef.current.createBufferSource()
@@ -252,7 +252,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     if (isPlaying) {
       stopPlayback()
 
-      // Restart at new position
       if (preserveDuration && tonePlayerRef.current) {
         tonePlayerRef.current.start(undefined, newTime)
         setIsPlaying(true)
@@ -278,7 +277,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       pitchShiftRef.current.pitch = newPitch
     }
 
-    // If playing in simple mode, restart with new pitch
     if (isPlaying && !preserveDuration && audioBufferRef.current && audioContextRef.current) {
       const currentOffset = lastCurrentTimeRef.current
 
@@ -297,17 +295,47 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
   }
 
-  const handleDownload = async () => {
+  const handleStartProcessing = async () => {
     if (!audioBufferRef.current) return
 
-    // Process audio with pitch shift
-    const processed = await pitchShift(audioBufferRef.current, {
-      semitones: pitchShiftValue,
-      mode: preserveDuration ? 'preserve-duration' : 'simple'
-    })
+    setIsProcessing(true)
+    setProcessProgress(0)
+    setProcessedBlob(null)
 
-    const blob = encodeToWav(processed)
-    const url = URL.createObjectURL(blob)
+    // Scroll to show message about ads
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+
+    try {
+      // Process audio with pitch shift
+      const processed = await pitchShift(audioBufferRef.current, {
+        semitones: pitchShiftValue,
+        mode: preserveDuration ? 'preserve-duration' : 'simple',
+        onProgress: (progress) => setProcessProgress(progress)
+      })
+
+      const blob = encodeToWav(processed)
+      setProcessedBlob(blob)
+      setProcessProgress(100)
+
+      // Scroll to download section
+      setTimeout(() => {
+        downloadSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 500)
+    } catch (error) {
+      console.error('Error processing audio:', error)
+      setIsProcessing(false)
+    }
+  }
+
+  const handleCancelProcessing = () => {
+    setIsProcessing(false)
+    setProcessProgress(0)
+  }
+
+  const handleFinalDownload = () => {
+    if (!processedBlob) return
+
+    const url = URL.createObjectURL(processedBlob)
     const a = document.createElement('a')
     a.href = url
     a.download = `pitch-shifted-${file.name.replace(/\.[^/.]+$/, '')}.wav`
@@ -321,7 +349,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
-  // Calculate adjusted duration based on pitch shift (when preserve duration is off)
   const getAdjustedDuration = () => {
     if (preserveDuration || pitchShiftValue === 0) {
       return duration
@@ -427,8 +454,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                          [&::-moz-range-thumb]:transition-transform"
             />
 
-            {/* Clean label layout */}
-            <div className="flex items-end justify-between text-sm text-gray-500 px-2">
+            <div className="flex justify-between text-sm text-gray-500 px-2">
               <span className="font-semibold">-12</span>
               <span className="font-semibold">-6</span>
               <div className="flex flex-col items-center">
@@ -453,26 +479,21 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 const wasPlaying = isPlaying
                 const currentPosition = currentTime
 
-                // Stop current playback
                 stopPlayback()
                 offsetRef.current = currentPosition
 
-                // Switch mode
                 setPreserveDuration(newValue)
 
-                // Resume playback in new mode if it was playing
                 if (wasPlaying) {
                   await Tone.start()
 
                   if (newValue) {
-                    // Switch to Tone.js
                     if (tonePlayerRef.current && pitchShiftRef.current) {
                       pitchShiftRef.current.pitch = pitchShiftValue
                       tonePlayerRef.current.start(undefined, currentPosition)
                       setIsPlaying(true)
                     }
                   } else {
-                    // Switch to native
                     if (audioBufferRef.current && audioContextRef.current) {
                       const source = audioContextRef.current.createBufferSource()
                       source.buffer = audioBufferRef.current
@@ -571,22 +592,99 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           </p>
         </div>
 
-        {/* Download Button */}
+        {/* Process Button / Progress */}
         <div className="pt-4 border-t border-white/10">
-          <Button
-            onClick={handleDownload}
-            disabled={!audioBufferRef.current || !isReady || pitchShiftValue === 0}
-            variant="download"
-            className="w-full"
-            size="md"
-          >
-            ⬇ Download Processed Audio (WAV)
-          </Button>
-          {pitchShiftValue === 0 && (
+          {!isProcessing && !processedBlob ? (
+            <Button
+              onClick={handleStartProcessing}
+              disabled={!audioBufferRef.current || !isReady || pitchShiftValue === 0}
+              variant="download"
+              className="w-full"
+              size="md"
+            >
+              ⬇ Process & Download Audio (WAV)
+            </Button>
+          ) : isProcessing ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-white font-medium">Processing your audio...</span>
+                    <span className="text-accent font-semibold">{processProgress.toFixed(0)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-3">
+                    <div
+                      className="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full transition-all duration-300"
+                      style={{ width: `${processProgress}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="text-center space-y-2">
+                <p className="text-sm text-gray-400">
+                  ⏳ While you wait, scroll down to view our sponsors!
+                </p>
+                <p className="text-xs text-gray-500">
+                  Their support keeps this tool free for you
+                </p>
+                <Button
+                  onClick={handleCancelProcessing}
+                  variant="ghost"
+                  size="sm"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          ) : null}
+
+          {pitchShiftValue === 0 && !isProcessing && (
             <p className="text-xs text-gray-500 text-center mt-2">Adjust pitch to enable download</p>
           )}
         </div>
       </div>
+
+      {/* Ad Space 1 */}
+      {isProcessing && (
+        <>
+          <div className="bg-bg-card border border-white/10 rounded-lg p-8">
+            <div className="h-64 bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
+              <p className="text-gray-500">Ad Space - Sponsor 1 (728x250)</p>
+            </div>
+          </div>
+
+          {/* Ad Space 2 */}
+          <div className="bg-bg-card border border-white/10 rounded-lg p-8">
+            <div className="h-64 bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
+              <p className="text-gray-500">Ad Space - Sponsor 2 (728x250)</p>
+            </div>
+          </div>
+
+          {/* Download Ready Section */}
+          {processedBlob && (
+            <div ref={downloadSectionRef} className="bg-green-500/10 border-2 border-green-500/50 rounded-lg p-8 space-y-4">
+              <div className="text-center space-y-3">
+                <div className="text-5xl">✅</div>
+                <h3 className="text-2xl font-bold text-green-400">Your Audio is Ready!</h3>
+                <p className="text-gray-300">
+                  Pitch shifted by <span className="text-accent font-semibold">{pitchShiftValue > 0 ? '+' : ''}{pitchShiftValue} semitones</span>
+                </p>
+              </div>
+              <Button
+                onClick={handleFinalDownload}
+                variant="download"
+                className="w-full"
+                size="lg"
+              >
+                ⬇ Download Your Processed Audio
+              </Button>
+              <p className="text-xs text-gray-400 text-center">
+                Thank you for supporting our sponsors! 🙏
+              </p>
+            </div>
+          )}
+        </>
+      )}
     </div>
   )
 }
