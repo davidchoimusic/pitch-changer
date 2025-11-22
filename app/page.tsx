@@ -12,11 +12,11 @@ export default function Home() {
       {!selectedFile ? (
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Hero Section */}
-          <div className="text-center space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+          <div className="text-center space-y-4">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
               Change the Pitch of Your<br />Song or Audio
             </h1>
-            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
               Free, instant pitch shifting in your browser. Upload your audio and adjust pitch in real-time with our simple tool.
             </p>
           </div>
