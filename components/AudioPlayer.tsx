@@ -374,18 +374,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               )}
             </div>
           </div>
-          <div className="relative px-4">
-            {/* Tick marks - positioned absolutely to match slider thumb positions */}
-            <div className="absolute w-full top-0 left-0 right-0 px-4 pointer-events-none" style={{ marginTop: '-4px' }}>
-              <div className="relative w-full">
-                <div className="absolute w-0.5 h-2 bg-gray-600" style={{ left: '0%' }}></div>
-                <div className="absolute w-0.5 h-2 bg-gray-600" style={{ left: '25%', transform: 'translateX(-50%)' }}></div>
-                <div className="absolute w-0.5 h-2 bg-accent" style={{ left: '50%', transform: 'translateX(-50%)' }}></div>
-                <div className="absolute w-0.5 h-2 bg-gray-600" style={{ left: '75%', transform: 'translateX(-50%)' }}></div>
-                <div className="absolute w-0.5 h-2 bg-gray-600" style={{ left: '100%', transform: 'translateX(-100%)' }}></div>
-              </div>
-            </div>
-
+          <div className="relative">
             <input
               type="range"
               min="-12"
@@ -393,6 +382,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               step="1"
               value={pitchShiftValue}
               onChange={handlePitchChange}
+              list="semitone-markers"
               style={{
                 background: `linear-gradient(to right,
                   rgb(59 130 246) 0%,
@@ -426,16 +416,24 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                          [&::-moz-range-thumb]:transition-transform"
             />
 
-            {/* Labels - positioned absolutely to match tick marks exactly */}
-            <div className="relative w-full mt-3 h-8">
-              <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '0%' }}>-12</span>
-              <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '25%', transform: 'translateX(-50%)' }}>-6</span>
-              <div className="absolute flex flex-col items-center" style={{ left: '50%', transform: 'translateX(-50%)', top: '-0.5rem' }}>
+            <datalist id="semitone-markers">
+              <option value="-12" label="-12"></option>
+              <option value="-6" label="-6"></option>
+              <option value="0" label="0"></option>
+              <option value="6" label="+6"></option>
+              <option value="12" label="+12"></option>
+            </datalist>
+
+            {/* Labels positioned to align with datalist marks */}
+            <div className="flex justify-between text-sm text-gray-500 mt-1">
+              <span className="font-semibold">-12</span>
+              <span className="font-semibold">-6</span>
+              <div className="flex flex-col items-center -mt-2">
                 <span className="text-xs text-accent font-medium mb-1">Original Key</span>
                 <span className="font-bold text-accent text-base">0</span>
               </div>
-              <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '75%', transform: 'translateX(-50%)' }}>+6</span>
-              <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '100%', transform: 'translateX(-100%)' }}>+12</span>
+              <span className="font-semibold">+6</span>
+              <span className="font-semibold">+12</span>
             </div>
           </div>
         </div>
