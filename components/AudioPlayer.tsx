@@ -333,7 +333,10 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             <div className="flex justify-between text-sm text-gray-500 mt-3 px-1">
               <span className="font-semibold">-12</span>
               <span>-6</span>
-              <span className="font-bold text-accent text-base">0</span>
+              <div className="flex flex-col items-center -mt-2">
+                <span className="text-xs text-accent font-medium mb-1">Original Key</span>
+                <span className="font-bold text-accent text-base">0</span>
+              </div>
               <span>+6</span>
               <span className="font-semibold">+12</span>
             </div>
@@ -379,7 +382,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             <Button
               onClick={handlePlayPause}
               disabled={!audioBufferRef.current || uploadProgress < 100}
-              className="w-28"
+              variant="play"
+              className="w-32"
             >
               {isPlaying ? '⏸ Pause' : '▶ Play'}
             </Button>
