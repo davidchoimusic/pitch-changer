@@ -321,6 +321,17 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
+  // Calculate adjusted duration based on pitch shift (when preserve duration is off)
+  const getAdjustedDuration = () => {
+    if (preserveDuration || pitchShiftValue === 0) {
+      return duration
+    }
+    const playbackRate = Math.pow(2, pitchShiftValue / 12)
+    return duration / playbackRate
+  }
+
+  const adjustedDuration = getAdjustedDuration()
+
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* File Info & Upload Progress */}
@@ -333,7 +344,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             <p className="text-lg font-medium mt-1">{file.name}</p>
             <p className="text-sm text-gray-500 mt-1">
               {(file.size / 1024 / 1024).toFixed(2)} MB
-              {duration > 0 && ` • ${formatTime(duration)}`}
+              {duration > 0 && ` • ${formatTime(duration)} original`}
+              {!preserveDuration && pitchShiftValue !== 0 && duration > 0 && ` → ${formatTime(adjustedDuration)} adjusted`}
             </p>
           </div>
         </div>
@@ -526,7 +538,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               <input
                 type="range"
                 min="0"
-                max={duration || 100}
+                max={adjustedDuration || 100}
                 step="0.1"
                 value={currentTime}
                 onChange={handleSeek}
@@ -551,7 +563,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                            [&::-moz-range-thumb]:hover:scale-110
                            [&::-moz-range-thumb]:transition-transform"
               />
-              <span className="text-sm text-gray-400 w-14 font-mono">{formatTime(duration)}</span>
+              <span className="text-sm text-gray-400 w-14 font-mono">{formatTime(adjustedDuration)}</span>
             </div>
           </div>
           <p className="text-xs text-gray-500 text-center">
