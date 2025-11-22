@@ -16,12 +16,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     className = '',
     ...props
   }, ref) => {
-    const baseStyles = 'inline-flex items-center justify-center font-light tracking-wide transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
+    const baseStyles = 'inline-flex items-center justify-center font-medium tracking-wide transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg'
 
     const variants = {
-      primary: 'bg-electric-blue text-charcoal hover:glow-blue-sm active:scale-95',
-      secondary: 'border border-electric-blue text-electric-blue hover:bg-electric-blue/10',
-      ghost: 'text-white/70 hover:text-white hover:bg-white/5',
+      primary: 'bg-accent text-white hover:bg-accent/90 active:scale-95 shadow-lg shadow-accent/20',
+      secondary: 'border-2 border-accent text-accent hover:bg-accent/10',
+      ghost: 'text-gray-400 hover:text-white hover:bg-white/5',
     }
 
     const sizes = {

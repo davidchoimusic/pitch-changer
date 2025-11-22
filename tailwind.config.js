@@ -7,11 +7,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        charcoal: '#1a1a1a',
-        'electric-blue': '#00D4FF',
+        'bg-dark': 'rgb(17 24 39)',
+        'bg-card': 'rgb(31 41 55)',
+        'accent': 'rgb(59 130 246)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
     },
   },

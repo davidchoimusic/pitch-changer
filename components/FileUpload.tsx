@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { Button } from './ui/Button'
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void
@@ -11,7 +10,7 @@ interface FileUploadProps {
 
 export function FileUpload({
   onFileSelect,
-  maxSizeMB = 25,
+  maxSizeMB = 250,
   acceptedFormats = ['audio/mpeg', 'audio/wav', 'audio/mp3']
 }: FileUploadProps) {
   const [error, setError] = useState<string | null>(null)
@@ -71,11 +70,11 @@ export function FileUpload({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`
-          relative border-2 border-dashed rounded-lg p-12 text-center cursor-pointer
+          relative border-2 border-dashed rounded-xl p-16 text-center cursor-pointer
           transition-all duration-200
           ${isDragging
-            ? 'border-electric-blue bg-electric-blue/5 glow-blue-sm'
-            : 'border-white/20 hover:border-electric-blue/50 hover:bg-white/5'
+            ? 'border-accent bg-accent/10 scale-105'
+            : 'border-gray-600 hover:border-accent/70 hover:bg-gray-800/30'
           }
         `}
       >
@@ -87,17 +86,17 @@ export function FileUpload({
           className="hidden"
         />
 
-        <div className="space-y-4">
-          <div className="text-6xl">🎵</div>
-          <div className="space-y-2">
-            <p className="text-lg font-light">
+        <div className="space-y-6">
+          <div className="text-7xl">🎵</div>
+          <div className="space-y-3">
+            <p className="text-2xl font-semibold">
               Drop your audio file here
             </p>
-            <p className="text-sm text-white/50 font-light">
+            <p className="text-base text-gray-400">
               or click to browse
             </p>
           </div>
-          <div className="text-xs text-white/40 font-light">
+          <div className="text-sm text-gray-500">
             MP3 or WAV • Max {maxSizeMB}MB
           </div>
         </div>
@@ -105,7 +104,7 @@ export function FileUpload({
 
       {error && (
         <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-          <p className="text-sm text-red-400 font-light">{error}</p>
+          <p className="text-sm text-red-400">{error}</p>
         </div>
       )}
     </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { FileUpload } from '@/components/FileUpload'
-import { PitchControl } from '@/components/PitchControl'
+import { AudioPlayer } from '@/components/AudioPlayer'
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -10,84 +10,91 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-12">
       {!selectedFile ? (
-        <div className="max-w-3xl mx-auto space-y-12">
+        <div className="max-w-4xl mx-auto space-y-16">
           {/* Hero Section */}
-          <div className="text-center space-y-4">
-            <h1 className="text-5xl md:text-6xl font-light tracking-tight">
-              Audio Pitch <span className="text-electric-blue">Shifting</span>
+          <div className="text-center space-y-6">
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+              Change the Pitch of Your<br />Song or Audio
             </h1>
-            <p className="text-lg md:text-xl text-white/60 font-light max-w-2xl mx-auto">
-              Free, fast, and powerful pitch shifting tool for musicians and creators.
-              Upload your MP3 or WAV file and adjust pitch in seconds.
+            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto">
+              Free, instant pitch shifting in your browser. Upload your audio and adjust pitch in real-time with our simple tool.
             </p>
           </div>
 
           {/* Upload Section */}
-          <FileUpload onFileSelect={setSelectedFile} maxSizeMB={25} />
+          <FileUpload onFileSelect={setSelectedFile} maxSizeMB={250} />
 
           {/* Features */}
-          <div className="grid md:grid-cols-3 gap-6 pt-8">
-            <div className="text-center space-y-2">
-              <div className="text-3xl">⚡</div>
-              <h3 className="font-light">Lightning Fast</h3>
-              <p className="text-sm text-white/50 font-light">
-                Client-side processing for instant results
+          <div className="grid md:grid-cols-3 gap-8 pt-8">
+            <div className="text-center space-y-3">
+              <div className="text-5xl">⚡</div>
+              <h3 className="text-lg font-semibold">Real-Time Processing</h3>
+              <p className="text-sm text-gray-400">
+                Hear changes instantly as you adjust the pitch slider
               </p>
             </div>
-            <div className="text-center space-y-2">
-              <div className="text-3xl">🔒</div>
-              <h3 className="font-light">100% Private</h3>
-              <p className="text-sm text-white/50 font-light">
-                Your audio never leaves your device
+            <div className="text-center space-y-3">
+              <div className="text-5xl">🔒</div>
+              <h3 className="text-lg font-semibold">100% Private</h3>
+              <p className="text-sm text-gray-400">
+                All processing happens in your browser - files never leave your device
               </p>
             </div>
-            <div className="text-center space-y-2">
-              <div className="text-3xl">🎯</div>
-              <h3 className="font-light">Pro Quality</h3>
-              <p className="text-sm text-white/50 font-light">
-                Choose simple or advanced processing modes
+            <div className="text-center space-y-3">
+              <div className="text-5xl">🎯</div>
+              <h3 className="text-lg font-semibold">Preserve Duration</h3>
+              <p className="text-sm text-gray-400">
+                Change pitch without affecting playback speed
               </p>
             </div>
           </div>
 
           {/* How It Works */}
-          <div className="border-t border-white/10 pt-12 space-y-6">
-            <h2 className="text-2xl font-light text-center">How It Works</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <div className="w-8 h-8 rounded-full bg-electric-blue/20 text-electric-blue flex items-center justify-center text-sm">
+          <div className="border-t border-white/10 pt-16 space-y-8">
+            <h2 className="text-3xl font-bold text-center">How It Works</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center text-lg font-semibold">
                   1
                 </div>
-                <h3 className="font-light">Upload Audio</h3>
-                <p className="text-sm text-white/50 font-light">
-                  Drag and drop or select your MP3/WAV file (max 25MB)
+                <h3 className="text-lg font-semibold">Upload Audio</h3>
+                <p className="text-sm text-gray-400">
+                  Drag and drop or select your MP3/WAV file (up to 250MB)
                 </p>
               </div>
-              <div className="space-y-2">
-                <div className="w-8 h-8 rounded-full bg-electric-blue/20 text-electric-blue flex items-center justify-center text-sm">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center text-lg font-semibold">
                   2
                 </div>
-                <h3 className="font-light">Adjust Pitch</h3>
-                <p className="text-sm text-white/50 font-light">
-                  Shift up or down by semitones with real-time preview
+                <h3 className="text-lg font-semibold">Adjust Pitch</h3>
+                <p className="text-sm text-gray-400">
+                  Use the slider to shift pitch up or down by semitones while listening in real-time
                 </p>
               </div>
-              <div className="space-y-2">
-                <div className="w-8 h-8 rounded-full bg-electric-blue/20 text-electric-blue flex items-center justify-center text-sm">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center text-lg font-semibold">
                   3
                 </div>
-                <h3 className="font-light">Download</h3>
-                <p className="text-sm text-white/50 font-light">
-                  Get your processed audio as high-quality WAV
+                <h3 className="text-lg font-semibold">Download</h3>
+                <p className="text-sm text-gray-400">
+                  Export your pitch-shifted audio when you're satisfied with the result
                 </p>
               </div>
             </div>
           </div>
         </div>
       ) : (
-        <PitchControl
-          audioFile={selectedFile}
-          onReset={() => setSelectedFile(null)}
+        <AudioPlayer
+          file={selectedFile}
+          onProcessComplete={(blob) => {
+            // Handle download
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `pitch-shifted-${selectedFile.name}`
+            a.click()
+            URL.revokeObjectURL(url)
+          }}
         />
       )}
     </div>
