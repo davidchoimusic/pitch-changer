@@ -670,14 +670,16 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   Pitch shifted by <span className="text-accent font-semibold">{pitchShiftValue > 0 ? '+' : ''}{pitchShiftValue} semitones</span>
                 </p>
               </div>
-              <Button
-                onClick={handleFinalDownload}
-                variant="download"
-                className="w-full"
-                size="lg"
-              >
-                ⬇ Download Your Processed Audio
-              </Button>
+              <div className="flex justify-center">
+                <Button
+                  onClick={handleFinalDownload}
+                  variant="download"
+                  size="md"
+                  className="px-12"
+                >
+                  ⬇ Download Your Processed Audio
+                </Button>
+              </div>
               <p className="text-xs text-gray-400 text-center">
                 Thank you for supporting our sponsors! 🙏
               </p>
