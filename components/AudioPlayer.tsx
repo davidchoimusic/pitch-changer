@@ -430,67 +430,86 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         </div>
 
         {/* Preserve Duration Checkbox */}
-        <div className="flex items-center gap-3 p-4 bg-gray-800/50 rounded-lg border border-white/10">
-          <input
-            type="checkbox"
-            id="preserve-duration"
-            checked={preserveDuration}
-            onChange={async (e) => {
-              const newValue = e.target.checked
-              const wasPlaying = isPlaying
-              const currentPosition = currentTime
+        <div className="p-5 bg-gray-800/50 rounded-lg border border-white/10 space-y-3">
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="preserve-duration"
+              checked={preserveDuration}
+              onChange={async (e) => {
+                const newValue = e.target.checked
+                const wasPlaying = isPlaying
+                const currentPosition = currentTime
 
-              // Stop current playback
-              stopPlayback()
-              offsetRef.current = currentPosition
+                // Stop current playback
+                stopPlayback()
+                offsetRef.current = currentPosition
 
-              // Switch mode
-              setPreserveDuration(newValue)
+                // Switch mode
+                setPreserveDuration(newValue)
 
-              // Resume playback in new mode if it was playing
-              if (wasPlaying) {
-                await Tone.start()
+                // Resume playback in new mode if it was playing
+                if (wasPlaying) {
+                  await Tone.start()
 
-                if (newValue) {
-                  // Switch to Tone.js
-                  if (tonePlayerRef.current && pitchShiftRef.current) {
-                    pitchShiftRef.current.pitch = pitchShiftValue
-                    tonePlayerRef.current.start(undefined, currentPosition)
-                    setIsPlaying(true)
-                  }
-                } else {
-                  // Switch to native
-                  if (audioBufferRef.current && audioContextRef.current) {
-                    const source = audioContextRef.current.createBufferSource()
-                    source.buffer = audioBufferRef.current
-                    const playbackRate = Math.pow(2, pitchShiftValue / 12)
-                    source.playbackRate.value = playbackRate
-                    source.connect(audioContextRef.current.destination)
-                    source.start(0, currentPosition)
-                    startTimeRef.current = audioContextRef.current.currentTime
-                    sourceNodeRef.current = source
-                    setIsPlaying(true)
+                  if (newValue) {
+                    // Switch to Tone.js
+                    if (tonePlayerRef.current && pitchShiftRef.current) {
+                      pitchShiftRef.current.pitch = pitchShiftValue
+                      tonePlayerRef.current.start(undefined, currentPosition)
+                      setIsPlaying(true)
+                    }
+                  } else {
+                    // Switch to native
+                    if (audioBufferRef.current && audioContextRef.current) {
+                      const source = audioContextRef.current.createBufferSource()
+                      source.buffer = audioBufferRef.current
+                      const playbackRate = Math.pow(2, pitchShiftValue / 12)
+                      source.playbackRate.value = playbackRate
+                      source.connect(audioContextRef.current.destination)
+                      source.start(0, currentPosition)
+                      startTimeRef.current = audioContextRef.current.currentTime
+                      sourceNodeRef.current = source
+                      setIsPlaying(true)
 
-                    source.onended = () => {
-                      stopPlayback()
-                      setCurrentTime(0)
-                      offsetRef.current = 0
-                      lastCurrentTimeRef.current = 0
+                      source.onended = () => {
+                        stopPlayback()
+                        setCurrentTime(0)
+                        offsetRef.current = 0
+                        lastCurrentTimeRef.current = 0
+                      }
                     }
                   }
                 }
-              }
-            }}
-            className="w-5 h-5 rounded border-gray-600 text-accent focus:ring-accent focus:ring-offset-0 cursor-pointer"
-          />
-          <label htmlFor="preserve-duration" className="text-sm cursor-pointer flex-1">
-            <span className="font-medium">Preserve Duration</span>
-            <span className="text-gray-400 ml-2 block mt-1">
-              {preserveDuration
-                ? '✨ Pitch changes, duration stays same (uses Tone.js - real-time!)'
-                : '⚡ Pitch AND duration change together (faster/slower playback)'}
-            </span>
-          </label>
+              }}
+              className="w-5 h-5 rounded border-gray-600 text-accent focus:ring-accent focus:ring-offset-0 cursor-pointer flex-shrink-0"
+            />
+            <label htmlFor="preserve-duration" className="font-medium cursor-pointer">
+              Preserve Duration
+            </label>
+          </div>
+
+          <div className="text-sm text-gray-400 space-y-2 ml-8">
+            {preserveDuration ? (
+              <>
+                <p className="font-medium text-white">Checked (Recommended):</p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Song stays the same length</li>
+                  <li>Only pitch changes</li>
+                  <li>Sounds natural and professional</li>
+                </ul>
+              </>
+            ) : (
+              <>
+                <p className="font-medium text-white">Unchecked:</p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Higher pitch = faster playback</li>
+                  <li>Lower pitch = slower playback</li>
+                  <li>Like a vinyl record sped up or slowed down</li>
+                </ul>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Playback Controls */}
