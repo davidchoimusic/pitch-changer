@@ -7,14 +7,15 @@
 ## Snapshot
 
 - **Repo Path:** `/Users/davidchoi/Documents/0 projects/pitch-changer`
-- **Repo URL:** Not connected to remote yet
-- **Domain:** pitchchanger.io (owned, DNS not yet configured)
+- **Repo URL:** https://github.com/davidchoimusic/pitch-changer
+- **Domain:** pitchchanger.io (configured and LIVE)
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** da4c759 (Rebranded to PitchChanger.io)
+- **Current Commit:** 1496a2d (Updated PROJECT_CONTEXT.md)
 - **Open PRs/Issues:** None
-- **Local Dev:** Running at http://localhost:3001
+- **Local Dev:** http://localhost:3001
+- **Production:** https://pitchchanger.io (LIVE)
 
 ---
 
@@ -70,11 +71,14 @@ Provide musicians, audio engineers, and creators with a free, fast, browser-base
 
 ## Deployments
 
-- **Status:** Ready to deploy (local development complete)
-- **Domain:** pitchchanger.io → PitchChanger.io (branding)
-- **Production URL:** https://pitchchanger.io (not live yet)
-- **Deployment Target:** Vercel (free tier)
-- **Release Process:** Push to GitHub → Auto-deploy via Vercel
+- **Status:** ✅ LIVE IN PRODUCTION
+- **Production URL:** https://pitchchanger.io
+- **Vercel Project:** https://vercel.com/davidchoimusics-projects/pitch-changer
+- **Deployment:** Vercel (free tier)
+- **GitHub:** Auto-deploy enabled on push to main
+- **DNS:** Configured via Namecheap → Vercel
+- **SSL:** Automatic via Vercel (HTTPS enabled)
+- **Release Process:** `git push origin main` → Auto-deploy to production
 
 ---
 
@@ -104,9 +108,10 @@ Provide musicians, audio engineers, and creators with a free, fast, browser-base
 - **Upstash Redis:** Not needed yet (future: rate limiting)
 
 ### DNS/Domain
-- **Domain:** pitchchanger.io (owned, not configured)
-- **Registrar:** [UNKNOWN]
-- **DNS:** Not pointed to Vercel yet
+- **Domain:** pitchchanger.io (LIVE)
+- **Registrar:** Namecheap
+- **DNS:** Configured and pointing to Vercel
+- **www redirect:** www.pitchchanger.io → pitchchanger.io (automatic)
 
 ---
 
@@ -412,4 +417,4 @@ pitch-changer/
 
 ---
 
-**Last Updated:** 2025-11-22 21:45
+**Last Updated:** 2025-11-22 21:50 (DEPLOYED TO PRODUCTION)
