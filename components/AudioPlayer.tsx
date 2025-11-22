@@ -14,9 +14,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [pitchShiftValue, setPitchShiftValue] = useState(0)
-  const [preserveDuration, setPreserveDuration] = useState(true)
+  const [preserveDuration, setPreserveDuration] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
-  const [processedBuffer, setProcessedBuffer] = useState<AudioBuffer | null>(null)
 
   const audioContextRef = useRef<AudioContext | null>(null)
   const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null)
@@ -142,7 +141,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       const source = audioContextRef.current.createBufferSource()
       source.buffer = audioBufferRef.current
 
-      // Apply pitch shift (real-time)
+      // Apply pitch shift using playbackRate ONLY if preserve duration is OFF
       const playbackRate = Math.pow(2, pitchShiftValue / 12)
       source.playbackRate.value = preserveDuration ? 1 : playbackRate
 
@@ -201,7 +200,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     const newPitch = parseInt(e.target.value)
     setPitchShiftValue(newPitch)
 
-    // If playing, restart with new pitch
+    // If playing, restart with new pitch in real-time
     if (isPlaying && audioBufferRef.current && audioContextRef.current) {
       const currentOffset = lastCurrentTimeRef.current
 
@@ -284,14 +283,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       {/* Audio Player */}
       <div className="bg-bg-card border border-white/10 rounded-lg p-8 space-y-6">
         {/* Pitch Control Slider */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div className="flex items-center justify-between">
             <label className="text-base font-medium">Pitch Shift</label>
-            <span className="text-xl font-semibold text-accent">
+            <span className="text-2xl font-bold text-accent">
               {pitchShiftValue > 0 ? '+' : ''}{pitchShiftValue} semitones
             </span>
           </div>
-          <div className="relative">
+          <div className="relative px-2">
             <input
               type="range"
               min="-12"
@@ -299,47 +298,80 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               step="1"
               value={pitchShiftValue}
               onChange={handlePitchChange}
-              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
+              style={{
+                background: `linear-gradient(to right,
+                  rgb(59 130 246) 0%,
+                  rgb(59 130 246) ${((pitchShiftValue + 12) / 24) * 100}%,
+                  rgb(55 65 81) ${((pitchShiftValue + 12) / 24) * 100}%,
+                  rgb(55 65 81) 100%)`
+              }}
+              className="w-full h-3 rounded-lg appearance-none cursor-pointer
                          [&::-webkit-slider-thumb]:appearance-none
-                         [&::-webkit-slider-thumb]:w-6
-                         [&::-webkit-slider-thumb]:h-6
+                         [&::-webkit-slider-thumb]:w-8
+                         [&::-webkit-slider-thumb]:h-8
                          [&::-webkit-slider-thumb]:rounded-full
-                         [&::-webkit-slider-thumb]:bg-accent
-                         [&::-webkit-slider-thumb]:cursor-pointer
+                         [&::-webkit-slider-thumb]:bg-white
+                         [&::-webkit-slider-thumb]:border-4
+                         [&::-webkit-slider-thumb]:border-accent
+                         [&::-webkit-slider-thumb]:cursor-grab
                          [&::-webkit-slider-thumb]:shadow-lg
-                         [&::-moz-range-thumb]:w-6
-                         [&::-moz-range-thumb]:h-6
+                         [&::-webkit-slider-thumb]:active:cursor-grabbing
+                         [&::-webkit-slider-thumb]:hover:scale-110
+                         [&::-webkit-slider-thumb]:transition-transform
+                         [&::-moz-range-thumb]:w-8
+                         [&::-moz-range-thumb]:h-8
                          [&::-moz-range-thumb]:rounded-full
-                         [&::-moz-range-thumb]:bg-accent
-                         [&::-moz-range-thumb]:border-0
-                         [&::-moz-range-thumb]:cursor-pointer"
+                         [&::-moz-range-thumb]:bg-white
+                         [&::-moz-range-thumb]:border-4
+                         [&::-moz-range-thumb]:border-accent
+                         [&::-moz-range-thumb]:cursor-grab
+                         [&::-moz-range-thumb]:shadow-lg
+                         [&::-moz-range-thumb]:active:cursor-grabbing
+                         [&::-moz-range-thumb]:hover:scale-110
+                         [&::-moz-range-thumb]:transition-transform"
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-2">
-              <span>-12</span>
+            <div className="flex justify-between text-sm text-gray-500 mt-3 px-1">
+              <span className="font-semibold">-12</span>
               <span>-6</span>
-              <span className="font-semibold">0</span>
+              <span className="font-bold text-accent text-base">0</span>
               <span>+6</span>
-              <span>+12</span>
+              <span className="font-semibold">+12</span>
             </div>
           </div>
         </div>
 
         {/* Preserve Duration Checkbox */}
-        <div className="flex items-center gap-3 p-4 bg-gray-800/50 rounded-lg">
+        <div className="flex items-center gap-3 p-4 bg-gray-800/50 rounded-lg border border-white/10">
           <input
             type="checkbox"
             id="preserve-duration"
             checked={preserveDuration}
             onChange={(e) => setPreserveDuration(e.target.checked)}
-            className="w-5 h-5 rounded border-gray-600 text-accent focus:ring-accent focus:ring-offset-0"
+            className="w-5 h-5 rounded border-gray-600 text-accent focus:ring-accent focus:ring-offset-0 cursor-pointer"
           />
-          <label htmlFor="preserve-duration" className="text-sm cursor-pointer">
+          <label htmlFor="preserve-duration" className="text-sm cursor-pointer flex-1">
             <span className="font-medium">Preserve Duration</span>
-            <span className="text-gray-400 ml-2">
-              {preserveDuration ? '(pitch changes, duration stays same)' : '(pitch and duration both change)'}
+            <span className="text-gray-400 ml-2 block mt-1">
+              {preserveDuration
+                ? '⚠️ Playback at normal speed (no pitch change audible in preview). Download will have pitch shifted with duration preserved.'
+                : 'Playback speed changes with pitch. Both preview and download will change pitch + duration together.'}
             </span>
           </label>
         </div>
+
+        {/* Info box */}
+        {preserveDuration && pitchShiftValue !== 0 && (
+          <div className="flex items-start gap-3 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+            <div className="text-blue-400 text-xl mt-0.5">💡</div>
+            <div className="text-sm">
+              <p className="font-medium text-blue-200">Preview Limitation</p>
+              <p className="text-blue-100/80 mt-1">
+                You won't hear the pitch change in the preview because browsers can only shift pitch by changing playback speed.
+                Click Download to get the advanced pitch-shifted audio with preserved duration.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Playback Controls */}
         <div className="space-y-4">
@@ -347,12 +379,12 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             <Button
               onClick={handlePlayPause}
               disabled={!audioBufferRef.current || uploadProgress < 100}
-              className="w-24"
+              className="w-28"
             >
-              {isPlaying ? 'Pause' : 'Play'}
+              {isPlaying ? '⏸ Pause' : '▶ Play'}
             </Button>
             <div className="flex-1 flex items-center gap-3">
-              <span className="text-sm text-gray-400 w-12 text-right">{formatTime(currentTime)}</span>
+              <span className="text-sm text-gray-400 w-14 text-right font-mono">{formatTime(currentTime)}</span>
               <input
                 type="range"
                 min="0"
@@ -363,33 +395,43 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 disabled={uploadProgress < 100}
                 className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
                            [&::-webkit-slider-thumb]:appearance-none
-                           [&::-webkit-slider-thumb]:w-4
-                           [&::-webkit-slider-thumb]:h-4
+                           [&::-webkit-slider-thumb]:w-5
+                           [&::-webkit-slider-thumb]:h-5
                            [&::-webkit-slider-thumb]:rounded-full
                            [&::-webkit-slider-thumb]:bg-white
                            [&::-webkit-slider-thumb]:cursor-pointer
-                           [&::-moz-range-thumb]:w-4
-                           [&::-moz-range-thumb]:h-4
+                           [&::-webkit-slider-thumb]:shadow-md
+                           [&::-webkit-slider-thumb]:hover:scale-110
+                           [&::-webkit-slider-thumb]:transition-transform
+                           [&::-moz-range-thumb]:w-5
+                           [&::-moz-range-thumb]:h-5
                            [&::-moz-range-thumb]:rounded-full
                            [&::-moz-range-thumb]:bg-white
-                           [&::-moz-range-thumb]:border-0"
+                           [&::-moz-range-thumb]:border-0
+                           [&::-moz-range-thumb]:cursor-pointer
+                           [&::-moz-range-thumb]:shadow-md
+                           [&::-moz-range-thumb]:hover:scale-110
+                           [&::-moz-range-thumb]:transition-transform"
               />
-              <span className="text-sm text-gray-400 w-12">{formatTime(duration)}</span>
+              <span className="text-sm text-gray-400 w-14 font-mono">{formatTime(duration)}</span>
             </div>
           </div>
-          <p className="text-xs text-gray-500 text-center">Press Spacebar to play/pause</p>
+          <p className="text-xs text-gray-500 text-center">Press <kbd className="px-2 py-1 bg-gray-700 rounded text-white">Spacebar</kbd> to play/pause</p>
         </div>
 
         {/* Download Button */}
         <div className="pt-4 border-t border-white/10">
           <Button
             onClick={handleDownload}
-            disabled={!audioBufferRef.current || uploadProgress < 100}
+            disabled={!audioBufferRef.current || uploadProgress < 100 || pitchShiftValue === 0}
             className="w-full"
             size="lg"
           >
-            Download Processed Audio (WAV)
+            ⬇ Download Processed Audio (WAV)
           </Button>
+          {pitchShiftValue === 0 && (
+            <p className="text-xs text-gray-500 text-center mt-2">Adjust pitch to enable download</p>
+          )}
         </div>
       </div>
     </div>
