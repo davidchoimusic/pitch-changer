@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --charcoal: 26 26 26;
+    --electric-blue: 0 212 255;
+    --glow-blue: 0 212 255;
+  }
+
+  * {
+    @apply border-white/10;
+  }
+
+  body {
+    @apply bg-charcoal text-white antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+  }
+}
+
+@layer utilities {
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  }
+
+  .glow-blue-sm {
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
