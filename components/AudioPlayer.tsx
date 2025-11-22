@@ -425,13 +425,50 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             type="checkbox"
             id="preserve-duration"
             checked={preserveDuration}
-            onChange={(e) => {
+            onChange={async (e) => {
               const newValue = e.target.checked
+              const wasPlaying = isPlaying
+              const currentPosition = currentTime
+
+              // Stop current playback
+              stopPlayback()
+              offsetRef.current = currentPosition
+
+              // Switch mode
               setPreserveDuration(newValue)
-              // Stop playback when switching modes
-              if (isPlaying) {
-                stopPlayback()
-                offsetRef.current = currentTime
+
+              // Resume playback in new mode if it was playing
+              if (wasPlaying) {
+                await Tone.start()
+
+                if (newValue) {
+                  // Switch to Tone.js
+                  if (tonePlayerRef.current && pitchShiftRef.current) {
+                    pitchShiftRef.current.pitch = pitchShiftValue
+                    tonePlayerRef.current.start(undefined, currentPosition)
+                    setIsPlaying(true)
+                  }
+                } else {
+                  // Switch to native
+                  if (audioBufferRef.current && audioContextRef.current) {
+                    const source = audioContextRef.current.createBufferSource()
+                    source.buffer = audioBufferRef.current
+                    const playbackRate = Math.pow(2, pitchShiftValue / 12)
+                    source.playbackRate.value = playbackRate
+                    source.connect(audioContextRef.current.destination)
+                    source.start(0, currentPosition)
+                    startTimeRef.current = audioContextRef.current.currentTime
+                    sourceNodeRef.current = source
+                    setIsPlaying(true)
+
+                    source.onended = () => {
+                      stopPlayback()
+                      setCurrentTime(0)
+                      offsetRef.current = 0
+                      lastCurrentTimeRef.current = 0
+                    }
+                  }
+                }
               }
             }}
             className="w-5 h-5 rounded border-gray-600 text-accent focus:ring-accent focus:ring-offset-0 cursor-pointer"
