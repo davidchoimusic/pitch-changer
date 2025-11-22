@@ -302,9 +302,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     setProcessProgress(0)
     setProcessedBlob(null)
 
-    // Scroll to show message about ads
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-
     try {
       // Process audio with pitch shift
       const processed = await pitchShift(audioBufferRef.current, {
@@ -316,11 +313,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
       setProcessProgress(100)
-
-      // Scroll to download section
-      setTimeout(() => {
-        downloadSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 500)
     } catch (error) {
       console.error('Error processing audio:', error)
       setIsProcessing(false)
@@ -620,35 +612,58 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             </div>
           ) : isProcessing ? (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex-1 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-white font-medium">Processing your audio...</span>
-                    <span className="text-accent font-semibold">{processProgress.toFixed(0)}%</span>
-                  </div>
-                  <div className="w-full bg-gray-700 rounded-full h-3">
-                    <div
-                      className="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full transition-all duration-300"
-                      style={{ width: `${processProgress}%` }}
-                    />
-                  </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-white font-medium">Processing your audio...</span>
+                  <span className="text-accent font-semibold">{processProgress.toFixed(0)}%</span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-3">
+                  <div
+                    className="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full transition-all duration-300"
+                    style={{ width: `${processProgress}%` }}
+                  />
                 </div>
               </div>
-              <div className="text-center space-y-2">
-                <p className="text-sm text-gray-400">
-                  ⏳ While you wait, scroll down to view our sponsors!
-                </p>
-                <p className="text-xs text-gray-500">
-                  Their support keeps this tool free for you
-                </p>
-                <Button
-                  onClick={handleCancelProcessing}
-                  variant="ghost"
-                  size="sm"
-                >
-                  Cancel
-                </Button>
-              </div>
+
+              {processProgress < 100 ? (
+                <div className="text-center space-y-3 py-4">
+                  <p className="text-2xl font-bold text-white">
+                    ⏳ While you wait...
+                  </p>
+                  <p className="text-lg text-gray-300">
+                    Scroll down to view our sponsors!
+                  </p>
+                  <div className="text-4xl animate-bounce">
+                    ⬇️
+                  </div>
+                  <p className="text-sm text-gray-400">
+                    Their support keeps this tool free for you
+                  </p>
+                  <Button
+                    onClick={handleCancelProcessing}
+                    variant="ghost"
+                    size="sm"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <div className="text-center space-y-3 py-4">
+                  <div className="text-5xl">✅</div>
+                  <p className="text-3xl font-bold text-green-400">
+                    SUCCESS!
+                  </p>
+                  <p className="text-xl font-semibold text-white">
+                    YOUR FILE IS READY!
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Scroll down to download
+                  </p>
+                  <div className="text-3xl animate-bounce">
+                    ⬇️
+                  </div>
+                </div>
+              )}
             </div>
           ) : null}
 
