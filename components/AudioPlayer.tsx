@@ -595,15 +595,17 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         {/* Process Button / Progress */}
         <div className="pt-4 border-t border-white/10">
           {!isProcessing && !processedBlob ? (
-            <Button
-              onClick={handleStartProcessing}
-              disabled={!audioBufferRef.current || !isReady || pitchShiftValue === 0}
-              variant="download"
-              className="w-full"
-              size="md"
-            >
-              ⬇ Process & Download Audio (WAV)
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                onClick={handleStartProcessing}
+                disabled={!audioBufferRef.current || !isReady || pitchShiftValue === 0}
+                variant="download"
+                size="md"
+                className="px-12"
+              >
+                ⬇ Process & Download Audio (WAV)
+              </Button>
+            </div>
           ) : isProcessing ? (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
