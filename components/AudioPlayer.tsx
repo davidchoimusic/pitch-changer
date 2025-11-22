@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from './ui/Button'
 import { pitchShift, encodeToWav } from '@/utils/audio/pitchShift'
+import * as Tone from 'tone'
 
 interface AudioPlayerProps {
   file: File
@@ -14,18 +15,15 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [pitchShiftValue, setPitchShiftValue] = useState(0)
-  const [preserveDuration, setPreserveDuration] = useState(false)
+  const [preserveDuration, setPreserveDuration] = useState(true)
   const [uploadProgress, setUploadProgress] = useState(0)
 
-  const audioContextRef = useRef<AudioContext | null>(null)
-  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null)
+  const playerRef = useRef<Tone.Player | null>(null)
+  const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
   const audioBufferRef = useRef<AudioBuffer | null>(null)
   const animationFrameRef = useRef<number | null>(null)
-  const startTimeRef = useRef<number>(0)
-  const offsetRef = useRef<number>(0)
-  const lastCurrentTimeRef = useRef<number>(0)
 
-  // Load audio file and simulate upload
+  // Load audio file
   useEffect(() => {
     const loadAudio = async () => {
       try {
@@ -44,12 +42,30 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
         const arrayBuffer = await file.arrayBuffer()
 
+        // Decode for both Tone.js and download processing
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        audioContextRef.current = audioContext
-
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
         audioBufferRef.current = audioBuffer
         setDuration(audioBuffer.duration)
+
+        // Create Tone.js player from buffer
+        await Tone.start()
+        const player = new Tone.Player().toDestination()
+        player.buffer.set(audioBuffer)
+        player.loop = false
+        playerRef.current = player
+
+        // Create pitch shift effect
+        const pitchShiftEffect = new Tone.PitchShift({
+          pitch: 0,
+          windowSize: 0.1,
+          delayTime: 0,
+          feedback: 0
+        }).toDestination()
+
+        player.disconnect()
+        player.connect(pitchShiftEffect)
+        pitchShiftRef.current = pitchShiftEffect
 
         clearInterval(uploadInterval)
         setUploadProgress(100)
@@ -60,7 +76,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     loadAudio()
 
     return () => {
-      stopPlayback()
+      if (playerRef.current) {
+        playerRef.current.stop()
+        playerRef.current.dispose()
+      }
+      if (pitchShiftRef.current) {
+        pitchShiftRef.current.dispose()
+      }
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
       }
@@ -82,19 +104,17 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
   // Update current time during playback
   const updateTime = () => {
-    if (!audioContextRef.current || !isPlaying) return
+    if (!playerRef.current || !isPlaying) return
 
-    const elapsed = audioContextRef.current.currentTime - startTimeRef.current + offsetRef.current
+    const time = playerRef.current.immediate()
+    setCurrentTime(time)
 
-    const newTime = Math.min(elapsed, duration)
-    setCurrentTime(newTime)
-    lastCurrentTimeRef.current = newTime
-
-    if (elapsed >= duration) {
-      stopPlayback()
+    if (time >= duration - 0.1) {
+      setIsPlaying(false)
       setCurrentTime(0)
-      offsetRef.current = 0
-      lastCurrentTimeRef.current = 0
+      if (playerRef.current) {
+        playerRef.current.stop()
+      }
     } else {
       animationFrameRef.current = requestAnimationFrame(updateTime)
     }
@@ -116,83 +136,31 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
   }, [isPlaying, duration])
 
-  const stopPlayback = () => {
-    if (sourceNodeRef.current) {
-      try {
-        sourceNodeRef.current.stop()
-      } catch (e) {
-        // Already stopped
-      }
-      sourceNodeRef.current.disconnect()
-      sourceNodeRef.current = null
-    }
-    setIsPlaying(false)
-  }
+  const handlePlayPause = async () => {
+    if (!playerRef.current) return
 
-  const handlePlayPause = () => {
-    if (!audioBufferRef.current || !audioContextRef.current) return
+    await Tone.start()
 
     if (isPlaying) {
-      // Pause - save current position
-      stopPlayback()
-      offsetRef.current = lastCurrentTimeRef.current
+      playerRef.current.stop()
+      setIsPlaying(false)
     } else {
-      // Play from saved position
-      const source = audioContextRef.current.createBufferSource()
-      source.buffer = audioBufferRef.current
-
-      // Apply pitch shift using playbackRate ONLY if preserve duration is OFF
-      const playbackRate = Math.pow(2, pitchShiftValue / 12)
-      source.playbackRate.value = preserveDuration ? 1 : playbackRate
-
-      source.connect(audioContextRef.current.destination)
-
-      const startOffset = offsetRef.current
-      source.start(0, startOffset)
-
-      startTimeRef.current = audioContextRef.current.currentTime
-      sourceNodeRef.current = source
-      setIsPlaying(true)
-
-      source.onended = () => {
-        if (lastCurrentTimeRef.current < duration) {
-          stopPlayback()
-          setCurrentTime(0)
-          offsetRef.current = 0
-          lastCurrentTimeRef.current = 0
-        }
+      if (currentTime > 0) {
+        playerRef.current.start(undefined, currentTime)
+      } else {
+        playerRef.current.start()
       }
+      setIsPlaying(true)
     }
   }
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value)
     setCurrentTime(newTime)
-    offsetRef.current = newTime
-    lastCurrentTimeRef.current = newTime
 
-    if (isPlaying) {
-      stopPlayback()
-
-      // Restart playback at new position
-      if (audioBufferRef.current && audioContextRef.current) {
-        const source = audioContextRef.current.createBufferSource()
-        source.buffer = audioBufferRef.current
-        const playbackRate = Math.pow(2, pitchShiftValue / 12)
-        source.playbackRate.value = preserveDuration ? 1 : playbackRate
-        source.connect(audioContextRef.current.destination)
-        source.start(0, newTime)
-        startTimeRef.current = audioContextRef.current.currentTime
-        sourceNodeRef.current = source
-        setIsPlaying(true)
-
-        source.onended = () => {
-          stopPlayback()
-          setCurrentTime(0)
-          offsetRef.current = 0
-          lastCurrentTimeRef.current = 0
-        }
-      }
+    if (playerRef.current && isPlaying) {
+      playerRef.current.stop()
+      playerRef.current.start(undefined, newTime)
     }
   }
 
@@ -200,29 +168,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     const newPitch = parseInt(e.target.value)
     setPitchShiftValue(newPitch)
 
-    // If playing, restart with new pitch in real-time
-    if (isPlaying && audioBufferRef.current && audioContextRef.current) {
-      const currentOffset = lastCurrentTimeRef.current
-
-      stopPlayback()
-
-      const source = audioContextRef.current.createBufferSource()
-      source.buffer = audioBufferRef.current
-      const playbackRate = Math.pow(2, newPitch / 12)
-      source.playbackRate.value = preserveDuration ? 1 : playbackRate
-      source.connect(audioContextRef.current.destination)
-      source.start(0, currentOffset)
-      startTimeRef.current = audioContextRef.current.currentTime
-      offsetRef.current = currentOffset
-      sourceNodeRef.current = source
-      setIsPlaying(true)
-
-      source.onended = () => {
-        stopPlayback()
-        setCurrentTime(0)
-        offsetRef.current = 0
-        lastCurrentTimeRef.current = 0
-      }
+    if (pitchShiftRef.current) {
+      pitchShiftRef.current.pitch = newPitch
     }
   }
 
@@ -343,6 +290,17 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           </div>
         </div>
 
+        {/* Real-time pitch shifting info */}
+        <div className="flex items-start gap-3 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+          <div className="text-green-400 text-xl mt-0.5">✨</div>
+          <div className="text-sm">
+            <p className="font-medium text-green-200">Real-Time Pitch Shifting Enabled</p>
+            <p className="text-green-100/80 mt-1">
+              Powered by Tone.js - hear pitch changes instantly while preserving duration! Move the slider while playing to hear it in real-time.
+            </p>
+          </div>
+        </div>
+
         {/* Preserve Duration Checkbox */}
         <div className="flex items-center gap-3 p-4 bg-gray-800/50 rounded-lg border border-white/10">
           <input
@@ -353,35 +311,21 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             className="w-5 h-5 rounded border-gray-600 text-accent focus:ring-accent focus:ring-offset-0 cursor-pointer"
           />
           <label htmlFor="preserve-duration" className="text-sm cursor-pointer flex-1">
-            <span className="font-medium">Preserve Duration</span>
+            <span className="font-medium">Preserve Duration (for Download)</span>
             <span className="text-gray-400 ml-2 block mt-1">
               {preserveDuration
-                ? '⚠️ Playback at normal speed (no pitch change audible in preview). Download will have pitch shifted with duration preserved.'
-                : 'Playback speed changes with pitch. Both preview and download will change pitch + duration together.'}
+                ? 'Download will use advanced processing to maintain original duration'
+                : 'Download will use simple mode (pitch and duration change together)'}
             </span>
           </label>
         </div>
-
-        {/* Info box */}
-        {preserveDuration && pitchShiftValue !== 0 && (
-          <div className="flex items-start gap-3 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <div className="text-blue-400 text-xl mt-0.5">💡</div>
-            <div className="text-sm">
-              <p className="font-medium text-blue-200">Preview Limitation</p>
-              <p className="text-blue-100/80 mt-1">
-                You won't hear the pitch change in the preview because browsers can only shift pitch by changing playback speed.
-                Click Download to get the advanced pitch-shifted audio with preserved duration.
-              </p>
-            </div>
-          </div>
-        )}
 
         {/* Playback Controls */}
         <div className="space-y-4">
           <div className="flex items-center gap-4">
             <Button
               onClick={handlePlayPause}
-              disabled={!audioBufferRef.current || uploadProgress < 100}
+              disabled={!playerRef.current || uploadProgress < 100}
               variant="play"
               className="w-32"
             >
