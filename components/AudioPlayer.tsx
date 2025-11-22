@@ -501,7 +501,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               </>
             ) : (
               <>
-                <p className="font-medium text-white">Unchecked:</p>
+                <p className="font-medium text-white">When unchecked:</p>
                 <ul className="list-disc list-inside space-y-1">
                   <li>Higher pitch = audio speeds up and duration gets shorter</li>
                   <li>Lower pitch = audio slows down and duration gets longer</li>
