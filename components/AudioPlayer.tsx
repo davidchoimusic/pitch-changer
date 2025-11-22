@@ -375,6 +375,15 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             </div>
           </div>
           <div className="relative">
+            {/* Tick marks for alignment */}
+            <div className="absolute w-full top-0 flex justify-between px-4 pointer-events-none" style={{ marginTop: '-4px' }}>
+              <div className="w-0.5 h-2 bg-gray-600"></div>
+              <div className="w-0.5 h-2 bg-gray-600"></div>
+              <div className="w-0.5 h-2 bg-accent"></div>
+              <div className="w-0.5 h-2 bg-gray-600"></div>
+              <div className="w-0.5 h-2 bg-gray-600"></div>
+            </div>
+
             <input
               type="range"
               min="-12"
@@ -414,15 +423,16 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                          [&::-moz-range-thumb]:hover:scale-110
                          [&::-moz-range-thumb]:transition-transform"
             />
-            <div className="relative w-full mt-3 h-8" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
-              <span className="absolute left-0 font-semibold text-sm text-gray-500">-12</span>
-              <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '25%', transform: 'translateX(-50%)' }}>-6</span>
-              <div className="absolute flex flex-col items-center" style={{ left: '50%', transform: 'translateX(-50%)', top: '-0.5rem' }}>
+
+            <div className="flex justify-between text-sm text-gray-500 mt-3 px-4">
+              <span className="font-semibold">-12</span>
+              <span className="font-semibold">-6</span>
+              <div className="flex flex-col items-center -mt-2">
                 <span className="text-xs text-accent font-medium mb-1">Original Key</span>
                 <span className="font-bold text-accent text-base">0</span>
               </div>
-              <span className="absolute font-semibold text-sm text-gray-500" style={{ left: '75%', transform: 'translateX(-50%)' }}>+6</span>
-              <span className="absolute right-0 font-semibold text-sm text-gray-500" style={{ transform: 'translateX(0)' }}>+12</span>
+              <span className="font-semibold">+6</span>
+              <span className="font-semibold">+12</span>
             </div>
           </div>
         </div>
