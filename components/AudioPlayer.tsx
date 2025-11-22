@@ -496,7 +496,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 <ul className="list-disc list-inside space-y-1">
                   <li>Song stays the same length</li>
                   <li>Only pitch changes</li>
-                  <li>Sounds natural and professional</li>
                 </ul>
               </>
             ) : (
