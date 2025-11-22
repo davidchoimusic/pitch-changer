@@ -338,7 +338,19 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     const url = URL.createObjectURL(processedBlob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `pitch-shifted-${file.name.replace(/\.[^/.]+$/, '')}.wav`
+
+    // Generate filename based on pitch direction
+    const baseName = file.name.replace(/\.[^/.]+$/, '')
+    let suffix = ''
+    if (pitchShiftValue > 0) {
+      suffix = ' - SPED UP - pitchchanger.io'
+    } else if (pitchShiftValue < 0) {
+      suffix = ' - SLOWED - pitchchanger.io'
+    } else {
+      suffix = ' - pitchchanger.io'
+    }
+
+    a.download = `${baseName}${suffix}.wav`
     a.click()
     URL.revokeObjectURL(url)
   }
