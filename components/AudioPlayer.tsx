@@ -22,6 +22,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [processProgress, setProcessProgress] = useState(0)
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null)
+  const [safariUnlocked, setSafariUnlocked] = useState(false)
 
   const tonePlayerRef = useRef<Tone.Player | null>(null)
   const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
@@ -36,6 +37,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
   // Load audio file
   useEffect(() => {
+    const abortController = new AbortController()
+
     const loadAudio = async () => {
       try {
         setUploadProgress(0)
@@ -43,19 +46,21 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
         // Read file as ArrayBuffer (single copy in memory)
         const arrayBuffer = await file.arrayBuffer()
+
+        // Check if aborted (user uploaded new file)
+        if (abortController.signal.aborted) return
+
         setUploadProgress(30)
 
         // Decode audio buffer for Web Audio API (reuses same ArrayBuffer, no copy)
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
         audioContextRef.current = audioContext
 
-        // DEBUG: Track context creation
-        if (!window.audioContextCount) window.audioContextCount = 0
-        window.audioContextCount++
-        console.log('[Debug] Created AudioContext #', window.audioContextCount)
-        console.log('[Debug] AudioContext state:', audioContext.state)
-
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
+
+        // Check again before setting state
+        if (abortController.signal.aborted) return
+
         audioBufferRef.current = audioBuffer
         setDuration(audioBuffer.duration)
         setUploadProgress(100)
@@ -63,17 +68,20 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         // Don't create Tone.js player yet - Safari requires user gesture
         // Will be created on first Play button click
         setIsReady(true)
-        console.log('[Debug] Audio decoded successfully - ready for playback')
+        console.log('Audio decoded successfully - ready for playback')
 
       } catch (error) {
-        console.error('Error loading audio:', error)
-        setUploadProgress(100)
-        setIsReady(true) // Enable playback anyway
+        if (!abortController.signal.aborted) {
+          console.error('Error loading audio:', error)
+          setUploadProgress(100)
+          setIsReady(false) // FIX: Don't enable playback on error
+        }
       }
     }
     loadAudio()
 
     return () => {
+      abortController.abort() // Cancel stale decode
       stopPlayback()
       if (tonePlayerRef.current) {
         tonePlayerRef.current.dispose()
@@ -105,15 +113,20 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     if (tonePlayerRef.current) {
       try {
         tonePlayerRef.current.stop()
+        tonePlayerRef.current.dispose() // FIX: Dispose to prevent memory leaks
       } catch (e) {
         console.error('Error stopping Tone player:', e)
       }
-      // Don't dispose (memory overhead), but null the ref for clean re-init
       tonePlayerRef.current = null
     }
 
-    // Clear pitch shift effect ref too
+    // Dispose pitch shift effect too
     if (pitchShiftRef.current) {
+      try {
+        pitchShiftRef.current.dispose() // FIX: Dispose to prevent memory leaks
+      } catch (e) {
+        console.error('Error disposing pitch shift:', e)
+      }
       pitchShiftRef.current = null
     }
 
@@ -192,30 +205,26 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const handlePlayPause = async () => {
     if (!isReady) return
 
-    // DEBUG: Log state before any audio operations
-    console.log('[Debug] handlePlayPause called')
-    console.log('[Debug] Mode:', preserveDuration ? 'Tone.js (Preserve)' : 'Simple (Native)')
-    console.log('[Debug] Native context:', audioContextRef.current)
-    console.log('[Debug] Native context state:', audioContextRef.current?.state)
-    console.log('[Debug] Tone context:', Tone.getContext().rawContext)
-    console.log('[Debug] Tone context state:', Tone.context.state)
-    console.log('[Debug] Same context?', audioContextRef.current === Tone.getContext().rawContext)
-    console.log('[Debug] Tone refs exist?', {
-      player: !!tonePlayerRef.current,
-      pitchShift: !!pitchShiftRef.current
-    })
+    // Safari unlock pattern (run once on first user gesture)
+    if (!safariUnlocked && audioContextRef.current) {
+      if (audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume()
+
+        // Create silent buffer to fully unlock Safari audio
+        const buffer = audioContextRef.current.createBuffer(1, 1, 22050)
+        const source = audioContextRef.current.createBufferSource()
+        source.buffer = buffer
+        source.connect(audioContextRef.current.destination)
+        source.start(0)
+
+        setSafariUnlocked(true)
+      }
+    }
 
     await Tone.start()
-    console.log('[Debug] After Tone.start(), state:', Tone.context.state)
 
     // Lazy init Tone.js on first play (Safari requires user gesture)
     if (preserveDuration && !tonePlayerRef.current && audioBufferRef.current) {
-      // DEBUG: Check if player already exists
-      if (tonePlayerRef.current) {
-        console.warn('[Debug] Tone player already exists! Memory leak detected.')
-      }
-
-      console.log('[Debug] Creating Tone.Player and PitchShift...')
       const player = new Tone.Player()
       player.buffer.set(audioBufferRef.current)
       player.loop = false
@@ -230,7 +239,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
       player.connect(pitchShiftEffect)
       pitchShiftRef.current = pitchShiftEffect
-      console.log('[Debug] Tone.js initialized on first play (Safari compatibility)')
+      console.log('Tone.js initialized on first play (Safari compatibility)')
     }
 
     if (isPlaying) {
@@ -242,36 +251,26 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       }
     } else {
       if (preserveDuration) {
-        if (!tonePlayerRef.current) {
-          console.error('[Debug] Cannot play: Tone player not initialized')
-          return
-        }
+        if (!tonePlayerRef.current) return
 
         if (pitchShiftRef.current) {
           pitchShiftRef.current.pitch = pitchShiftValue
         }
 
-        console.log('[Debug] Starting Tone.js playback from position:', currentTime)
         if (currentTime > 0) {
           tonePlayerRef.current.start(undefined, currentTime)
         } else {
           tonePlayerRef.current.start()
         }
         setIsPlaying(true)
-        console.log('[Debug] Tone.js playback started, isPlaying:', true)
       } else {
-        if (!audioBufferRef.current || !audioContextRef.current) {
-          console.error('[Debug] Cannot play: buffer or context missing')
-          return
-        }
+        if (!audioBufferRef.current || !audioContextRef.current) return
 
-        console.log('[Debug] Starting native playback from offset:', offsetRef.current)
         const source = audioContextRef.current.createBufferSource()
         source.buffer = audioBufferRef.current
 
         const playbackRate = Math.pow(2, pitchShiftValue / 12)
         source.playbackRate.value = playbackRate
-        console.log('[Debug] Playback rate:', playbackRate)
 
         source.connect(audioContextRef.current.destination)
         source.start(0, offsetRef.current)
@@ -279,7 +278,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         startTimeRef.current = audioContextRef.current.currentTime
         sourceNodeRef.current = source
         setIsPlaying(true)
-        console.log('[Debug] Native playback started, isPlaying:', true)
 
         source.onended = () => {
           stopPlayback()
@@ -543,10 +541,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 const wasPlaying = isPlaying
                 const currentPosition = currentTime
 
-                console.log('[Debug] Toggle preserve duration')
-                console.log('[Debug] Switching from:', preserveDuration ? 'preserve' : 'simple', 'to:', newValue ? 'preserve' : 'simple')
-                console.log('[Debug] Was playing:', wasPlaying, 'Position:', currentPosition)
-
                 stopPlayback()
                 offsetRef.current = currentPosition
 
@@ -554,23 +548,34 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
                 if (wasPlaying) {
                   await Tone.start()
-                  console.log('[Debug] Tone.start() called, state:', Tone.context.state)
 
                   if (newValue) {
-                    console.log('[Debug] Resuming in Tone.js mode, refs exist?', {
-                      player: !!tonePlayerRef.current,
-                      pitchShift: !!pitchShiftRef.current
-                    })
+                    // FIX: Re-initialize Tone player/effect if null
+                    if (!tonePlayerRef.current || !pitchShiftRef.current) {
+                      if (audioBufferRef.current) {
+                        const player = new Tone.Player()
+                        player.buffer.set(audioBufferRef.current)
+                        player.loop = false
+                        tonePlayerRef.current = player
+
+                        const pitchShiftEffect = new Tone.PitchShift({
+                          pitch: pitchShiftValue,
+                          windowSize: 0.1,
+                          delayTime: 0,
+                          feedback: 0
+                        }).toDestination()
+
+                        player.connect(pitchShiftEffect)
+                        pitchShiftRef.current = pitchShiftEffect
+                      }
+                    }
+
                     if (tonePlayerRef.current && pitchShiftRef.current) {
                       pitchShiftRef.current.pitch = pitchShiftValue
                       tonePlayerRef.current.start(undefined, currentPosition)
                       setIsPlaying(true)
-                      console.log('[Debug] Tone.js resumed successfully')
-                    } else {
-                      console.error('[Debug] Cannot resume: Tone refs are null!')
                     }
                   } else {
-                    console.log('[Debug] Resuming in Simple mode')
                     if (audioBufferRef.current && audioContextRef.current) {
                       const source = audioContextRef.current.createBufferSource()
                       source.buffer = audioBufferRef.current
@@ -581,7 +586,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                       startTimeRef.current = audioContextRef.current.currentTime
                       sourceNodeRef.current = source
                       setIsPlaying(true)
-                      console.log('[Debug] Simple mode resumed successfully')
 
                       source.onended = () => {
                         stopPlayback()
@@ -589,8 +593,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                         offsetRef.current = 0
                         lastCurrentTimeRef.current = 0
                       }
-                    } else {
-                      console.error('[Debug] Cannot resume: buffer or context missing')
                     }
                   }
                 }

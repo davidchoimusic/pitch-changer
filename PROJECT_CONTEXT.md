@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR:** LIVE at pitchchanger.io - Production-stable pitch shifter with Safari/Chrome optimizations, 5 audio formats, clean UI | 2025-11-23 06:40
+**TL;DR:** LIVE at pitchchanger.io - **CRITICAL: Safari has no audio** - Architecture issues found (743-line component, memory leaks) | 2025-11-22 [Current Time]
 
 ---
 
@@ -13,8 +13,8 @@
 - **Main Branch:** `main`
 - **Current Branch:** `main`
 - **Current Commit:** 2fdf570 (Symmetrical spacing + glowing line divider)
-- **Open PRs/Issues:** None
-- **Production:** https://pitchchanger.io (LIVE, stable, auto-deploys)
+- **Open PRs/Issues:** Safari no-sound bug (CRITICAL)
+- **Production:** https://pitchchanger.io (LIVE but Safari BROKEN)
 
 ---
 
@@ -71,7 +71,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Deployments
 
-- **Status:** ✅ LIVE AND STABLE
+- **Status:** ⚠️ LIVE but Safari broken (no audio)
 - **Production URL:** https://pitchchanger.io
 - **Vercel Project:** https://vercel.com/davidchoimusics-projects/pitch-changer
 - **Build System:** Webpack (Turbopack disabled via `NEXT_DISABLE_TURBOPACK=1`)
@@ -104,13 +104,13 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Current State
 
-### Working Features
+### Working Features (Chrome Only)
 ✅ File upload: MP3, WAV, FLAC, M4A, AAC (max 250MB)
 ✅ File validation with memory guard (<4GB devices)
 ✅ Real-time pitch shifting ±12 semitones (Tone.js)
 ✅ Dual playback modes with seamless switching
-✅ Lazy Tone.js initialization (Safari compatible)
-✅ Safari/Chrome optimized (windowSize: 0.1 works on both after bug fixes)
+❌ Safari audio completely broken (no sound, both modes)
+✅ Chrome working (all features functional)
 ✅ Spacebar keyboard shortcut
 ✅ Dynamic timecode (adjusts for playback speed)
 ✅ Playback speed % indicator
@@ -139,14 +139,45 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Known Issues
 
-### Current Issues
-1. **Safari Latency (~slight delay)**
-   - Issue: Small delay when changing pitch on Safari vs Chrome
-   - Cause: Safari Web Audio API buffering
-   - Status: Acceptable - resolved from 1 second to imperceptible with bug fixes
-   - Note: windowSize 0.1 works well now
+### CRITICAL Issues (Must Fix)
+1. **Safari No Audio (REGRESSION)**
+   - Issue: Both playback modes completely silent on Safari
+   - Cause: Likely AudioContext suspended/not resumed, or Tone.start() not called
+   - Diagnosis: Used to work, now broken - no console errors
+   - Fix: Add Safari unlock pattern, ensure Tone.start() on every play
+   - File: components/AudioPlayer.tsx
 
-2. **Tailwind v4 Custom Gradient Classes**
+2. **Memory Leaks - Tone.js Objects**
+   - Issue: Tone.js objects nulled without disposal
+   - Impact: Memory accumulates with each play/stop cycle
+   - Fix: Call .dispose() before nulling refs
+   - File: components/AudioPlayer.tsx:105,110
+
+3. **Architecture Complexity**
+   - Issue: 743-line AudioPlayer with 20 state variables (10 useState + 10 useRef)
+   - Impact: Race conditions, hard to debug, fixes break other features
+   - Problems: Dual playback systems, multiple AudioContext creation
+   - File: components/AudioPlayer.tsx
+
+### High Priority Issues
+4. **Preserve Toggle Doesn't Resume**
+   - Issue: Switching simple→preserve while playing stops, doesn't restart
+   - Cause: Tone refs null, not re-initialized
+   - Fix: Re-init Tone.Player/PitchShift if null, resume from position
+   - File: components/AudioPlayer.tsx:502-543
+
+5. **Multiple AudioContext Creation**
+   - Issue: Contexts created in 3 places without coordination
+   - Risk: Safari limit of 6 contexts → crashes
+   - Files: AudioPlayer.tsx:49, pitchShift.ts:25,63,124, toneExport.ts:12-27
+
+6. **Keydown Listener Issues**
+   - Issue: Re-attaches on every state change
+   - Fix: Use stable callback with useCallback
+   - File: components/AudioPlayer.tsx (spacebar handler)
+
+### Medium Priority Issues
+7. **Tailwind v4 Custom Gradient Classes**
    - Issue: bg-gradient-brand not generating in production
    - Workaround: Using inline `style={{ backgroundImage: ... }}`
    - Status: Working - inline styles are reliable
@@ -165,6 +196,26 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 ---
 
 ## Architecture Decisions
+
+### Problems Discovered (2025-11-22)
+
+1. **Monolithic AudioPlayer Component**
+   - Problem: 743 lines managing dual playback systems
+   - Impact: 20 state variables causing race conditions
+   - Solution: Need to split into smaller components/hooks
+   - File: components/AudioPlayer.tsx
+
+2. **No AudioContext Management**
+   - Problem: Contexts created in 3+ places without coordination
+   - Impact: Safari 6-context limit, memory leaks
+   - Solution: Need centralized AudioEngine singleton
+   - Files: Multiple locations creating new AudioContext()
+
+3. **Dual Playback Systems Conflict**
+   - Problem: Tone.js and Web Audio API share refs but different lifecycles
+   - Impact: Mode switching causes silent failures
+   - Solution: Need separate management for each mode
+   - File: components/AudioPlayer.tsx
 
 ### Key Choices
 
@@ -208,7 +259,20 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## TODO
 
-### Must Have (Immediate)
+### CRITICAL - Safari Fix (1-2 hours)
+- [ ] Add debug logging to identify Safari failure point
+- [ ] Test simple mode vs preserve mode separately
+- [ ] Add Safari unlock pattern (once on first gesture)
+- [ ] Ensure Tone.start() called on every play
+- [ ] Fix Tone.js memory leaks (.dispose() before null)
+- [ ] Fix preserve toggle resume bug
+- [ ] Fix keydown listener (stable callback)
+- [ ] Add abort flag for stale decodes
+- [ ] Add user-visible decode errors
+- [ ] Remove unused AudioEngine.ts file (190 lines)
+- [ ] Test on Safari after fixes
+
+### Must Have (After Safari Fixed)
 - [ ] Apply for Google AdSense
 - [ ] Add Google Analytics or Vercel Analytics
 - [ ] Test on iOS Safari (iPhone/iPad)
@@ -216,22 +280,54 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 - [ ] Test FLAC, M4A, AAC file uploads
 - [ ] Replace ad placeholders with real AdSense (after approval)
 
-### Should Have
+### Should Have (Architecture)
+- [ ] Consider minimal AudioEngine (30 lines, not 190)
+- [ ] Consolidate duplicate pitch-change logic (3 places)
+- [ ] Simplify mode switching conditionals
 - [ ] Add FAQ section with SEO keywords
 - [ ] Run Lighthouse audit
-- [ ] Add "Upload Another File" button
-- [ ] Monitor first week traffic
-- [ ] Gather user feedback
 
 ### Nice to Have
+- [ ] Full component refactor (split 743 lines)
+- [ ] Custom hooks (useAudioPlayback, useAudioProcessing)
 - [ ] MP3 export option
 - [ ] Waveform visualization
 - [ ] Batch processing
-- [ ] User presets (requires backend)
 
 ---
 
 ## Troubleshooting
+
+### Safari No Audio Diagnosis
+
+1. **Test Simple Mode First**
+   - Uncheck "Preserve Duration"
+   - Try to play
+   - If works → Tone.js issue
+   - If silent → Core AudioContext issue
+
+2. **Check Console for:**
+   - AudioContext state (suspended?)
+   - Tone.context state
+   - Any promise rejections
+
+3. **Common Safari Fixes:**
+   - Add audioContext.resume() after user gesture
+   - Ensure Tone.start() on EVERY play
+   - Add Safari unlock pattern (silent buffer)
+
+### Memory Leak Detection
+
+1. **Chrome DevTools:**
+   - Memory tab → Take heap snapshot
+   - Upload/play 5 files
+   - Take second snapshot → Compare
+   - Look for retained Tone.Player instances
+
+2. **Signs of Leaks:**
+   - Performance degrades over time
+   - Multiple AudioContext warnings
+   - Browser tab crashes after many files
 
 ### Common Errors
 
@@ -245,24 +341,28 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
    - Fix: Use smaller file or desktop
    - File: components/FileUpload.tsx:39-42
 
-3. **Safari 60% hang** (FIXED)
-   - Cause: Tone.js needed user gesture
-   - Fix: Lazy init on Play click
-   - File: components/AudioPlayer.tsx:183-200
-
-4. **Double playback** (FIXED)
-   - Cause: Stale player refs
-   - Fix: Null all refs in stopPlayback
-   - File: components/AudioPlayer.tsx:105,110
-
-5. **Invisible text** (FIXED)
-   - Cause: Tailwind v4 custom gradients not generating
-   - Fix: Inline gradient styles
-   - File: app/page.tsx:20,26,41
+3. **Safari AudioContext Limit**
+   - Cause: >6 contexts created
+   - Fix: Reuse single context
+   - Prevention: Centralized AudioEngine
 
 ---
 
 ## Recently Completed
+
+### Session 3 (2025-11-22) - Deep Architecture Analysis
+- ✅ **Discovered Safari regression** - No audio in any mode
+- ✅ **Identified architecture issues:**
+  - 743-line AudioPlayer component with 20 state variables
+  - Memory leaks from Tone.js objects not disposed
+  - Multiple AudioContext creation (3+ places)
+  - Dual playback systems causing conflicts
+- ✅ **Developed consensus fix plan** with CODEX + Claude review:
+  - Debug-first approach (30 min)
+  - Targeted fixes only (1-2 hours total)
+  - Skip big refactor for now
+- ✅ **Created unused AudioEngine.ts** (190 lines - to be removed)
+- ✅ **Documented all issues** in PROJECT_CONTEXT.md
 
 ### Session 2 (2025-11-22/23)
 - ✅ **DEPLOYED TO PRODUCTION** at https://pitchchanger.io
@@ -305,15 +405,18 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Next Steps
 
-1. **Apply for Google AdSense** (site live with content)
-2. **Enable Vercel Analytics** (one click)
-3. **Test on iOS/Android** (verify mobile UX)
-4. **Test new formats** (FLAC, M4A, AAC)
-5. **Monitor traffic** (first week baseline)
-6. **Add FAQ section** (SEO optimization)
-7. **Run Lighthouse** (performance audit)
-8. **Gather user feedback** (beta testers)
+1. **FIX SAFARI AUDIO** (CRITICAL - 1-2 hours)
+   - Debug to find exact failure point
+   - Apply minimal targeted fixes
+   - Test on Safari and Chrome
+2. **Fix Memory Leaks** (Tone.js disposal)
+3. **Fix Preserve Toggle Resume** (confirmed bug)
+4. **Remove unused AudioEngine.ts** (190 lines)
+5. **Then: Apply for Google AdSense** (after Safari fixed)
+6. **Test on iOS/Android** (verify mobile UX)
+7. **Monitor for AudioContext limit issues**
+8. **Consider minimal refactor if needed**
 
 ---
 
-**Last Updated:** 2025-11-23 06:40 (PRODUCTION STABLE)
+**Last Updated:** 2025-11-22 (Safari broken, architecture issues identified)
