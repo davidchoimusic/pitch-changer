@@ -16,12 +16,15 @@ export default function Home() {
             {/* Branding */}
             <div className="pb-8">
               <h1
-                className="text-5xl md:text-6xl font-black bg-clip-text text-transparent"
+                className="text-5xl md:text-6xl font-black bg-clip-text text-transparent leading-tight pb-2"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
                 Pitch Changer Tool
               </h1>
-              <p className="text-xl md:text-2xl font-semibold text-accent mt-3">
+              <p
+                className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-3"
+                style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
+              >
                 PitchChanger.io
               </p>
 
@@ -114,12 +117,15 @@ export default function Home() {
           {/* Inline Title */}
           <div className="text-center pb-6">
             <h1
-              className="text-5xl md:text-6xl font-black bg-clip-text text-transparent"
+              className="text-5xl md:text-6xl font-black bg-clip-text text-transparent leading-tight pb-2"
               style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
             >
               Pitch Changer Tool
             </h1>
-            <p className="text-xl md:text-2xl font-semibold text-accent mt-3">
+            <p
+              className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-3"
+              style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
+            >
               PitchChanger.io
             </p>
 
