@@ -190,7 +190,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
       const pitchShiftEffect = new Tone.PitchShift({
         pitch: pitchShiftValue,
-        windowSize: 0.03, // Reduced for faster response (was 0.1)
+        windowSize: 0.07, // Balanced for quality + responsiveness
         delayTime: 0,
         feedback: 0
       }).toDestination()
