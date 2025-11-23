@@ -23,6 +23,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [processProgress, setProcessProgress] = useState(0)
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null)
   const [safariUnlocked, setSafariUnlocked] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const tonePlayerRef = useRef<Tone.Player | null>(null)
   const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
@@ -34,6 +35,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const offsetRef = useRef<number>(0)
   const lastCurrentTimeRef = useRef<number>(0)
   const downloadSectionRef = useRef<HTMLDivElement | null>(null)
+  // FIX: Refs for stable keydown callback
+  const isReadyRef = useRef(isReady)
+  const isPlayingRef = useRef(isPlaying)
 
   // Load audio file
   useEffect(() => {
@@ -43,6 +47,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       try {
         setUploadProgress(0)
         setIsReady(false)
+        setError(null) // Clear previous errors
+        setSafariUnlocked(false) // FIX: Reset unlock flag for new file
 
         // Read file as ArrayBuffer (single copy in memory)
         const arrayBuffer = await file.arrayBuffer()
@@ -51,6 +57,15 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         if (abortController.signal.aborted) return
 
         setUploadProgress(30)
+
+        // FIX: Close old AudioContext before creating new one
+        if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+          try {
+            await audioContextRef.current.close()
+          } catch (e) {
+            console.error('Error closing old context:', e)
+          }
+        }
 
         // Decode audio buffer for Web Audio API (reuses same ArrayBuffer, no copy)
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
@@ -74,7 +89,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         if (!abortController.signal.aborted) {
           console.error('Error loading audio:', error)
           setUploadProgress(100)
-          setIsReady(false) // FIX: Don't enable playback on error
+          setIsReady(false)
+          // FIX: Show user-friendly error message
+          setError('Unable to load audio file. Format may not be supported in this browser.')
         }
       }
     }
@@ -92,13 +109,32 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
       }
+      // FIX: Close context on cleanup
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close().catch(e => console.error('Cleanup context close error:', e))
+      }
     }
   }, [file])
 
-  // Spacebar to play/pause
+  // FIX: Update refs when state changes (for stable keydown callback)
+  useEffect(() => {
+    isReadyRef.current = isReady
+  }, [isReady])
+
+  useEffect(() => {
+    isPlayingRef.current = isPlaying
+  }, [isPlaying])
+
+  // FIX: Spacebar to play/pause with stable callback (attach once)
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.code === 'Space' && isReady) {
+      // Don't intercept space if focused on input/textarea
+      const target = e.target as HTMLElement
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return
+      }
+
+      if (e.code === 'Space' && isReadyRef.current) {
         e.preventDefault()
         handlePlayPause()
       }
@@ -106,7 +142,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [isPlaying, isReady])
+  }, []) // Empty deps = attach once only
 
   const stopPlayback = () => {
     // Stop Tone playback path
@@ -440,6 +476,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             </p>
           </div>
         </div>
+
+        {/* FIX: Display decode errors to user */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-4 mb-4">
+            <p className="text-red-400 text-sm">{error}</p>
+          </div>
+        )}
 
         {uploadProgress < 100 && (
           <div className="space-y-2">
