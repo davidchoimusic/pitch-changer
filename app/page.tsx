@@ -90,7 +90,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-lg font-semibold">Upload Audio</h3>
                 <p className="text-sm text-gray-400">
-                  Drag and drop or select your MP3/WAV file (up to 250MB)
+                  Drag and drop your audio file (MP3, WAV, FLAC, M4A, AAC - up to 250MB)
                 </p>
               </div>
               <div className="space-y-3">

@@ -4,6 +4,9 @@
   :root {
     --color-bg: 17 24 39;
     --color-accent: 59 130 246;
+    --gradient-brand: linear-gradient(135deg, rgb(244 114 182) 0%, rgb(168 85 247) 100%);
+    --gradient-subtle: linear-gradient(180deg, rgb(31 41 55) 0%, rgb(17 24 39) 100%);
+    --shadow-glow: 0 0 40px rgba(192, 132, 252, 0.5);
   }
 
   body {

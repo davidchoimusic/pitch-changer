@@ -11,7 +11,16 @@ interface FileUploadProps {
 export function FileUpload({
   onFileSelect,
   maxSizeMB = 250,
-  acceptedFormats = ['audio/mpeg', 'audio/wav', 'audio/mp3']
+  acceptedFormats = [
+    'audio/mpeg',
+    'audio/wav',
+    'audio/mp3',
+    'audio/flac',
+    'audio/m4a',
+    'audio/x-m4a',
+    'audio/aac',
+    'audio/mp4'
+  ]
 }: FileUploadProps) {
   const [error, setError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -21,8 +30,8 @@ export function FileUpload({
     setError(null)
 
     // Check file type
-    if (!acceptedFormats.includes(file.type) && !file.name.match(/\.(mp3|wav)$/i)) {
-      setError('Please upload an MP3 or WAV file')
+    if (!acceptedFormats.includes(file.type) && !file.name.match(/\.(mp3|wav|flac|m4a|aac)$/i)) {
+      setError('Please upload an MP3, WAV, FLAC, M4A, or AAC file')
       return false
     }
 
@@ -94,7 +103,7 @@ export function FileUpload({
         <input
           ref={fileInputRef}
           type="file"
-          accept=".mp3,.wav,audio/mpeg,audio/wav"
+          accept=".mp3,.wav,.flac,.m4a,.aac,audio/mpeg,audio/wav,audio/flac,audio/m4a,audio/aac,audio/mp4"
           onChange={handleFileChange}
           className="hidden"
         />
@@ -110,7 +119,7 @@ export function FileUpload({
             </p>
           </div>
           <div className="text-sm text-gray-500">
-            MP3 or WAV • Max {maxSizeMB}MB
+            MP3, WAV, FLAC, M4A, AAC • Max {maxSizeMB}MB
           </div>
         </div>
       </div>
