@@ -45,7 +45,8 @@ export default function Home() {
             <div className="space-y-4">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 bg-clip-text text-transparent"
                   style={{
-                    filter: 'drop-shadow(0 0 30px rgba(219,39,119,0.3)) drop-shadow(0 0 20px rgba(168,85,247,0.3))'
+                    textShadow: '0 2px 8px rgba(0,0,0,0.4), 0 4px 16px rgba(219,39,119,0.3), 0 6px 20px rgba(168,85,247,0.2)',
+                    filter: 'drop-shadow(0 0 30px rgba(219,39,119,0.3)) drop-shadow(0 0 20px rgba(168,85,247,0.3)) drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
                   }}>
                 Change the Pitch of Your<br />Song or Audio
               </h2>
