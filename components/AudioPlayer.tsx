@@ -344,12 +344,31 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     lastCurrentTimeRef.current = newTime
 
     if (isPlaying) {
-      stopPlayback()
+      // FIX: Don't call stopPlayback() - keep RAF running to prevent timecode freeze
 
       if (preserveDuration && tonePlayerRef.current) {
+        // Stop Tone player without disposing
+        try {
+          tonePlayerRef.current.stop()
+        } catch (e) {
+          console.error('Tone stop error during seek:', e)
+        }
+        // Start at new position
         tonePlayerRef.current.start(undefined, newTime)
-        setIsPlaying(true)
+        // Don't touch isPlaying - stays true, RAF keeps running
+
       } else if (audioBufferRef.current && audioContextRef.current) {
+        // Stop old native source
+        if (sourceNodeRef.current) {
+          try {
+            sourceNodeRef.current.stop()
+            sourceNodeRef.current.disconnect()
+          } catch (e) {
+            console.error('Native stop error during seek:', e)
+          }
+        }
+
+        // Create new source at new position
         const source = audioContextRef.current.createBufferSource()
         source.buffer = audioBufferRef.current
         const playbackRate = Math.pow(2, pitchShiftValue / 12)
@@ -358,7 +377,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         source.start(0, newTime)
         startTimeRef.current = audioContextRef.current.currentTime
         sourceNodeRef.current = source
-        setIsPlaying(true)
+        // Don't touch isPlaying - stays true, RAF keeps running
+
+        source.onended = () => {
+          stopPlayback()
+          setCurrentTime(0)
+          offsetRef.current = 0
+          lastCurrentTimeRef.current = 0
+        }
       }
     }
   }
