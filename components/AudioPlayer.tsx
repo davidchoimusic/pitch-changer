@@ -182,7 +182,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
   // Update time for Tone.js
   const updateTimeTone = () => {
-    if (!tonePlayerRef.current || !isPlaying) return
+    // FIX: Use ref instead of state to avoid stale closure
+    if (!tonePlayerRef.current || !isPlayingRef.current) return
 
     const time = tonePlayerRef.current.immediate()
     setCurrentTime(time)
@@ -198,7 +199,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
   // Update time for native Web Audio
   const updateTimeNative = () => {
-    if (!audioContextRef.current || !isPlaying) return
+    // FIX: Use ref instead of state to avoid stale closure
+    if (!audioContextRef.current || !isPlayingRef.current) return
 
     const elapsed = audioContextRef.current.currentTime - startTimeRef.current + offsetRef.current
     const newTime = Math.min(elapsed, duration)
