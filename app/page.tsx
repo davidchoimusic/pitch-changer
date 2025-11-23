@@ -15,10 +15,13 @@ export default function Home() {
           <div className="text-center space-y-12">
             {/* Branding */}
             <div className="pb-8">
-              <h1 className="text-6xl md:text-7xl font-black text-white">
+              <h1
+                className="text-5xl md:text-6xl font-black tracking-tight bg-gradient-to-r from-white via-accent/80 to-accent bg-clip-text text-transparent"
+                style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 8px 22px rgba(59,130,246,0.35), 0 0 1px rgba(255,255,255,0.6)' }}
+              >
                 Pitch Changer Tool
               </h1>
-              <p className="text-2xl text-accent mt-3 font-bold">
+              <p className="text-xl md:text-2xl text-accent mt-3 font-semibold tracking-wide drop-shadow-[0_4px_16px_rgba(59,130,246,0.35)]">
                 PitchChanger.io
               </p>
 
@@ -107,10 +110,13 @@ export default function Home() {
         <div className="space-y-8">
           {/* Inline Title */}
           <div className="text-center pb-6">
-            <h1 className="text-6xl md:text-7xl font-black text-white">
+            <h1
+              className="text-5xl md:text-6xl font-black tracking-tight bg-gradient-to-r from-white via-accent/80 to-accent bg-clip-text text-transparent"
+              style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 8px 22px rgba(59,130,246,0.35), 0 0 1px rgba(255,255,255,0.6)' }}
+            >
               Pitch Changer Tool
             </h1>
-            <p className="text-2xl text-accent mt-3 font-bold">
+            <p className="text-xl md:text-2xl text-accent mt-3 font-semibold tracking-wide drop-shadow-[0_4px_16px_rgba(59,130,246,0.35)]">
               PitchChanger.io
             </p>
 
