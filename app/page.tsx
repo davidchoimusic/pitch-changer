@@ -43,7 +43,10 @@ export default function Home() {
 
             {/* Tagline */}
             <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 bg-clip-text text-transparent"
+                  style={{
+                    filter: 'drop-shadow(0 0 30px rgba(219,39,119,0.3)) drop-shadow(0 0 20px rgba(168,85,247,0.3))'
+                  }}>
                 Change the Pitch of Your<br />Song or Audio
               </h2>
               <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
