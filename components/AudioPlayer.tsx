@@ -274,10 +274,12 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     const newPitch = parseInt(e.target.value)
     setPitchShiftValue(newPitch)
 
+    // Always update Tone.js pitch shift (even when paused)
     if (pitchShiftRef.current) {
       pitchShiftRef.current.pitch = newPitch
     }
 
+    // If playing in simple mode (native), restart with new pitch
     if (isPlaying && !preserveDuration && audioBufferRef.current && audioContextRef.current) {
       const currentOffset = lastCurrentTimeRef.current
 
@@ -294,6 +296,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       sourceNodeRef.current = source
       setIsPlaying(true)
     }
+    // Note: Tone.js updates pitch in real-time, no restart needed
   }
 
   const handleStartProcessing = async () => {
