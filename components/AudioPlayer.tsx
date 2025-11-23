@@ -55,10 +55,12 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
         setUploadProgress(30)
 
-        // SIMPLIFIED: Use Tone's context for decoding (single context)
-        await Tone.start() // Ensure Tone context exists
-        const audioContext = Tone.context.rawContext as AudioContext
+        // Decode with regular AudioContext (Tone.start() requires user gesture)
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
+
+        // Close immediately after decode - we'll use Tone's context for playback
+        await audioContext.close()
 
         // Check again before setting state
         if (abortController.signal.aborted) return
