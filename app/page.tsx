@@ -118,24 +118,29 @@ export default function Home() {
         <div className="space-y-8">
           {/* Inline Title */}
           <div className="text-center pb-6">
-            <h1
-              className="text-5xl md:text-6xl font-black tracking-tight bg-gradient-to-r from-white via-accent/80 to-accent bg-clip-text text-transparent"
-              style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 8px 22px rgba(59,130,246,0.35), 0 0 1px rgba(255,255,255,0.6)' }}
-            >
+            <h1 className="text-5xl md:text-6xl font-black bg-gradient-brand bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,132,252,0.5)]">
               Pitch Changer Tool
             </h1>
-            <p
-              className="text-xl md:text-2xl font-semibold tracking-wide bg-gradient-to-r from-accent via-white/85 to-accent bg-clip-text text-transparent"
-              style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 6px 18px rgba(59,130,246,0.32)' }}
-            >
+            <p className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-primary/80 to-accent-pink/80 bg-clip-text text-transparent mt-3">
               PitchChanger.io
             </p>
 
-            {/* Simple divider */}
-            <div className="mt-6 flex items-center justify-center">
-              <div className="h-px bg-accent/30 flex-1 max-w-xs"></div>
-              <div className="w-2 h-2 bg-accent rounded-full mx-4"></div>
-              <div className="h-px bg-accent/30 flex-1 max-w-xs"></div>
+            {/* Animated waveform divider */}
+            <div className="flex items-center justify-center gap-3 mt-8">
+              <div className="h-px flex-1 max-w-xs bg-gradient-to-r from-transparent to-primary/40"></div>
+              <div className="flex items-center gap-1.5">
+                {[6, 8, 10, 8, 6].map((height, i) => (
+                  <div
+                    key={i}
+                    className="w-1 bg-gradient-to-t from-accent-pink to-primary rounded-full animate-pulse"
+                    style={{
+                      height: `${height * 4}px`,
+                      animationDelay: `${i * 150}ms`
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="h-px flex-1 max-w-xs bg-gradient-to-l from-transparent to-primary/40"></div>
             </div>
           </div>
 
