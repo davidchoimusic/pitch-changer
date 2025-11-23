@@ -246,9 +246,23 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       try {
         tonePlayerRef.current.stop()
       } catch (e) {
-        console.error('Error stopping during seek:', e)
+        // Player might already be stopped
       }
-      tonePlayerRef.current.start(undefined, newTime)
+
+      // Recreate player at new position for accurate timing
+      tonePlayerRef.current.dispose()
+
+      const player = new Tone.Player()
+      player.buffer.set(audioBufferRef.current!)
+      player.loop = false
+      tonePlayerRef.current = player
+
+      if (pitchShiftRef.current) {
+        player.connect(pitchShiftRef.current)
+        pitchShiftRef.current.pitch = pitchShiftValue
+      }
+
+      player.start(undefined, newTime)
     }
   }
 
