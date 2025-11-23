@@ -31,9 +31,15 @@ export default function Home() {
                 PitchChanger.io
               </p>
 
-              {/* Simple spectrum divider */}
-              <div className="mt-6 text-accent text-2xl tracking-wider">
-                ▁ ▃ ▅ ▆ ▇ ▆ ▅ ▃ ▁
+              {/* Glowing gradient line */}
+              <div className="mt-6 flex justify-center">
+                <div
+                  className="h-1 w-48 rounded-full"
+                  style={{
+                    backgroundImage: 'linear-gradient(to right, transparent, rgb(59 130 246), transparent)',
+                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
+                  }}
+                />
               </div>
             </div>
 
@@ -130,9 +136,15 @@ export default function Home() {
               PitchChanger.io
             </p>
 
-            {/* Simple spectrum divider */}
-            <div className="mt-6 text-accent text-2xl tracking-wider">
-              ▁ ▃ ▅ ▆ ▇ ▆ ▅ ▃ ▁
+            {/* Glowing gradient line */}
+            <div className="mt-6 flex justify-center">
+              <div
+                className="h-1 w-48 rounded-full"
+                style={{
+                  backgroundImage: 'linear-gradient(to right, transparent, rgb(59 130 246), transparent)',
+                  boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
+                }}
+              />
             </div>
           </div>
 
