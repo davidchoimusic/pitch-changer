@@ -28,15 +28,15 @@ export default function Home() {
               </p>
 
               {/* Tech-y divider */}
-              <div className="relative mt-8">
+              <div className="relative mt-8 h-6">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-50"></div>
+                  <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent"></div>
                 </div>
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full h-px bg-gradient-to-r from-transparent via-accent to-transparent blur-sm"></div>
+                  <div className="w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent blur-md opacity-70"></div>
                 </div>
                 <div className="relative flex justify-center">
-                  <div className="w-2 h-2 bg-accent rounded-full shadow-[0_0_20px_rgba(59,130,246,0.8)]"></div>
+                  <div className="w-3 h-3 bg-accent rounded-full shadow-[0_0_30px_rgba(59,130,246,1),0_0_15px_rgba(59,130,246,0.8)]"></div>
                 </div>
               </div>
             </div>
