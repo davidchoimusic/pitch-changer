@@ -28,11 +28,19 @@ export default function Home() {
                 PitchChanger.io
               </p>
 
-              {/* Simple line divider */}
-              <div className="flex items-center justify-center gap-3 mt-8">
-                <div className="h-px flex-1 max-w-xs bg-accent/30"></div>
-                <div className="w-2 h-2 rounded-full bg-accent"></div>
-                <div className="h-px flex-1 max-w-xs bg-accent/30"></div>
+              {/* Spectrum Analyzer */}
+              <div className="flex items-end justify-center gap-1 mt-8 h-24">
+                {Array.from({ length: 40 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-1 bg-gradient-to-t from-accent/80 to-accent rounded-t"
+                    style={{
+                      height: '20%',
+                      animation: `pulse ${0.5 + Math.random() * 0.8}s ease-in-out infinite`,
+                      animationDelay: `${i * 0.03}s`
+                    }}
+                  />
+                ))}
               </div>
             </div>
 
@@ -129,11 +137,19 @@ export default function Home() {
               PitchChanger.io
             </p>
 
-            {/* Simple line divider */}
-            <div className="flex items-center justify-center gap-3 mt-8">
-              <div className="h-px flex-1 max-w-xs bg-accent/30"></div>
-              <div className="w-2 h-2 rounded-full bg-accent"></div>
-              <div className="h-px flex-1 max-w-xs bg-accent/30"></div>
+            {/* Spectrum Analyzer */}
+            <div className="flex items-end justify-center gap-1 mt-8 h-24">
+              {Array.from({ length: 40 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-1 bg-gradient-to-t from-accent/80 to-accent rounded-t"
+                  style={{
+                    height: '20%',
+                    animation: `pulse ${0.5 + Math.random() * 0.8}s ease-in-out infinite`,
+                    animationDelay: `${i * 0.03}s`
+                  }}
+                />
+              ))}
             </div>
           </div>
 
