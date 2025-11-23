@@ -12,26 +12,31 @@ export default function Home() {
       {!selectedFile ? (
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Hero Section */}
-          <div className="text-center space-y-6">
-            <div>
-              <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent"
+          <div className="text-center space-y-12">
+            {/* Branding */}
+            <div className="pb-8 border-b border-divider">
+              <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent leading-tight pb-4"
                   style={{
                     textShadow: '0 4px 12px rgba(0,0,0,0.5), 0 8px 24px rgba(59,130,246,0.3)',
                     filter: 'drop-shadow(0 0 40px rgba(59,130,246,0.4)) drop-shadow(0 2px 4px rgba(0,0,0,0.6))'
                   }}>
                 Pitch Changer Tool
               </h1>
-              <p className="text-2xl text-accent mt-3 font-bold tracking-wide"
+              <p className="text-2xl text-accent mt-4 font-bold tracking-wide"
                  style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.5))' }}>
                 PitchChanger.io
               </p>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-              Change the Pitch of Your<br />Song or Audio
-            </h2>
-            <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
-              Free, instant pitch shifting in your browser. 100% client-side - your files never leave your device.
-            </p>
+
+            {/* Tagline */}
+            <div className="space-y-4">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                Change the Pitch of Your<br />Song or Audio
+              </h2>
+              <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
+                Free, instant pitch shifting in your browser. 100% client-side - your files never leave your device.
+              </p>
+            </div>
           </div>
 
           {/* Upload Section */}
@@ -97,17 +102,17 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Inline Title */}
-          <div className="text-center">
-            <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent"
+          <div className="text-center pb-6 border-b border-divider">
+            <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent leading-tight pb-4"
                 style={{
                   textShadow: '0 4px 12px rgba(0,0,0,0.5), 0 8px 24px rgba(59,130,246,0.3)',
                   filter: 'drop-shadow(0 0 40px rgba(59,130,246,0.4)) drop-shadow(0 2px 4px rgba(0,0,0,0.6))'
                 }}>
               Pitch Changer Tool
             </h1>
-            <p className="text-2xl text-accent mt-3 font-bold tracking-wide"
+            <p className="text-2xl text-accent mt-4 font-bold tracking-wide"
                style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.5))' }}>
               PitchChanger.io
             </p>
