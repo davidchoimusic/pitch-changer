@@ -25,14 +25,14 @@ export default function Home() {
                 Pitch Changer Tool
               </h1>
               <p
-                className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-3"
+                className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-2"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
                 PitchChanger.io
               </p>
 
               {/* Glowing gradient line */}
-              <div className="mt-6 flex justify-center">
+              <div className="mt-4 flex justify-center">
                 <div
                   className="h-1 w-48 rounded-full"
                   style={{
@@ -44,7 +44,7 @@ export default function Home() {
             </div>
 
             {/* Tagline */}
-            <div className="space-y-4">
+            <div className="space-y-4 mt-4">
               <h2
                 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
@@ -130,14 +130,14 @@ export default function Home() {
               Pitch Changer Tool
             </h1>
             <p
-              className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-3"
+              className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-2"
               style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
             >
               PitchChanger.io
             </p>
 
             {/* Glowing gradient line */}
-            <div className="mt-6 flex justify-center">
+            <div className="mt-4 flex justify-center">
               <div
                 className="h-1 w-48 rounded-full"
                 style={{
