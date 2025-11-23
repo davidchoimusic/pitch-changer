@@ -159,13 +159,19 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
   // SIMPLIFIED: Single animation loop for Tone.js only
   const updateTime = () => {
-    if (!tonePlayerRef.current || !isPlayingRef.current) return
+    if (!tonePlayerRef.current || !isPlayingRef.current) {
+      console.log('[RAF] Stopped - player:', !!tonePlayerRef.current, 'playing:', isPlayingRef.current)
+      return
+    }
 
     const time = tonePlayerRef.current.immediate()
 
     // FIX: Don't update currentTime while user is dragging seek slider
     if (!isSeekingRef.current) {
       setCurrentTime(time)
+      console.log('[RAF] Updated time:', time.toFixed(2))
+    } else {
+      console.log('[RAF] Skipped update (seeking)')
     }
 
     if (time >= duration - 0.1) {
@@ -196,8 +202,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const handlePlayPause = async () => {
     if (!isReady) return
 
+    console.log('[Play] handlePlayPause called, isPlaying:', isPlaying)
+
     // SIMPLIFIED: Safari unlock for Tone.js context only
     if (!safariUnlocked) {
+      console.log('[Play] Running Safari unlock')
       await Tone.start()
 
       if (Tone.context.state === 'suspended') {
@@ -205,9 +214,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       }
 
       setSafariUnlocked(true)
+      console.log('[Play] Safari unlocked, context state:', Tone.context.state)
     }
 
     await Tone.start()
+    console.log('[Play] Tone.start() called')
 
     // Lazy init Tone.js on first play (Safari requires user gesture)
     if (!tonePlayerRef.current && audioBufferRef.current) {
@@ -229,35 +240,42 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
 
     if (isPlaying) {
+      console.log('[Play] Pausing playback')
       stopPlayback()
     } else {
-      if (!tonePlayerRef.current) return
+      if (!tonePlayerRef.current) {
+        console.error('[Play] Cannot play: tonePlayerRef is null')
+        return
+      }
 
       if (pitchShiftRef.current) {
         pitchShiftRef.current.pitch = pitchShiftValue
       }
 
+      console.log('[Play] Starting Tone.Player from position:', currentTime)
       if (currentTime > 0) {
         tonePlayerRef.current.start(undefined, currentTime)
       } else {
         tonePlayerRef.current.start()
       }
       setIsPlaying(true)
+      console.log('[Play] setIsPlaying(true) called, isPlayingRef will update to:', true)
     }
   }
 
   const handleSeekStart = () => {
-    // FIX: Pause animation updates while user drags
+    console.log('[Seek] Mouse/Touch DOWN - pausing RAF updates')
     isSeekingRef.current = true
   }
 
   const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value)
+    console.log('[Seek] onChange fired, newTime:', newTime, 'isPlaying:', isPlaying)
     setCurrentTime(newTime)
   }
 
   const handleSeekEnd = () => {
-    // FIX: Resume animation and restart playback from new position
+    console.log('[Seek] Mouse/Touch UP - resuming RAF, restarting from:', currentTime)
     isSeekingRef.current = false
 
     if (isPlaying && tonePlayerRef.current) {
@@ -268,6 +286,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       }
 
       tonePlayerRef.current.start(undefined, currentTime)
+      console.log('[Seek] Tone.Player restarted at position:', currentTime)
     }
   }
 
