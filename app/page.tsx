@@ -107,29 +107,18 @@ export default function Home() {
         <div className="space-y-8">
           {/* Inline Title */}
           <div className="text-center pb-6">
-            <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent leading-tight pb-4"
-                style={{
-                  textShadow: '0 4px 12px rgba(0,0,0,0.5), 0 8px 24px rgba(59,130,246,0.3)',
-                  filter: 'drop-shadow(0 0 40px rgba(59,130,246,0.4)) drop-shadow(0 2px 4px rgba(0,0,0,0.6))'
-                }}>
+            <h1 className="text-6xl md:text-7xl font-black text-white">
               Pitch Changer Tool
             </h1>
-            <p className="text-2xl text-accent mt-4 font-bold tracking-wide"
-               style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.5))' }}>
+            <p className="text-2xl text-accent mt-3 font-bold">
               PitchChanger.io
             </p>
 
-            {/* Tech-y divider */}
-            <div className="relative mt-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-50"></div>
-              </div>
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-accent to-transparent blur-sm"></div>
-              </div>
-              <div className="relative flex justify-center">
-                <div className="w-2 h-2 bg-accent rounded-full shadow-[0_0_20px_rgba(59,130,246,0.8)]"></div>
-              </div>
+            {/* Simple divider */}
+            <div className="mt-6 flex items-center justify-center">
+              <div className="h-px bg-accent/30 flex-1 max-w-xs"></div>
+              <div className="w-2 h-2 bg-accent rounded-full mx-4"></div>
+              <div className="h-px bg-accent/30 flex-1 max-w-xs"></div>
             </div>
           </div>
 
