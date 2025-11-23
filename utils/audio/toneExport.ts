@@ -12,46 +12,55 @@ export async function exportWithTone(
   // Save current context to restore later
   const previousContext = Tone.getContext()
 
-  // Create offline context with same sample rate and duration
-  const offlineContext = new Tone.OfflineContext(
-    audioBuffer.numberOfChannels,
-    audioBuffer.duration,
-    audioBuffer.sampleRate
-  )
+  let player: Tone.Player | null = null
+  let pitchShift: Tone.PitchShift | null = null
 
-  // Set offline context as current
-  Tone.setContext(offlineContext)
+  try {
+    // Create offline context with same sample rate and duration
+    const offlineContext = new Tone.OfflineContext(
+      audioBuffer.numberOfChannels,
+      audioBuffer.duration,
+      audioBuffer.sampleRate
+    )
 
-  // Create player from buffer
-  const player = new Tone.Player(audioBuffer)
+    // Set offline context as current
+    Tone.setContext(offlineContext)
 
-  // Create pitch shift effect
-  const pitchShift = new Tone.PitchShift({
-    pitch: semitones,
-    windowSize: 0.1,
-    delayTime: 0,
-    feedback: 0
-  }).toDestination()
+    // Create player from buffer
+    player = new Tone.Player(audioBuffer)
 
-  // Connect chain
-  player.connect(pitchShift)
+    // Create pitch shift effect
+    pitchShift = new Tone.PitchShift({
+      pitch: semitones,
+      windowSize: 0.1,
+      delayTime: 0,
+      feedback: 0
+    }).toDestination()
 
-  // Start playback
-  player.start(0)
+    // Connect chain
+    player.connect(pitchShift)
 
-  // Render offline
-  const rendered = await offlineContext.render()
+    // Start playback
+    player.start(0)
 
-  // Clean up
-  player.dispose()
-  pitchShift.dispose()
+    // Render offline
+    const rendered = await offlineContext.render()
 
-  // Restore previous context for live playback
-  Tone.setContext(previousContext)
+    if (onProgress) {
+      onProgress(100)
+    }
 
-  if (onProgress) {
-    onProgress(100)
+    return rendered
+  } finally {
+    // ALWAYS restore context and clean up, even on error
+    try {
+      if (player) player.dispose()
+      if (pitchShift) pitchShift.dispose()
+    } catch (e) {
+      console.error('Error disposing Tone nodes:', e)
+    }
+
+    // Restore previous context for live playback
+    Tone.setContext(previousContext)
   }
-
-  return rendered
 }

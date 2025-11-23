@@ -41,36 +41,24 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         setUploadProgress(0)
         setIsReady(false)
 
+        // Read file as ArrayBuffer (single copy in memory)
         const arrayBuffer = await file.arrayBuffer()
         setUploadProgress(30)
 
-        // Decode audio buffer
+        // Decode audio buffer for Web Audio API
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
         audioContextRef.current = audioContext
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0))
         audioBufferRef.current = audioBuffer
         setDuration(audioBuffer.duration)
         setUploadProgress(60)
 
-        // Create blob URL for Tone.js
-        const blob = new Blob([arrayBuffer], { type: file.type })
-        const url = URL.createObjectURL(blob)
-
-        // Create Tone.js player for preserve duration mode
-        const player = new Tone.Player({
-          url: url,
-          loop: false,
-          onload: () => {
-            console.log('Tone.js player loaded successfully')
-            setUploadProgress(100)
-            setIsReady(true)
-          },
-          onerror: (err) => {
-            console.error('Tone.js player error:', err)
-            setUploadProgress(100)
-            setIsReady(true) // Still enable playback with fallback
-          }
-        })
+        // Create Tone.js player directly from the same buffer (no blob copy)
+        await Tone.start()
+        const player = new Tone.Player()
+        player.buffer.set(audioBuffer) // Reuse decoded buffer
+        player.loop = false
+        tonePlayerRef.current = player
 
         // Create pitch shift effect
         const pitchShiftEffect = new Tone.PitchShift({
@@ -81,8 +69,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         }).toDestination()
 
         player.connect(pitchShiftEffect)
-        tonePlayerRef.current = player
         pitchShiftRef.current = pitchShiftEffect
+
+        setUploadProgress(100)
+        setIsReady(true)
+        console.log('Tone.js player loaded successfully')
 
       } catch (error) {
         console.error('Error loading audio:', error)
