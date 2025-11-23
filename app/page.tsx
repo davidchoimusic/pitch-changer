@@ -84,18 +84,26 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <AudioPlayer
-          file={selectedFile}
-          onProcessComplete={(blob) => {
-            // Handle download
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `pitch-shifted-${selectedFile.name}`
-            a.click()
-            URL.revokeObjectURL(url)
-          }}
-        />
+        <div className="space-y-6">
+          {/* Inline Title */}
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-white">Pitch Changer Tool</h2>
+            <p className="text-sm text-accent mt-1">PitchChanger.io</p>
+          </div>
+
+          <AudioPlayer
+            file={selectedFile}
+            onProcessComplete={(blob) => {
+              // Handle download
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url
+              a.download = `pitch-shifted-${selectedFile.name}`
+              a.click()
+              URL.revokeObjectURL(url)
+            }}
+          />
+        </div>
       )}
     </div>
   )
