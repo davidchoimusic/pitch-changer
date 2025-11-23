@@ -21,21 +21,29 @@ export default function Home() {
               >
                 Pitch Changer Tool
               </h1>
-              <p className="text-xl md:text-2xl text-accent mt-3 font-semibold tracking-wide drop-shadow-[0_4px_16px_rgba(59,130,246,0.35)]">
+              <p
+                className="text-xl md:text-2xl font-semibold tracking-wide bg-gradient-to-r from-accent via-white/85 to-accent bg-clip-text text-transparent"
+                style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 6px 18px rgba(59,130,246,0.32)' }}
+              >
                 PitchChanger.io
               </p>
 
-              {/* Simple divider */}
-              <div className="mt-6 flex items-center justify-center">
-                <div className="h-px bg-accent/30 flex-1 max-w-xs"></div>
-                <div className="w-2 h-2 bg-accent rounded-full mx-4"></div>
-                <div className="h-px bg-accent/30 flex-1 max-w-xs"></div>
+              {/* Unique separator */}
+              <div className="mt-6 flex items-center justify-center gap-3 text-accent/80 text-lg tracking-widest">
+                <span className="h-px flex-1 max-w-xs bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+                <span className="px-3 py-1 rounded-full border border-accent/40 bg-accent/10 shadow-[0_8px_20px_rgba(59,130,246,0.25)]">
+                  ◎ ◎ ◎
+                </span>
+                <span className="h-px flex-1 max-w-xs bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
               </div>
             </div>
 
             {/* Tagline */}
             <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-white">
+              <h2
+                className="text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-pink-400 via-purple-300 to-purple-500 bg-clip-text text-transparent"
+                style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 6px 18px rgba(192,132,252,0.28)' }}
+              >
                 Change the Pitch of Your<br />Song or Audio
               </h2>
               <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
@@ -116,7 +124,10 @@ export default function Home() {
             >
               Pitch Changer Tool
             </h1>
-            <p className="text-xl md:text-2xl text-accent mt-3 font-semibold tracking-wide drop-shadow-[0_4px_16px_rgba(59,130,246,0.35)]">
+            <p
+              className="text-xl md:text-2xl font-semibold tracking-wide bg-gradient-to-r from-accent via-white/85 to-accent bg-clip-text text-transparent"
+              style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 6px 18px rgba(59,130,246,0.32)' }}
+            >
               PitchChanger.io
             </p>
 
