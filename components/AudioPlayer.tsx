@@ -54,7 +54,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         setUploadProgress(60)
 
         // Create Tone.js player directly from the decoded buffer (no additional memory)
-        await Tone.start()
         const player = new Tone.Player()
         player.buffer.set(audioBuffer) // Reuse decoded buffer
         player.loop = false
@@ -111,17 +110,26 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   }, [isPlaying, isReady])
 
   const stopPlayback = () => {
-    if (preserveDuration && tonePlayerRef.current) {
-      tonePlayerRef.current.stop()
-    } else if (sourceNodeRef.current) {
+    // Stop Tone playback path
+    if (tonePlayerRef.current) {
+      try {
+        tonePlayerRef.current.stop()
+      } catch (e) {
+        console.error('Error stopping Tone player:', e)
+      }
+    }
+
+    // Stop native Web Audio path
+    if (sourceNodeRef.current) {
       try {
         sourceNodeRef.current.stop()
       } catch (e) {
-        // Already stopped
+        console.error('Error stopping native player:', e)
       }
       sourceNodeRef.current.disconnect()
       sourceNodeRef.current = null
     }
+
     setIsPlaying(false)
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current)
@@ -341,11 +349,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     const baseName = file.name.replace(/\.[^/.]+$/, '')
     let suffix = ''
     if (pitchShiftValue > 0) {
-      suffix = ' - SPED UP - pitchchanger.io'
+      suffix = ' - SPED UP - PitchChanger.io'
     } else if (pitchShiftValue < 0) {
-      suffix = ' - SLOWED - pitchchanger.io'
+      suffix = ' - SLOWED - PitchChanger.io'
     } else {
-      suffix = ' - pitchchanger.io'
+      suffix = ' - PitchChanger.io'
     }
 
     a.download = `${baseName}${suffix}.wav`
@@ -714,7 +722,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 </Button>
               </div>
               <p className="text-xs text-gray-400 text-center">
-                Thank you for supporting pitchchanger.io! 🙏
+                Thank you for supporting PitchChanger.io! 🙏
               </p>
             </div>
           )}

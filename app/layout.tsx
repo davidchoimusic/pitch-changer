@@ -2,14 +2,14 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'pitchchanger.io - Change the Pitch of Your Song or Audio',
+  title: 'PitchChanger.io - Change the Pitch of Your Song or Audio',
   description: 'Free web-based audio pitch shifting tool. Upload MP3 or WAV files and adjust pitch instantly.',
   keywords: ['pitch shift', 'audio editor', 'pitch changer', 'music tool', 'audio processing'],
   openGraph: {
-    title: 'pitchchanger.io',
+    title: 'PitchChanger.io',
     description: 'Free audio pitch shifting tool for musicians and creators',
     url: 'https://pitchchanger.io',
-    siteName: 'pitchchanger.io',
+    siteName: 'PitchChanger.io',
     type: 'website',
   },
 }
@@ -46,11 +46,11 @@ export default function RootLayout({
             <header className="border-b border-divider bg-gradient-to-b from-bg-card to-bg-card/50 backdrop-blur-sm sticky top-0 z-50">
               <div className="container mx-auto px-4 py-10">
                 <div className="text-center">
-                  <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-white via-blue-100 to-accent bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+                  <h1 className="text-5xl md:text-6xl font-extrabold text-white drop-shadow-[0_0_20px_rgba(0,0,0,0.4)]">
                     Pitch Changer Tool
                   </h1>
                   <p className="text-xl text-accent mt-3 font-semibold tracking-wide drop-shadow-[0_0_20px_rgba(59,130,246,0.4)]">
-                    pitchchanger.io
+                    PitchChanger.io
                   </p>
                 </div>
               </div>
@@ -60,7 +60,7 @@ export default function RootLayout({
             </main>
             <footer className="border-t border-divider py-6 mt-auto bg-bg-card">
               <div className="container mx-auto px-4 text-center text-sm text-gray-400">
-                <p>&copy; 2025 pitchchanger.io - Free Audio Pitch Shifting Tool</p>
+                <p>&copy; 2025 PitchChanger.io - Free Audio Pitch Shifting Tool</p>
               </div>
             </footer>
           </div>
