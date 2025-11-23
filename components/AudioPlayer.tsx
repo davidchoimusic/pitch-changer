@@ -33,6 +33,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   // Refs for stable keydown callback
   const isReadyRef = useRef(isReady)
   const isPlayingRef = useRef(isPlaying)
+  // FIX: Track when user is dragging seek slider
+  const isSeekingRef = useRef(false)
 
   // Load audio file
   useEffect(() => {
@@ -155,10 +157,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
   // SIMPLIFIED: Single animation loop for Tone.js only
   const updateTime = () => {
-    if (!tonePlayerRef.current || !isPlaying) return
+    if (!tonePlayerRef.current || !isPlayingRef.current) return
 
     const time = tonePlayerRef.current.immediate()
-    setCurrentTime(time)
+
+    // FIX: Don't update currentTime while user is dragging seek slider
+    if (!isSeekingRef.current) {
+      setCurrentTime(time)
+    }
 
     if (time >= duration - 0.1) {
       setIsPlaying(false)
@@ -238,22 +244,28 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
   }
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeekStart = () => {
+    // FIX: Pause animation updates while user drags
+    isSeekingRef.current = true
+  }
+
+  const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value)
     setCurrentTime(newTime)
+  }
+
+  const handleSeekEnd = () => {
+    // FIX: Resume animation and restart playback from new position
+    isSeekingRef.current = false
 
     if (isPlaying && tonePlayerRef.current) {
-      // FIX: Don't call stopPlayback() - just stop and restart Tone.Player
-      // This keeps isPlaying=true and RAF running (prevents timecode freeze)
       try {
         tonePlayerRef.current.stop()
       } catch (e) {
         console.error('Error stopping Tone player during seek:', e)
       }
 
-      // Restart at new position
-      tonePlayerRef.current.start(undefined, newTime)
-      // isPlaying stays true, RAF keeps updating timecode
+      tonePlayerRef.current.start(undefined, currentTime)
     }
   }
 
@@ -450,7 +462,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 max={duration || 100}
                 step="0.1"
                 value={currentTime}
-                onChange={handleSeek}
+                onMouseDown={handleSeekStart}
+                onTouchStart={handleSeekStart}
+                onChange={handleSeekChange}
+                onMouseUp={handleSeekEnd}
+                onTouchEnd={handleSeekEnd}
                 disabled={!isReady}
                 className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
                            [&::-webkit-slider-thumb]:appearance-none
