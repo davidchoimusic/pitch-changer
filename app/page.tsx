@@ -12,10 +12,14 @@ export default function Home() {
       {!selectedFile ? (
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Hero Section */}
-          <div className="text-center space-y-4">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+          <div className="text-center space-y-6">
+            <div>
+              <h1 className="text-5xl md:text-6xl font-extrabold text-white">Pitch Changer Tool</h1>
+              <p className="text-xl text-accent mt-2 font-semibold">PitchChanger.io</p>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
               Change the Pitch of Your<br />Song or Audio
-            </h1>
+            </h2>
             <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
               Free, instant pitch shifting in your browser. 100% client-side - your files never leave your device.
             </p>
@@ -87,8 +91,8 @@ export default function Home() {
         <div className="space-y-6">
           {/* Inline Title */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-white">Pitch Changer Tool</h2>
-            <p className="text-sm text-accent mt-1">PitchChanger.io</p>
+            <h1 className="text-5xl md:text-6xl font-extrabold text-white">Pitch Changer Tool</h1>
+            <p className="text-xl text-accent mt-2 font-semibold">PitchChanger.io</p>
           </div>
 
           <AudioPlayer
