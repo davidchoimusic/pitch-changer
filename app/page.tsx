@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { FileUpload } from '@/components/FileUpload'
 import { AudioPlayer } from '@/components/AudioPlayer'
 
+// Deterministic spectrum analyzer values (no Math.random for hydration)
+const spectrumSpeeds = [0.6, 0.9, 0.5, 1.1, 0.7, 0.8, 1.0, 0.6, 0.9, 0.7, 0.5, 0.8, 1.2, 0.6, 0.9, 0.7, 0.8, 0.6, 1.0, 0.5, 0.9, 0.7, 0.8, 0.6, 1.1, 0.5, 0.9, 0.8, 0.7, 1.0, 0.6, 0.8, 0.9, 0.7, 0.5, 1.1, 0.8, 0.6, 0.9, 0.7]
+
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
@@ -30,13 +33,13 @@ export default function Home() {
 
               {/* Spectrum Analyzer */}
               <div className="flex items-end justify-center gap-1 mt-8 h-24">
-                {Array.from({ length: 40 }).map((_, i) => (
+                {spectrumSpeeds.map((speed, i) => (
                   <div
                     key={i}
                     className="w-1 bg-gradient-to-t from-accent/80 to-accent rounded-t"
                     style={{
                       height: '20%',
-                      animation: `pulse ${0.5 + Math.random() * 0.8}s ease-in-out infinite`,
+                      animation: `pulse ${speed}s ease-in-out infinite`,
                       animationDelay: `${i * 0.03}s`
                     }}
                   />
@@ -139,13 +142,13 @@ export default function Home() {
 
             {/* Spectrum Analyzer */}
             <div className="flex items-end justify-center gap-1 mt-8 h-24">
-              {Array.from({ length: 40 }).map((_, i) => (
+              {spectrumSpeeds.map((speed, i) => (
                 <div
                   key={i}
                   className="w-1 bg-gradient-to-t from-accent/80 to-accent rounded-t"
                   style={{
                     height: '20%',
-                    animation: `pulse ${0.5 + Math.random() * 0.8}s ease-in-out infinite`,
+                    animation: `pulse ${speed}s ease-in-out infinite`,
                     animationDelay: `${i * 0.03}s`
                   }}
                 />
