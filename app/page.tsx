@@ -15,10 +15,16 @@ export default function Home() {
           <div className="text-center space-y-12">
             {/* Branding */}
             <div className="pb-8">
-              <h1 className="text-5xl md:text-6xl font-black bg-gradient-brand bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,132,252,0.5)]">
+              <h1
+                className="text-5xl md:text-6xl font-black bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,132,252,0.5)]"
+                style={{ backgroundImage: 'linear-gradient(135deg, rgb(244 114 182) 0%, rgb(168 85 247) 100%)' }}
+              >
                 Pitch Changer Tool
               </h1>
-              <p className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-primary/80 to-accent-pink/80 bg-clip-text text-transparent mt-3">
+              <p
+                className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-3"
+                style={{ backgroundImage: 'linear-gradient(to right, rgba(168,85,247,0.8), rgba(244,114,182,0.8))' }}
+              >
                 PitchChanger.io
               </p>
 
@@ -43,7 +49,10 @@ export default function Home() {
 
             {/* Tagline */}
             <div className="space-y-4">
-              <h2 className="text-2xl md:text-3xl font-bold bg-gradient-brand bg-clip-text text-transparent">
+              <h2
+                className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent"
+                style={{ backgroundImage: 'linear-gradient(135deg, rgb(244 114 182) 0%, rgb(168 85 247) 100%)' }}
+              >
                 Change the Pitch of Your<br />Song or Audio
               </h2>
               <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
@@ -118,10 +127,16 @@ export default function Home() {
         <div className="space-y-8">
           {/* Inline Title */}
           <div className="text-center pb-6">
-            <h1 className="text-5xl md:text-6xl font-black bg-gradient-brand bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,132,252,0.5)]">
+            <h1
+              className="text-5xl md:text-6xl font-black bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,132,252,0.5)]"
+              style={{ backgroundImage: 'linear-gradient(135deg, rgb(244 114 182) 0%, rgb(168 85 247) 100%)' }}
+            >
               Pitch Changer Tool
             </h1>
-            <p className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-primary/80 to-accent-pink/80 bg-clip-text text-transparent mt-3">
+            <p
+              className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-3"
+              style={{ backgroundImage: 'linear-gradient(to right, rgba(168,85,247,0.8), rgba(244,114,182,0.8))' }}
+            >
               PitchChanger.io
             </p>
 
