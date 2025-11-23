@@ -51,28 +51,12 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
         audioBufferRef.current = audioBuffer
         setDuration(audioBuffer.duration)
-        setUploadProgress(60)
-
-        // Create Tone.js player directly from the decoded buffer (no additional memory)
-        const player = new Tone.Player()
-        player.buffer.set(audioBuffer) // Reuse decoded buffer
-        player.loop = false
-        tonePlayerRef.current = player
-
-        // Create pitch shift effect
-        const pitchShiftEffect = new Tone.PitchShift({
-          pitch: 0,
-          windowSize: 0.1,
-          delayTime: 0,
-          feedback: 0
-        }).toDestination()
-
-        player.connect(pitchShiftEffect)
-        pitchShiftRef.current = pitchShiftEffect
-
         setUploadProgress(100)
+
+        // Don't create Tone.js player yet - Safari requires user gesture
+        // Will be created on first Play button click
         setIsReady(true)
-        console.log('Tone.js player loaded successfully')
+        console.log('Audio decoded successfully - ready for playback')
 
       } catch (error) {
         console.error('Error loading audio:', error)
@@ -117,16 +101,17 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       } catch (e) {
         console.error('Error stopping Tone player:', e)
       }
+      // Don't dispose, just stop - will reuse player
     }
 
     // Stop native Web Audio path
     if (sourceNodeRef.current) {
       try {
         sourceNodeRef.current.stop()
+        sourceNodeRef.current.disconnect()
       } catch (e) {
         console.error('Error stopping native player:', e)
       }
-      sourceNodeRef.current.disconnect()
       sourceNodeRef.current = null
     }
 
@@ -195,6 +180,25 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     if (!isReady) return
 
     await Tone.start()
+
+    // Lazy init Tone.js on first play (Safari requires user gesture)
+    if (preserveDuration && !tonePlayerRef.current && audioBufferRef.current) {
+      const player = new Tone.Player()
+      player.buffer.set(audioBufferRef.current)
+      player.loop = false
+      tonePlayerRef.current = player
+
+      const pitchShiftEffect = new Tone.PitchShift({
+        pitch: pitchShiftValue,
+        windowSize: 0.1,
+        delayTime: 0,
+        feedback: 0
+      }).toDestination()
+
+      player.connect(pitchShiftEffect)
+      pitchShiftRef.current = pitchShiftEffect
+      console.log('Tone.js initialized on first play (Safari compatibility)')
+    }
 
     if (isPlaying) {
       stopPlayback()
