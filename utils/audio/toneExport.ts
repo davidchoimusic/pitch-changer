@@ -9,6 +9,9 @@ export async function exportWithTone(
   semitones: number,
   onProgress?: (progress: number) => void
 ): Promise<AudioBuffer> {
+  // Save current context to restore later
+  const previousContext = Tone.getContext()
+
   // Create offline context with same sample rate and duration
   const offlineContext = new Tone.OfflineContext(
     audioBuffer.numberOfChannels,
@@ -42,6 +45,9 @@ export async function exportWithTone(
   // Clean up
   player.dispose()
   pitchShift.dispose()
+
+  // Restore previous context for live playback
+  Tone.setContext(previousContext)
 
   if (onProgress) {
     onProgress(100)
