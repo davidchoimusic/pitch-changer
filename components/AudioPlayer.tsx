@@ -101,7 +101,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       } catch (e) {
         console.error('Error stopping Tone player:', e)
       }
-      // Don't dispose, just stop - will reuse player
+      // Don't dispose (memory overhead), but null the ref for clean re-init
+      tonePlayerRef.current = null
+    }
+
+    // Clear pitch shift effect ref too
+    if (pitchShiftRef.current) {
+      pitchShiftRef.current = null
     }
 
     // Stop native Web Audio path
