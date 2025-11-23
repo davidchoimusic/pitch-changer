@@ -32,7 +32,7 @@ export async function exportWithTone(
     // Create pitch shift effect
     pitchShift = new Tone.PitchShift({
       pitch: semitones,
-      windowSize: 0.1,
+      windowSize: 0.03, // Reduced for faster response (was 0.1)
       delayTime: 0,
       feedback: 0
     }).toDestination()
