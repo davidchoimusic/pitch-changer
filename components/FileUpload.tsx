@@ -35,7 +35,8 @@ export function FileUpload({
 
     // Memory guard for mobile devices
     const fileSizeMB = file.size / 1024 / 1024
-    if (fileSizeMB > 100 && navigator.deviceMemory && navigator.deviceMemory < 4) {
+    const deviceMemory = (navigator as any).deviceMemory // Experimental API
+    if (fileSizeMB > 100 && deviceMemory && deviceMemory < 4) {
       setError('⚠️ Large file on low-memory device. For best results, use files under 100MB or try on desktop.')
       return false
     }

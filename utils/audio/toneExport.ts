@@ -50,7 +50,8 @@ export async function exportWithTone(
       onProgress(100)
     }
 
-    return rendered
+    // Convert ToneAudioBuffer to native AudioBuffer
+    return rendered.get() as AudioBuffer
   } finally {
     // ALWAYS restore context and clean up, even on error
     try {
