@@ -16,34 +16,20 @@ export default function Home() {
             {/* Branding */}
             <div className="pb-8">
               <h1
-                className="text-5xl md:text-6xl font-black bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,132,252,0.5)]"
-                style={{ backgroundImage: 'linear-gradient(135deg, rgb(244 114 182) 0%, rgb(168 85 247) 100%)' }}
+                className="text-5xl md:text-6xl font-black bg-clip-text text-transparent"
+                style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
                 Pitch Changer Tool
               </h1>
-              <p
-                className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-3"
-                style={{ backgroundImage: 'linear-gradient(to right, rgba(168,85,247,0.8), rgba(244,114,182,0.8))' }}
-              >
+              <p className="text-xl md:text-2xl font-semibold text-accent mt-3">
                 PitchChanger.io
               </p>
 
-              {/* Animated waveform divider */}
+              {/* Simple line divider */}
               <div className="flex items-center justify-center gap-3 mt-8">
-                <div className="h-px flex-1 max-w-xs bg-gradient-to-r from-transparent to-primary/40"></div>
-                <div className="flex items-center gap-1.5">
-                  {[6, 8, 10, 8, 6].map((height, i) => (
-                    <div
-                      key={i}
-                      className="w-1 bg-gradient-to-t from-accent-pink to-primary rounded-full animate-pulse"
-                      style={{
-                        height: `${height * 4}px`,
-                        animationDelay: `${i * 150}ms`
-                      }}
-                    />
-                  ))}
-                </div>
-                <div className="h-px flex-1 max-w-xs bg-gradient-to-l from-transparent to-primary/40"></div>
+                <div className="h-px flex-1 max-w-xs bg-accent/30"></div>
+                <div className="w-2 h-2 rounded-full bg-accent"></div>
+                <div className="h-px flex-1 max-w-xs bg-accent/30"></div>
               </div>
             </div>
 
@@ -51,7 +37,7 @@ export default function Home() {
             <div className="space-y-4">
               <h2
                 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent"
-                style={{ backgroundImage: 'linear-gradient(135deg, rgb(244 114 182) 0%, rgb(168 85 247) 100%)' }}
+                style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
                 Change the Pitch of Your<br />Song or Audio
               </h2>
@@ -128,34 +114,20 @@ export default function Home() {
           {/* Inline Title */}
           <div className="text-center pb-6">
             <h1
-              className="text-5xl md:text-6xl font-black bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,132,252,0.5)]"
-              style={{ backgroundImage: 'linear-gradient(135deg, rgb(244 114 182) 0%, rgb(168 85 247) 100%)' }}
+              className="text-5xl md:text-6xl font-black bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
             >
               Pitch Changer Tool
             </h1>
-            <p
-              className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-3"
-              style={{ backgroundImage: 'linear-gradient(to right, rgba(168,85,247,0.8), rgba(244,114,182,0.8))' }}
-            >
+            <p className="text-xl md:text-2xl font-semibold text-accent mt-3">
               PitchChanger.io
             </p>
 
-            {/* Animated waveform divider */}
+            {/* Simple line divider */}
             <div className="flex items-center justify-center gap-3 mt-8">
-              <div className="h-px flex-1 max-w-xs bg-gradient-to-r from-transparent to-primary/40"></div>
-              <div className="flex items-center gap-1.5">
-                {[6, 8, 10, 8, 6].map((height, i) => (
-                  <div
-                    key={i}
-                    className="w-1 bg-gradient-to-t from-accent-pink to-primary rounded-full animate-pulse"
-                    style={{
-                      height: `${height * 4}px`,
-                      animationDelay: `${i * 150}ms`
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="h-px flex-1 max-w-xs bg-gradient-to-l from-transparent to-primary/40"></div>
+              <div className="h-px flex-1 max-w-xs bg-accent/30"></div>
+              <div className="w-2 h-2 rounded-full bg-accent"></div>
+              <div className="h-px flex-1 max-w-xs bg-accent/30"></div>
             </div>
           </div>
 
