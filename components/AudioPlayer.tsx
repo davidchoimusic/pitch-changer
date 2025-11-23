@@ -32,8 +32,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const downloadSectionRef = useRef<HTMLDivElement | null>(null)
   // Ref for stable keydown callback
   const isReadyRef = useRef(isReady)
-  // Track seek offset for accurate position after recreating player
-  const seekOffsetRef = useRef<number>(0)
 
   // Load audio file
   useEffect(() => {
@@ -156,16 +154,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const updateTime = () => {
     if (!tonePlayerRef.current) return
 
-    // FIX: Add seek offset to get absolute position
-    // When player is recreated at offset 30s, immediate() returns 0, 0.1, 0.2...
-    // We need to add 30 to get actual position: 30, 30.1, 30.2...
-    const time = tonePlayerRef.current.immediate() + seekOffsetRef.current
+    // FIX: immediate() returns absolute position in buffer, not time since start
+    const time = tonePlayerRef.current.immediate()
     setCurrentTime(time)
 
     if (time >= duration - 0.1) {
       setIsPlaying(false)
       setCurrentTime(0)
-      seekOffsetRef.current = 0
       tonePlayerRef.current.stop()
     } else {
       animationFrameRef.current = requestAnimationFrame(updateTime)
@@ -232,12 +227,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         pitchShiftRef.current.pitch = pitchShiftValue
       }
 
-      // FIX: Set seek offset before starting
       if (currentTime > 0) {
-        seekOffsetRef.current = currentTime
         tonePlayerRef.current.start(undefined, currentTime)
       } else {
-        seekOffsetRef.current = 0
         tonePlayerRef.current.start()
       }
       setIsPlaying(true)
@@ -256,11 +248,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         // Player might already be stopped
       }
 
-      // FIX: Update seek offset so RAF shows correct absolute position
-      seekOffsetRef.current = newTime
-
-      // Restart player at offset 0 (immediate() will return 0, 0.1, 0.2...)
-      // RAF adds seekOffsetRef to get absolute position
+      // FIX: immediate() already returns absolute position in buffer
+      // Just restart player at new position
       tonePlayerRef.current.start(undefined, newTime)
     }
   }
