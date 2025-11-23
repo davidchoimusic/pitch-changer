@@ -31,20 +31,9 @@ export default function Home() {
                 PitchChanger.io
               </p>
 
-              {/* Spectrum Analyzer */}
-              <div className="flex items-end justify-center gap-1 mt-8 h-32">
-                {spectrumSpeeds.map((speed, i) => (
-                  <div
-                    key={i}
-                    className="w-1.5 rounded-t"
-                    style={{
-                      backgroundImage: 'linear-gradient(to top, rgb(59 130 246), rgb(147 197 253))',
-                      height: `${40 + (i % 3) * 15}px`,
-                      animation: `pulse ${speed}s ease-in-out infinite`,
-                      animationDelay: `${i * 0.03}s`
-                    }}
-                  />
-                ))}
+              {/* Simple spectrum divider */}
+              <div className="mt-6 text-accent text-2xl tracking-wider">
+                ▁ ▃ ▅ ▆ ▇ ▆ ▅ ▃ ▁
               </div>
             </div>
 
@@ -141,20 +130,9 @@ export default function Home() {
               PitchChanger.io
             </p>
 
-            {/* Spectrum Analyzer */}
-            <div className="flex items-end justify-center gap-1 mt-8 h-32">
-              {spectrumSpeeds.map((speed, i) => (
-                <div
-                  key={i}
-                  className="w-1.5 rounded-t"
-                  style={{
-                    backgroundImage: 'linear-gradient(to top, rgb(59 130 246), rgb(147 197 253))',
-                    height: `${40 + (i % 3) * 15}px`,
-                    animation: `pulse ${speed}s ease-in-out infinite`,
-                    animationDelay: `${i * 0.03}s`
-                  }}
-                />
-              ))}
+            {/* Simple spectrum divider */}
+            <div className="mt-6 text-accent text-2xl tracking-wider">
+              ▁ ▃ ▅ ▆ ▇ ▆ ▅ ▃ ▁
             </div>
           </div>
 
