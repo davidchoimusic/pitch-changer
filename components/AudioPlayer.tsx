@@ -154,7 +154,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const updateTime = () => {
     if (!tonePlayerRef.current) return
 
-    // FIX: immediate() returns absolute position in buffer, not time since start
+    // immediate() returns absolute position in buffer
     const time = tonePlayerRef.current.immediate()
     setCurrentTime(time)
 
@@ -162,6 +162,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       setIsPlaying(false)
       setCurrentTime(0)
       tonePlayerRef.current.stop()
+      // Clear any pending RAF
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
+      }
     } else {
       animationFrameRef.current = requestAnimationFrame(updateTime)
     }
@@ -173,12 +178,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     } else {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
       }
     }
 
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
       }
     }
   }, [isPlaying, duration])
