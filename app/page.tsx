@@ -15,35 +15,35 @@ export default function Home() {
           <div className="text-center space-y-12">
             {/* Branding */}
             <div className="pb-8">
-              <h1
-                className="text-5xl md:text-6xl font-black tracking-tight bg-gradient-to-r from-white via-accent/80 to-accent bg-clip-text text-transparent"
-                style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 8px 22px rgba(59,130,246,0.35), 0 0 1px rgba(255,255,255,0.6)' }}
-              >
+              <h1 className="text-5xl md:text-6xl font-black bg-gradient-brand bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,132,252,0.5)]">
                 Pitch Changer Tool
               </h1>
-              <p
-                className="text-xl md:text-2xl font-semibold tracking-wide bg-gradient-to-r from-accent via-white/85 to-accent bg-clip-text text-transparent"
-                style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 6px 18px rgba(59,130,246,0.32)' }}
-              >
+              <p className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-primary/80 to-accent-pink/80 bg-clip-text text-transparent mt-3">
                 PitchChanger.io
               </p>
 
-              {/* Unique separator */}
-              <div className="mt-6 flex items-center justify-center gap-3 text-accent/80 text-lg tracking-widest">
-                <span className="h-px flex-1 max-w-xs bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
-                <span className="px-3 py-1 rounded-full border border-accent/40 bg-accent/10 shadow-[0_8px_20px_rgba(59,130,246,0.25)]">
-                  ◎ ◎ ◎
-                </span>
-                <span className="h-px flex-1 max-w-xs bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+              {/* Animated waveform divider */}
+              <div className="flex items-center justify-center gap-3 mt-8">
+                <div className="h-px flex-1 max-w-xs bg-gradient-to-r from-transparent to-primary/40"></div>
+                <div className="flex items-center gap-1.5">
+                  {[6, 8, 10, 8, 6].map((height, i) => (
+                    <div
+                      key={i}
+                      className="w-1 bg-gradient-to-t from-accent-pink to-primary rounded-full animate-pulse"
+                      style={{
+                        height: `${height * 4}px`,
+                        animationDelay: `${i * 150}ms`
+                      }}
+                    />
+                  ))}
+                </div>
+                <div className="h-px flex-1 max-w-xs bg-gradient-to-l from-transparent to-primary/40"></div>
               </div>
             </div>
 
             {/* Tagline */}
             <div className="space-y-4">
-              <h2
-                className="text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-pink-400 via-purple-300 to-purple-500 bg-clip-text text-transparent"
-                style={{ textShadow: '0 1px 0 rgba(255,255,255,0.35), 0 6px 18px rgba(192,132,252,0.28)' }}
-              >
+              <h2 className="text-2xl md:text-3xl font-bold bg-gradient-brand bg-clip-text text-transparent">
                 Change the Pitch of Your<br />Song or Audio
               </h2>
               <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
