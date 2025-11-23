@@ -14,7 +14,7 @@ export default function Home() {
           {/* Hero Section */}
           <div className="text-center space-y-12">
             {/* Branding */}
-            <div className="pb-8 border-b border-divider">
+            <div className="pb-8">
               <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent leading-tight pb-4"
                   style={{
                     textShadow: '0 4px 12px rgba(0,0,0,0.5), 0 8px 24px rgba(59,130,246,0.3)',
@@ -26,6 +26,19 @@ export default function Home() {
                  style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.5))' }}>
                 PitchChanger.io
               </p>
+
+              {/* Tech-y divider */}
+              <div className="relative mt-8">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-50"></div>
+                </div>
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full h-px bg-gradient-to-r from-transparent via-accent to-transparent blur-sm"></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <div className="w-2 h-2 bg-accent rounded-full shadow-[0_0_20px_rgba(59,130,246,0.8)]"></div>
+                </div>
+              </div>
             </div>
 
             {/* Tagline */}
@@ -104,7 +117,7 @@ export default function Home() {
       ) : (
         <div className="space-y-8">
           {/* Inline Title */}
-          <div className="text-center pb-6 border-b border-divider">
+          <div className="text-center pb-6">
             <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent leading-tight pb-4"
                 style={{
                   textShadow: '0 4px 12px rgba(0,0,0,0.5), 0 8px 24px rgba(59,130,246,0.3)',
@@ -116,6 +129,19 @@ export default function Home() {
                style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.5))' }}>
               PitchChanger.io
             </p>
+
+            {/* Tech-y divider */}
+            <div className="relative mt-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-50"></div>
+              </div>
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-accent to-transparent blur-sm"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <div className="w-2 h-2 bg-accent rounded-full shadow-[0_0_20px_rgba(59,130,246,0.8)]"></div>
+              </div>
+            </div>
           </div>
 
           <AudioPlayer
