@@ -14,8 +14,17 @@ export default function Home() {
           {/* Hero Section */}
           <div className="text-center space-y-6">
             <div>
-              <h1 className="text-5xl md:text-6xl font-extrabold text-white">Pitch Changer Tool</h1>
-              <p className="text-xl text-accent mt-2 font-semibold">PitchChanger.io</p>
+              <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent"
+                  style={{
+                    textShadow: '0 4px 12px rgba(0,0,0,0.5), 0 8px 24px rgba(59,130,246,0.3)',
+                    filter: 'drop-shadow(0 0 40px rgba(59,130,246,0.4)) drop-shadow(0 2px 4px rgba(0,0,0,0.6))'
+                  }}>
+                Pitch Changer Tool
+              </h1>
+              <p className="text-2xl text-accent mt-3 font-bold tracking-wide"
+                 style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.5))' }}>
+                PitchChanger.io
+              </p>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
               Change the Pitch of Your<br />Song or Audio
@@ -91,8 +100,17 @@ export default function Home() {
         <div className="space-y-6">
           {/* Inline Title */}
           <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-extrabold text-white">Pitch Changer Tool</h1>
-            <p className="text-xl text-accent mt-2 font-semibold">PitchChanger.io</p>
+            <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent"
+                style={{
+                  textShadow: '0 4px 12px rgba(0,0,0,0.5), 0 8px 24px rgba(59,130,246,0.3)',
+                  filter: 'drop-shadow(0 0 40px rgba(59,130,246,0.4)) drop-shadow(0 2px 4px rgba(0,0,0,0.6))'
+                }}>
+              Pitch Changer Tool
+            </h1>
+            <p className="text-2xl text-accent mt-3 font-bold tracking-wide"
+               style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.5))' }}>
+              PitchChanger.io
+            </p>
           </div>
 
           <AudioPlayer
