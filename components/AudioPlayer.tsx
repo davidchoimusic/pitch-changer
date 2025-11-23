@@ -45,15 +45,15 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         const arrayBuffer = await file.arrayBuffer()
         setUploadProgress(30)
 
-        // Decode audio buffer for Web Audio API
+        // Decode audio buffer for Web Audio API (reuses same ArrayBuffer, no copy)
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
         audioContextRef.current = audioContext
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0))
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
         audioBufferRef.current = audioBuffer
         setDuration(audioBuffer.duration)
         setUploadProgress(60)
 
-        // Create Tone.js player directly from the same buffer (no blob copy)
+        // Create Tone.js player directly from the decoded buffer (no additional memory)
         await Tone.start()
         const player = new Tone.Player()
         player.buffer.set(audioBuffer) // Reuse decoded buffer
