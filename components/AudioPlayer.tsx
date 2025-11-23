@@ -99,13 +99,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
     return () => {
       abortController.abort() // Cancel stale decode
-      stopPlayback()
-      if (tonePlayerRef.current) {
-        tonePlayerRef.current.dispose()
-      }
-      if (pitchShiftRef.current) {
-        pitchShiftRef.current.dispose()
-      }
+      stopPlayback(true) // FIX: Dispose on cleanup
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
       }
@@ -144,26 +138,29 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     return () => window.removeEventListener('keydown', handleKeyPress)
   }, []) // Empty deps = attach once only
 
-  const stopPlayback = () => {
+  const stopPlayback = (shouldDispose = false) => {
     // Stop Tone playback path
     if (tonePlayerRef.current) {
       try {
         tonePlayerRef.current.stop()
-        tonePlayerRef.current.dispose() // FIX: Dispose to prevent memory leaks
+        // FIX: Only dispose on cleanup, not on seek/pause
+        if (shouldDispose) {
+          tonePlayerRef.current.dispose()
+          tonePlayerRef.current = null
+        }
       } catch (e) {
         console.error('Error stopping Tone player:', e)
       }
-      tonePlayerRef.current = null
     }
 
     // Dispose pitch shift effect too
-    if (pitchShiftRef.current) {
+    if (pitchShiftRef.current && shouldDispose) {
       try {
-        pitchShiftRef.current.dispose() // FIX: Dispose to prevent memory leaks
+        pitchShiftRef.current.dispose()
+        pitchShiftRef.current = null
       } catch (e) {
         console.error('Error disposing pitch shift:', e)
       }
-      pitchShiftRef.current = null
     }
 
     // Stop native Web Audio path
@@ -597,7 +594,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 const wasPlaying = isPlaying
                 const currentPosition = currentTime
 
-                stopPlayback()
+                stopPlayback(true) // FIX: Dispose when switching modes
                 offsetRef.current = currentPosition
 
                 setPreserveDuration(newValue)
