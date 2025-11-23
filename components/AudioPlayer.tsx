@@ -241,9 +241,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const handlePlayPause = async () => {
     if (!isReady) return
 
-    // Safari unlock pattern (run once on first user gesture)
-    if (!safariUnlocked && audioContextRef.current) {
-      if (audioContextRef.current.state === 'suspended') {
+    // FIX: Unlock Tone.js context FIRST (critical for first load)
+    await Tone.start()
+
+    // Safari unlock pattern for BOTH contexts (run once on first user gesture)
+    if (!safariUnlocked) {
+      // Unlock our native AudioContext
+      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
         await audioContextRef.current.resume()
 
         // Create silent buffer to fully unlock Safari audio
@@ -252,15 +256,24 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         source.buffer = buffer
         source.connect(audioContextRef.current.destination)
         source.start(0)
-
-        setSafariUnlocked(true)
       }
-    }
 
-    await Tone.start()
+      // FIX: Also unlock Tone's context (they might be different!)
+      if (Tone.context.state === 'suspended') {
+        await Tone.context.resume()
+      }
+
+      setSafariUnlocked(true)
+    }
 
     // Lazy init Tone.js on first play (Safari requires user gesture)
     if (preserveDuration && !tonePlayerRef.current && audioBufferRef.current) {
+      // FIX: Ensure Tone.context is actually running before creating player
+      if (Tone.context.state !== 'running') {
+        console.warn('Tone.context not running, attempting to resume...')
+        await Tone.context.resume()
+      }
+
       const player = new Tone.Player()
       player.buffer.set(audioBufferRef.current)
       player.loop = false
@@ -591,6 +604,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
                 if (wasPlaying) {
                   await Tone.start()
+
+                  // FIX: Ensure Tone.context is running before resume
+                  if (Tone.context.state === 'suspended') {
+                    await Tone.context.resume()
+                  }
 
                   if (newValue) {
                     // FIX: Re-initialize Tone player/effect if null
