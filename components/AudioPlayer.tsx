@@ -30,9 +30,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const audioBufferRef = useRef<AudioBuffer | null>(null)
   const animationFrameRef = useRef<number | null>(null)
   const downloadSectionRef = useRef<HTMLDivElement | null>(null)
-  // Refs for stable keydown callback
+  // Ref for stable keydown callback
   const isReadyRef = useRef(isReady)
-  const isPlayingRef = useRef(isPlaying)
 
   // Load audio file
   useEffect(() => {
@@ -105,10 +104,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     isReadyRef.current = isReady
   }, [isReady])
 
-  useEffect(() => {
-    isPlayingRef.current = isPlaying
-  }, [isPlaying])
-
   // FIX: Spacebar to play/pause with stable callback (attach once)
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -157,7 +152,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
   // SIMPLIFIED: Single animation loop for Tone.js only
   const updateTime = () => {
-    if (!tonePlayerRef.current || !isPlayingRef.current) return
+    if (!tonePlayerRef.current) return
 
     const time = tonePlayerRef.current.immediate()
     setCurrentTime(time)
@@ -167,6 +162,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       setCurrentTime(0)
       tonePlayerRef.current.stop()
     } else {
+      // FIX: Only schedule next frame if still playing
+      // RAF is cancelled by useEffect when isPlaying becomes false
       animationFrameRef.current = requestAnimationFrame(updateTime)
     }
   }
