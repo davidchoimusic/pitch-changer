@@ -75,6 +75,9 @@ Provide musicians, audio engineers, and creators with a free, fast, browser-base
 - **Production URL:** https://pitchchanger.io
 - **Vercel Project:** https://vercel.com/davidchoimusics-projects/pitch-changer
 - **Deployment:** Vercel (free tier)
+- **Build System:** Webpack (Turbopack disabled via `NEXT_DISABLE_TURBOPACK=1` env var)
+  - **Why:** Turbopack has port binding issues in Vercel sandbox
+  - **Note:** Env var set in Vercel for Production & Preview environments
 - **GitHub:** Auto-deploy enabled on push to main
 - **DNS:** Configured via Namecheap → Vercel
 - **SSL:** Automatic via Vercel (HTTPS enabled)
