@@ -190,7 +190,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
       const pitchShiftEffect = new Tone.PitchShift({
         pitch: pitchShiftValue,
-        windowSize: 0.07, // Balanced for quality + responsiveness
+        windowSize: 0.1, // Higher quality, bugs were causing Safari delay
         delayTime: 0,
         feedback: 0
       }).toDestination()
