@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from './ui/Button'
 import { pitchShift, encodeToWav } from '@/utils/audio/pitchShift'
+import { exportWithTone } from '@/utils/audio/toneExport'
 import * as Tone from 'tone'
 
 interface AudioPlayerProps {
@@ -303,12 +304,23 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     setProcessedBlob(null)
 
     try {
-      // Process audio with pitch shift
-      const processed = await pitchShift(audioBufferRef.current, {
-        semitones: pitchShiftValue,
-        mode: preserveDuration ? 'preserve-duration' : 'simple',
-        onProgress: (progress) => setProcessProgress(progress)
-      })
+      let processed: AudioBuffer
+
+      if (preserveDuration) {
+        // Use Tone.js for export (matches preview)
+        processed = await exportWithTone(
+          audioBufferRef.current,
+          pitchShiftValue,
+          (progress) => setProcessProgress(progress)
+        )
+      } else {
+        // Use simple playbackRate mode
+        processed = await pitchShift(audioBufferRef.current, {
+          semitones: pitchShiftValue,
+          mode: 'simple',
+          onProgress: (progress) => setProcessProgress(progress)
+        })
+      }
 
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
@@ -335,11 +347,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     const baseName = file.name.replace(/\.[^/.]+$/, '')
     let suffix = ''
     if (pitchShiftValue > 0) {
-      suffix = ' - SPED UP - PitchChanger.io'
+      suffix = ' - SPED UP - pitchchanger.io'
     } else if (pitchShiftValue < 0) {
-      suffix = ' - SLOWED - PitchChanger.io'
+      suffix = ' - SLOWED - pitchchanger.io'
     } else {
-      suffix = ' - PitchChanger.io'
+      suffix = ' - pitchchanger.io'
     }
 
     a.download = `${baseName}${suffix}.wav`
@@ -366,11 +378,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* File Info & Upload Progress */}
-      <div className="bg-bg-card border border-white/10 rounded-lg p-6">
+      <div className="bg-bg-card border border-divider rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-sm text-gray-400">
-              {uploadProgress < 100 ? 'Loading...' : isReady ? '✅ Ready to Play' : 'Initializing player...'}
+              {uploadProgress < 100 ? 'Decoding in browser...' : isReady ? '✅ Ready to Play' : 'Initializing...'}
             </p>
             <p className="text-lg font-medium mt-1">{file.name}</p>
             <p className="text-sm text-gray-500 mt-1">
@@ -381,26 +393,24 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm text-gray-400">
-            <span>
-              {uploadProgress < 100 ? 'Loading audio...' : isReady ? 'Ready!' : 'Initializing player...'}
-            </span>
-            <span>{uploadProgress}%</span>
-          </div>
-          {uploadProgress < 100 && (
+        {uploadProgress < 100 && (
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm text-gray-400">
+              <span>Decoding audio in browser...</span>
+              <span>{uploadProgress}%</span>
+            </div>
             <div className="w-full bg-gray-700 rounded-full h-2">
               <div
                 className="bg-accent h-2 rounded-full transition-all duration-300"
                 style={{ width: `${uploadProgress}%` }}
               />
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Audio Player */}
-      <div className="bg-bg-card border border-white/10 rounded-lg p-8 space-y-6">
+      <div className="bg-bg-card border border-divider rounded-lg p-8 space-y-6">
         {/* Pitch Control Slider */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -472,7 +482,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         </div>
 
         {/* Preserve Duration Checkbox */}
-        <div className="p-5 bg-gray-800/50 rounded-lg border border-white/10 space-y-3">
+        <div className="p-5 bg-gray-800/50 rounded-lg border border-divider space-y-3">
           <div className="flex items-center gap-3">
             <input
               type="checkbox"
@@ -597,7 +607,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         </div>
 
         {/* Process Button / Progress */}
-        <div className="pt-4 border-t border-white/10">
+        <div className="pt-4 border-t border-divider">
           {!isProcessing && !processedBlob ? (
             <div className="flex justify-center">
               <Button
@@ -676,15 +686,15 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       {/* Ad Space 1 */}
       {isProcessing && (
         <>
-          <div className="bg-bg-card border border-white/10 rounded-lg p-8">
-            <div className="h-64 bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
+          <div className="bg-bg-card border border-divider rounded-lg p-8">
+            <div className="h-[250px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
               <p className="text-gray-500">Ad Space - Sponsor 1 (728x250)</p>
             </div>
           </div>
 
           {/* Ad Space 2 */}
-          <div className="bg-bg-card border border-white/10 rounded-lg p-8">
-            <div className="h-64 bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
+          <div className="bg-bg-card border border-divider rounded-lg p-8">
+            <div className="h-[250px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
               <p className="text-gray-500">Ad Space - Sponsor 2 (728x250)</p>
             </div>
           </div>
@@ -710,7 +720,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 </Button>
               </div>
               <p className="text-xs text-gray-400 text-center">
-                Thank you for supporting PitchChanger.io! 🙏
+                Thank you for supporting pitchchanger.io! 🙏
               </p>
             </div>
           )}

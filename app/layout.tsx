@@ -2,14 +2,14 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PitchChanger.io - Change the Pitch of Your Song or Audio',
+  title: 'pitchchanger.io - Change the Pitch of Your Song or Audio',
   description: 'Free web-based audio pitch shifting tool. Upload MP3 or WAV files and adjust pitch instantly.',
   keywords: ['pitch shift', 'audio editor', 'pitch changer', 'music tool', 'audio processing'],
   openGraph: {
-    title: 'PitchChanger.io',
+    title: 'pitchchanger.io',
     description: 'Free audio pitch shifting tool for musicians and creators',
     url: 'https://pitchchanger.io',
-    siteName: 'PitchChanger.io',
+    siteName: 'pitchchanger.io',
     type: 'website',
   },
 }
@@ -22,10 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans">
-        {/* Top Ad Banner */}
-        <div className="w-full bg-bg-card border-b border-white/10">
+        {/* Top Ad Banner - Reserved height for CLS */}
+        <div className="w-full bg-bg-card border-b border-divider">
           <div className="container mx-auto px-4 py-2">
-            <div className="h-24 bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center text-gray-500 text-sm">
+            <div className="h-[90px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center text-gray-500 text-sm">
               Ad Space - Top Banner (728x90)
             </div>
           </div>
@@ -33,9 +33,9 @@ export default function RootLayout({
 
         <div className="min-h-screen flex">
           {/* Left Ad Sidebar */}
-          <aside className="hidden lg:block w-40 border-r border-white/10 bg-bg-card">
+          <aside className="hidden lg:block w-40 border-r border-divider bg-bg-card">
             <div className="sticky top-0 p-4">
-              <div className="h-96 bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
+              <div className="h-[600px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
                 <p className="text-gray-500 text-xs text-center rotate-0">Ad Space<br/>160x600</p>
               </div>
             </div>
@@ -43,14 +43,14 @@ export default function RootLayout({
 
           {/* Main Content */}
           <div className="flex-1 flex flex-col">
-            <header className="border-b border-white/10 bg-gradient-to-b from-bg-card to-bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+            <header className="border-b border-divider bg-gradient-to-b from-bg-card to-bg-card/50 backdrop-blur-sm sticky top-0 z-50">
               <div className="container mx-auto px-4 py-10">
                 <div className="text-center">
                   <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-white via-blue-100 to-accent bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]">
                     Pitch Changer Tool
                   </h1>
                   <p className="text-xl text-accent mt-3 font-semibold tracking-wide drop-shadow-[0_0_20px_rgba(59,130,246,0.4)]">
-                    PitchChanger.io
+                    pitchchanger.io
                   </p>
                 </div>
               </div>
@@ -58,17 +58,17 @@ export default function RootLayout({
             <main className="flex-1">
               {children}
             </main>
-            <footer className="border-t border-white/10 py-6 mt-auto bg-bg-card">
+            <footer className="border-t border-divider py-6 mt-auto bg-bg-card">
               <div className="container mx-auto px-4 text-center text-sm text-gray-400">
-                <p>&copy; 2025 PitchChanger.io - Free Audio Pitch Shifting Tool</p>
+                <p>&copy; 2025 pitchchanger.io - Free Audio Pitch Shifting Tool</p>
               </div>
             </footer>
           </div>
 
           {/* Right Ad Sidebar */}
-          <aside className="hidden lg:block w-40 border-l border-white/10 bg-bg-card">
+          <aside className="hidden lg:block w-40 border-l border-divider bg-bg-card">
             <div className="sticky top-0 p-4">
-              <div className="h-96 bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
+              <div className="h-[600px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
                 <p className="text-gray-500 text-xs text-center">Ad Space<br/>160x600</p>
               </div>
             </div>

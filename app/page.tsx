@@ -17,7 +17,7 @@ export default function Home() {
               Change the Pitch of Your<br />Song or Audio
             </h1>
             <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
-              Free, instant pitch shifting in your browser. Upload your audio and adjust pitch in real-time with our simple tool.
+              Free, instant pitch shifting in your browser. 100% client-side - your files never leave your device.
             </p>
           </div>
 
@@ -37,7 +37,7 @@ export default function Home() {
               <div className="text-5xl">🔒</div>
               <h3 className="text-lg font-semibold">100% Private</h3>
               <p className="text-sm text-gray-400">
-                All processing happens in your browser - files never leave your device
+                Zero uploads - everything processed locally in your browser
               </p>
             </div>
             <div className="text-center space-y-3">
@@ -50,7 +50,7 @@ export default function Home() {
           </div>
 
           {/* How It Works */}
-          <div className="border-t border-white/10 pt-16 space-y-8">
+          <div className="border-t border-divider pt-16 space-y-8">
             <h2 className="text-3xl font-bold text-center">How It Works</h2>
             <div className="grid md:grid-cols-3 gap-8">
               <div className="space-y-3">

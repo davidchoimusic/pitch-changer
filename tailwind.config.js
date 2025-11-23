@@ -14,6 +14,9 @@ module.exports = {
       fontFamily: {
         sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
+      borderColor: {
+        'divider': 'rgb(255 255 255 / 0.1)',
+      },
     },
   },
   plugins: [],
