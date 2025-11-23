@@ -15,42 +15,24 @@ export default function Home() {
           <div className="text-center space-y-12">
             {/* Branding */}
             <div className="pb-8">
-              <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-b from-white via-blue-50 to-blue-200 bg-clip-text text-transparent leading-tight pb-4"
-                  style={{
-                    textShadow: '0 4px 12px rgba(0,0,0,0.5), 0 8px 24px rgba(59,130,246,0.3)',
-                    filter: 'drop-shadow(0 0 40px rgba(59,130,246,0.4)) drop-shadow(0 2px 4px rgba(0,0,0,0.6))'
-                  }}>
+              <h1 className="text-6xl md:text-7xl font-black text-white">
                 Pitch Changer Tool
               </h1>
-              <p className="text-2xl text-accent mt-4 font-bold tracking-wide"
-                 style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.5))' }}>
+              <p className="text-2xl text-accent mt-3 font-bold">
                 PitchChanger.io
               </p>
 
-              {/* Tech-y divider */}
-              <div className="relative mt-8 h-8">
-                {/* Main line */}
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-80"></div>
-                </div>
-                {/* Glow layer */}
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full h-2 bg-gradient-to-r from-transparent via-accent to-transparent blur-lg opacity-60"></div>
-                </div>
-                {/* Center dot */}
-                <div className="relative flex justify-center">
-                  <div className="w-4 h-4 bg-accent rounded-full shadow-[0_0_40px_rgba(59,130,246,1),0_0_20px_rgba(59,130,246,0.8)] border-2 border-white/30"></div>
-                </div>
+              {/* Simple divider */}
+              <div className="mt-6 flex items-center justify-center">
+                <div className="h-px bg-accent/30 flex-1 max-w-xs"></div>
+                <div className="w-2 h-2 bg-accent rounded-full mx-4"></div>
+                <div className="h-px bg-accent/30 flex-1 max-w-xs"></div>
               </div>
             </div>
 
             {/* Tagline */}
             <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 bg-clip-text text-transparent"
-                  style={{
-                    textShadow: '0 2px 8px rgba(0,0,0,0.4), 0 4px 16px rgba(219,39,119,0.3), 0 6px 20px rgba(168,85,247,0.2)',
-                    filter: 'drop-shadow(0 0 30px rgba(219,39,119,0.3)) drop-shadow(0 0 20px rgba(168,85,247,0.3)) drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
-                  }}>
+              <h2 className="text-3xl md:text-4xl font-bold text-white">
                 Change the Pitch of Your<br />Song or Audio
               </h2>
               <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
