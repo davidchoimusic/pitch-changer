@@ -710,18 +710,10 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
               {processProgress < 100 ? (
                 <div className="text-center space-y-3 py-4">
-                  <p className="text-2xl font-bold text-white">
-                    ⏳ While you wait...
-                  </p>
-                  <p className="text-lg text-gray-300">
-                    Scroll down to view your download
-                  </p>
-                  <div className="text-4xl animate-bounce">
-                    ⬇️
-                  </div>
-                  <p className="text-sm text-gray-400">
-                    Their support keeps this tool free for you
-                  </p>
+                  <p className="text-2xl font-bold text-white">⏳ While you wait...</p>
+                  <p className="text-lg text-gray-300">Check out these ads below.</p>
+                  <div className="text-4xl animate-bounce">⬇️</div>
+                  <p className="text-sm text-gray-400">The ads keep this tool free for you</p>
                   <Button
                     onClick={handleCancelProcessing}
                     variant="ghost"
