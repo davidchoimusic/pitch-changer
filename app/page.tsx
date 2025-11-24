@@ -93,7 +93,7 @@ export default function Home() {
 
           {/* Why Use PitchChanger.io */}
           <div className="space-y-4">
-            <div className="mt-6 md:mt-8 mb-2 flex justify-center">
+            <div className="mt-6 md:mt-8 mb-6 md:mb-8 flex justify-center">
               <div
                 className="h-1 w-48 rounded-full"
                 style={{
@@ -127,7 +127,7 @@ export default function Home() {
 
           {/* FAQ */}
           <div className="space-y-4">
-            <div className="mt-6 md:mt-8 mb-2 flex justify-center">
+            <div className="mt-6 md:mt-8 mb-6 md:mb-8 flex justify-center">
               <div
                 className="h-1 w-48 rounded-full"
                 style={{
