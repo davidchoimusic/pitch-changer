@@ -483,8 +483,10 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       clearTimeout(processTimeoutRef.current)
       processTimeoutRef.current = null
     }
-    setSelectedFile(null)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // Reset to home state by reloading root (clears selected file)
+    if (typeof window !== 'undefined') {
+      window.location.href = '/'
+    }
   }
 
   const handleFinalDownload = () => {
