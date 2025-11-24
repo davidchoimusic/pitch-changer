@@ -41,7 +41,7 @@ export default function Home() {
       {!selectedFile ? (
         <div className="max-w-4xl mx-auto space-y-8 md:space-y-16">
           {/* Hero Section */}
-          <div className="text-center space-y-7 md:space-y-9">
+          <div className="text-center space-y-0">
             {/* Branding */}
             <div className="pb-3 md:pb-8">
               <h1
