@@ -34,7 +34,12 @@ export default function Home() {
       {/* Nav */}
       <header className="w-full mb-8 sticky top-0 z-20 bg-bg-page/90 backdrop-blur border-b border-divider">
         <div className="flex items-center py-3">
-          <span className="text-lg md:text-xl font-semibold text-white">PitchChanger.io</span>
+          <span
+            className="text-xl md:text-2xl font-black bg-clip-text text-transparent"
+            style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
+          >
+            PitchChanger.io
+          </span>
         </div>
       </header>
 
