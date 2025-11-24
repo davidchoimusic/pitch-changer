@@ -90,7 +90,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
     return () => {
       abortController.abort() // Cancel stale decode
-      stopPlayback(true) // FIX: Dispose on cleanup
+      stopPlayback()
+      if (tonePlayerRef.current) {
+        tonePlayerRef.current.dispose()
+      }
+      if (pitchShiftRef.current) {
+        pitchShiftRef.current.dispose()
+      }
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
       }
@@ -131,6 +137,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       } catch (e) {
         console.error('Error stopping Tone player:', e)
       }
+      tonePlayerRef.current = null
     }
 
     if (pitchShiftRef.current) {
@@ -139,6 +146,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       } catch (e) {
         console.error('Error disposing pitch shift:', e)
       }
+      pitchShiftRef.current = null
     }
 
     setIsPlaying(false)
@@ -205,13 +213,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       setSafariUnlocked(true)
     }
 
-      // FIX: Also unlock Tone's context (they might be different!)
-      if (Tone.context.state === 'suspended') {
-        await Tone.context.resume()
-      }
-
-      setSafariUnlocked(true)
-    }
+    await Tone.start()
 
     // Lazy init Tone.js on first play (Safari requires user gesture)
     if (!tonePlayerRef.current && audioBufferRef.current) {
@@ -542,12 +544,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               {processProgress < 100 ? (
                 <div className="text-center space-y-3 py-4">
                   <p className="text-2xl font-bold text-white">
-                    While you wait...
+                    ⏳ While you wait...
                   </p>
                   <p className="text-lg text-gray-300">
                     Scroll down to view our sponsors!
                   </p>
-                  <div className="text-4xl animate-bounce">↓</div>
+                  <div className="text-4xl animate-bounce">
+                    ⬇️
+                  </div>
                   <p className="text-sm text-gray-400">
                     Their support keeps this tool free for you
                   </p>
@@ -571,7 +575,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   <p className="text-sm text-gray-400">
                     Scroll down to download
                   </p>
-                  <div className="text-3xl animate-bounce">↓</div>
+                  <div className="text-3xl animate-bounce">
+                    ⬇️
+                  </div>
                 </div>
               )}
             </div>
@@ -603,7 +609,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           {processedBlob && (
             <div ref={downloadSectionRef} className="bg-green-500/10 border-2 border-green-500/50 rounded-lg p-8 space-y-4">
               <div className="text-center space-y-3">
-                  <div className="text-5xl">✓</div>
+                <div className="text-5xl">✅</div>
                 <h3 className="text-2xl font-bold text-green-400">Your Audio is Ready!</h3>
                 <p className="text-gray-300">
                   Pitch shifted by <span className="text-accent font-semibold">{pitchShiftValue > 0 ? '+' : ''}{pitchShiftValue} semitones</span>
