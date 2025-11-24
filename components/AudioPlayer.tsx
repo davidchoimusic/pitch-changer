@@ -23,6 +23,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null)
   const [safariUnlocked, setSafariUnlocked] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [processError, setProcessError] = useState<string | null>(null)
 
   const tonePlayerRef = useRef<Tone.Player | null>(null)
   const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
@@ -389,6 +390,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     setIsProcessing(true)
     setProcessProgress(0)
     setProcessedBlob(null)
+    setProcessError(null)
 
     try {
       // SIMPLIFIED: Always use Tone.js for export (matches preview)
@@ -404,6 +406,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     } catch (error) {
       console.error('Error processing audio:', error)
       setIsProcessing(false)
+      setProcessError('Processing failed on this device. Try a smaller file or use desktop for large files.')
     }
   }
 
@@ -602,6 +605,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
         {/* Process Button / Progress */}
         <div className="pt-4 border-t border-divider">
+          {processError && (
+            <div className="mb-4 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-300">
+              {processError}
+            </div>
+          )}
           {!isProcessing && !processedBlob ? (
             <div className="flex justify-center">
               <Button

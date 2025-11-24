@@ -45,6 +45,13 @@ export function FileUpload({
     // Memory guard for mobile devices
     const fileSizeMB = file.size / 1024 / 1024
     const deviceMemory = (navigator as any).deviceMemory // Experimental API
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
+    if (isMobile && fileSizeMB > 120) {
+      setError('For best results on mobile, please use files under 120MB. Larger files can crash Safari.')
+      return false
+    }
+
     if (fileSizeMB > 100 && deviceMemory && deviceMemory < 4) {
       setError('⚠️ Large file on low-memory device. For best results, use files under 100MB or try on desktop.')
       return false
@@ -92,7 +99,7 @@ export function FileUpload({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`
-          relative border-2 border-dashed rounded-xl p-16 text-center cursor-pointer
+          relative border-2 border-dashed rounded-xl p-8 md:p-16 text-center cursor-pointer
           transition-all duration-200
           ${isDragging
             ? 'border-accent bg-accent/10 scale-105'
@@ -108,17 +115,17 @@ export function FileUpload({
           className="hidden"
         />
 
-        <div className="space-y-6">
-          <div className="text-7xl">🎵</div>
-          <div className="space-y-3">
-            <p className="text-2xl font-semibold">
+        <div className="space-y-4 md:space-y-6">
+          <div className="text-4xl md:text-7xl">🎵</div>
+          <div className="space-y-2">
+            <p className="text-2xl md:text-3xl font-semibold leading-snug">
               Drop your audio file here
             </p>
-            <p className="text-base text-gray-400">
+            <p className="text-base md:text-lg text-gray-400">
               or click to browse
             </p>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm md:text-base text-gray-500">
             MP3, WAV, FLAC, M4A, AAC • Max {maxSizeMB}MB
           </div>
         </div>

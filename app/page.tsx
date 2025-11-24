@@ -11,15 +11,15 @@ export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-8 md:py-12">
       {!selectedFile ? (
-        <div className="max-w-4xl mx-auto space-y-16">
+        <div className="max-w-4xl mx-auto space-y-10 md:space-y-16">
           {/* Hero Section */}
-          <div className="text-center space-y-12">
+          <div className="text-center space-y-10">
             {/* Branding */}
-            <div className="pb-8">
+            <div className="pb-4 md:pb-8">
               <h1
-                className="text-5xl md:text-6xl font-black bg-clip-text text-transparent leading-tight pb-2"
+                className="text-5xl md:text-6xl font-black bg-clip-text text-transparent leading-tight pb-1"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
                 Pitch Changer Tool
@@ -32,7 +32,7 @@ export default function Home() {
               </p>
 
               {/* Glowing gradient line */}
-              <div className="mt-4 flex justify-center">
+              <div className="mt-3 md:mt-4 flex justify-center">
                 <div
                   className="h-1 w-48 rounded-full"
                   style={{
@@ -44,14 +44,14 @@ export default function Home() {
             </div>
 
             {/* Tagline */}
-            <div className="space-y-4 mt-4">
+            <div className="space-y-3 mt-1">
               <h2
                 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
                 Change the Pitch of Your<br />Song or Audio
               </h2>
-              <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
                 Free, instant pitch shifting in your browser. 100% client-side - your files never leave your device.
               </p>
             </div>
