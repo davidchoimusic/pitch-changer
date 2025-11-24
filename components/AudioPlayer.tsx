@@ -31,6 +31,12 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const downloadSectionRef = useRef<HTMLDivElement | null>(null)
   // Ref for stable keydown callback
   const isReadyRef = useRef(isReady)
+  // Track playback timing to keep slider in sync
+  const playStartTimeRef = useRef<number>(0)
+  const playStartOffsetRef = useRef<number>(0)
+  // Track user seek interactions
+  const isSeekingRef = useRef(false)
+  const pendingSeekRef = useRef<number | null>(null)
   // Track user seek interactions
   const isSeekingRef = useRef(false)
   const pendingSeekRef = useRef<number | null>(null)
@@ -156,8 +162,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const updateTime = () => {
     if (!tonePlayerRef.current) return
 
-    // immediate() returns absolute position in buffer
-    const time = tonePlayerRef.current.immediate()
+    // Compute position based on start offset and elapsed time
+    const elapsed = Tone.now() - playStartTimeRef.current
+    const time = playStartOffsetRef.current + elapsed
     // Avoid fighting user drag
     if (!isSeekingRef.current) {
       setCurrentTime(time)
@@ -239,11 +246,10 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         pitchShiftRef.current.pitch = pitchShiftValue
       }
 
-      if (currentTime > 0) {
-        tonePlayerRef.current.start(undefined, currentTime)
-      } else {
-        tonePlayerRef.current.start()
-      }
+      const startOffset = currentTime > 0 ? currentTime : 0
+      playStartOffsetRef.current = startOffset
+      playStartTimeRef.current = Tone.now()
+      tonePlayerRef.current.start(undefined, startOffset)
       setIsPlaying(true)
     }
   }
@@ -271,10 +277,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       } catch (e) {
         // Player might already be stopped
       }
+      // Restart and update timing baseline
+      playStartOffsetRef.current = target
+      playStartTimeRef.current = Tone.now()
       tonePlayerRef.current.start(undefined, target)
     } else {
       // Paused: set position; next play starts from here
       setCurrentTime(target)
+      playStartOffsetRef.current = target
     }
   }
 
