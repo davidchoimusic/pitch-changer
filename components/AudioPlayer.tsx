@@ -155,6 +155,83 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
   }
 
+  const unlockToneContext = async () => {
+    try {
+      // Clear any stale nodes before rebuilding context
+      stopPlayback()
+
+      await Tone.start()
+
+      const ensureRunning = async (ctx: Tone.BaseContext) => {
+        let rawContext = ctx.rawContext as AudioContext | undefined
+        let running = ctx.state === 'running' && rawContext?.state === 'running'
+
+        try {
+          if (!running) {
+            if (ctx.state !== 'running') {
+              await ctx.resume()
+            }
+            rawContext = ctx.rawContext as AudioContext | undefined
+            if (rawContext && rawContext.state !== 'running') {
+              await rawContext.resume()
+            }
+            running = ctx.state === 'running' && rawContext?.state === 'running'
+          }
+        } catch (e) {
+          console.warn('Tone context resume warning:', e)
+        }
+
+        return { ctx, rawContext, running }
+      }
+
+      let { ctx, rawContext, running } = await ensureRunning(Tone.getContext())
+
+      // If Safari kept the old context suspended/closed, rebuild a fresh one
+      const stuck =
+        !ctx ||
+        !running ||
+        rawContext?.state === 'suspended' ||
+        rawContext?.state === 'interrupted' ||
+        rawContext?.state === 'closed'
+
+      if (stuck) {
+        // Try to close the old raw context to free Safari's context limit
+        try {
+          if (rawContext && rawContext.state !== 'closed') {
+            await rawContext.close()
+          }
+        } catch (e) {
+          console.warn('Raw audio context close warning:', e)
+        }
+
+        const fresh = new Tone.Context({ latencyHint: 'interactive' })
+        Tone.setContext(fresh)
+        const ensured = await ensureRunning(fresh)
+        ctx = ensured.ctx
+        rawContext = ensured.rawContext
+      }
+
+      // Safari sometimes stays silent until a tiny buffer is played once
+      if (rawContext) {
+        const buffer = rawContext.createBuffer(1, 1, rawContext.sampleRate)
+        const source = rawContext.createBufferSource()
+        source.buffer = buffer
+        source.connect(rawContext.destination)
+        const now = rawContext.currentTime
+        source.start(now)
+        source.stop(now + 0.05)
+      }
+
+      setSafariUnlocked(true)
+      setError(null)
+      return true
+    } catch (err) {
+      console.error('Safari audio unlock failed:', err)
+      setError('Safari blocked audio playback. Please tap Play again.')
+      return false
+    }
+  }
+
   // SIMPLIFIED: Single animation loop for Tone.js only
   const updateTime = () => {
     if (!tonePlayerRef.current) return
@@ -202,18 +279,29 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const handlePlayPause = async () => {
     if (!isReady) return
 
-    // SIMPLIFIED: Safari unlock for Tone.js context only
-    if (!safariUnlocked) {
-      await Tone.start()
+    const rawContext = Tone.getContext().rawContext as AudioContext | undefined
+    const needsUnlock =
+      !safariUnlocked ||
+      Tone.getContext().state !== 'running' ||
+      rawContext?.state === 'suspended' ||
+      rawContext?.state === 'interrupted' ||
+      rawContext?.state === 'closed'
 
-      if (Tone.context.state === 'suspended') {
-        await Tone.context.resume()
-      }
-
-      setSafariUnlocked(true)
+    if (needsUnlock) {
+      const unlocked = await unlockToneContext()
+      if (!unlocked) return
     }
 
-    await Tone.start()
+    const ctx = Tone.getContext()
+    const refreshedRaw = ctx.rawContext as AudioContext | undefined
+    if (
+      ctx.state !== 'running' ||
+      refreshedRaw?.state === 'suspended' ||
+      refreshedRaw?.state === 'interrupted' ||
+      refreshedRaw?.state === 'closed'
+    ) {
+      return
+    }
 
     // Lazy init Tone.js on first play (Safari requires user gesture)
     if (!tonePlayerRef.current && audioBufferRef.current) {

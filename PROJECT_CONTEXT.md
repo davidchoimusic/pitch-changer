@@ -245,6 +245,26 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
    - Ensure Tone.start() on EVERY play
    - Add Safari unlock pattern (silent buffer)
 
+### Safari Stale Cache (No Audio in Regular Mode)
+
+Symptoms:
+- Regular Safari: plays but silent
+- Safari Private Mode: works
+- Other browsers/devices: works
+
+Cause:
+- Safari occasionally serves stale JS even after hard refresh.
+
+Workaround (nuclear):
+1. Safari → Settings → Privacy → Manage Website Data → Remove All
+2. Quit Safari completely
+3. Reopen and reload pitchchanger.io
+
+Notes:
+- Hard refresh / closing tab / reopening Safari is insufficient.
+- Happens rarely; likely tied to rapid successive deploys.
+- Consider adding cache-busting headers if this recurs in production.
+
 ### Memory Leak Detection
 
 1. **Chrome DevTools:**
