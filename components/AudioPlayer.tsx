@@ -557,7 +557,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               onClick={handlePlayPause}
               disabled={!isReady}
               variant="play"
-              className="w-[7.5rem] h-[7.5rem] flex-none px-0 py-0 text-4xl md:w-32 md:h-auto md:px-6 md:py-3 md:text-base"
+              className="w-[5rem] h-[5rem] flex-none px-0 py-0 text-3xl md:w-32 md:h-auto md:px-6 md:py-3 md:text-base"
             >
               <span className="md:hidden">{isPlaying ? '⏸' : '▶'}</span>
               <span className="hidden md:inline">{isPlaying ? '⏸ Pause' : '▶ Play'}</span>
@@ -599,7 +599,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               <span className="text-sm text-gray-400 w-14 font-mono">{formatTime(duration)}</span>
             </div>
           </div>
-          <p className="text-xs text-gray-500 text-center">
+          <p className="hidden md:block text-xs text-gray-500 text-center">
             Press <kbd className="px-2 py-1 bg-gray-700 rounded text-white">Spacebar</kbd> to play/pause
           </p>
         </div>
@@ -618,10 +618,10 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 disabled={!audioBufferRef.current || !isReady || pitchShiftValue === 0}
                 variant="download"
                 size="md"
-                className="px-12"
-              >
-                ⬇ Process & Download Audio (WAV)
-              </Button>
+              className="px-12"
+            >
+              ⬇ Process Audio (WAV)
+            </Button>
             </div>
           ) : isProcessing ? (
             <div className="space-y-4">
@@ -681,7 +681,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           ) : null}
 
           {pitchShiftValue === 0 && !isProcessing && (
-            <p className="text-xs text-gray-500 text-center mt-2">Adjust pitch to enable download</p>
+            <p className="text-xs text-white text-center mt-2">Adjust pitch to enable download</p>
           )}
         </div>
       </div>
