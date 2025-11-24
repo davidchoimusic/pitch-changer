@@ -38,16 +38,19 @@ export default function Home() {
             {/* Branding */}
             <div className="pb-3 md:pb-8">
               <h1
-                className="text-3xl md:text-4xl font-black bg-clip-text text-transparent leading-tight pb-1"
+                className="text-4xl md:text-5xl font-black bg-clip-text text-transparent leading-tight pb-1"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
-                Free Online Pitch Changer - Change Pitch of Any Song or Audio
+                Free Online Pitch Changer
               </h1>
               <p
                 className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-2"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
                 PitchChanger.io
+              </p>
+              <p className="text-lg md:text-xl text-gray-200 mt-2">
+                Change Pitch of Any Song or Audio
               </p>
 
               {/* Glowing gradient line */}
