@@ -548,7 +548,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                          [&::-moz-range-thumb]:shadow-lg
                          [&::-moz-range-thumb]:active:cursor-grabbing
                          [&::-moz-range-thumb]:hover:scale-110
-                         [&::-moz-range-thumb]:transition-transform"
+                         [&::-moz-range-thumb]:transition-transform
+                         focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
             />
 
             <div className="flex justify-between text-sm text-gray-500 px-2">
@@ -608,7 +609,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                            [&::-moz-range-thumb]:cursor-pointer
                            [&::-moz-range-thumb]:shadow-md
                            [&::-moz-range-thumb]:hover:scale-110
-                           [&::-moz-range-thumb]:transition-transform"
+                           [&::-moz-range-thumb]:transition-transform
+                           focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
               />
               <span className="text-sm text-gray-400 w-14 font-mono">{formatTime(duration)}</span>
             </div>
