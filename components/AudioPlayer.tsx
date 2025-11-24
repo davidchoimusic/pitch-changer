@@ -483,6 +483,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       clearTimeout(processTimeoutRef.current)
       processTimeoutRef.current = null
     }
+    setSelectedFile(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleFinalDownload = () => {
@@ -717,14 +719,15 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   <p className="text-lg text-gray-300">Check out these ads below.</p>
                   <div className="text-4xl animate-bounce">⬇️</div>
                   <p className="text-sm text-gray-400">The ads keep this tool free for you</p>
-                  <p className="text-xs text-red-300 font-semibold">⚠️ Audio may not process in private browsing mode</p>
                   <Button
                     onClick={handleCancelProcessing}
-                    variant="ghost"
+                    variant="secondary"
                     size="sm"
+                    className="bg-red-600 text-white border-red-500 hover:bg-red-500 hover:border-red-400"
                   >
                     Cancel
                   </Button>
+                  <p className="text-xs text-red-300 font-semibold">⚠️ Audio may not process in private browsing mode</p>
                 </div>
               ) : (
                 <div className="text-center space-y-3 py-4">
