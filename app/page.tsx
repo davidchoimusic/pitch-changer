@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { FileUpload } from '@/components/FileUpload'
 import { AudioPlayer } from '@/components/AudioPlayer'
+import { Button } from '@/components/ui/Button'
 
 // Deterministic spectrum analyzer values (no Math.random for hydration)
 const spectrumSpeeds = [0.6, 0.9, 0.5, 1.1, 0.7, 0.8, 1.0, 0.6, 0.9, 0.7, 0.5, 0.8, 1.2, 0.6, 0.9, 0.7, 0.8, 0.6, 1.0, 0.5, 0.9, 0.7, 0.8, 0.6, 1.1, 0.5, 0.9, 0.8, 0.7, 1.0, 0.6, 0.8, 0.9, 0.7, 0.5, 1.1, 0.8, 0.6, 0.9, 0.7]
@@ -40,7 +41,7 @@ export default function Home() {
                 className="text-5xl md:text-6xl font-black bg-clip-text text-transparent leading-tight pb-1"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
-                Pitch Changer Tool
+                Free Online Pitch Changer
               </h1>
               <p
                 className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-2"
@@ -67,38 +68,45 @@ export default function Home() {
                 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
-                Change the Pitch of Your<br />Song or Audio
+                Change the Pitch of Any Song or Audio Instantly
               </h2>
               <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-                Free, instant pitch shifting in your browser. 100% client-side - your files never leave your device.
+                A fast, free audio pitch changer for MP3, WAV, FLAC, M4A, AAC. Change pitch without changing speed — 100% browser-based, no uploads.
               </p>
+              <div className="pt-2 flex justify-center">
+                <Button asChild variant="primary" size="md" className="px-6 py-3">
+                  <a href="#upload">Start Changing Pitch (Free)</a>
+                </Button>
+              </div>
             </div>
           </div>
 
           {/* Upload Section */}
-          <FileUpload onFileSelect={setSelectedFile} maxSizeMB={250} />
+          <div id="upload">
+            <FileUpload onFileSelect={setSelectedFile} maxSizeMB={250} />
+          </div>
 
           {/* Features */}
           <div className="grid md:grid-cols-3 gap-8 pt-8">
             <div className="text-center space-y-3">
               <div className="text-5xl">⚡</div>
-              <h3 className="text-lg font-semibold">Real-Time Processing</h3>
+              <h3 className="text-lg font-semibold">Online pitch changer</h3>
               <p className="text-sm text-gray-400">
-                Hear changes instantly as you adjust the pitch slider
+                Real-time preview; change pitch of a song up or down with no speed change.
               </p>
             </div>
             <div className="text-center space-y-3">
               <div className="text-5xl">🔒</div>
-              <h3 className="text-lg font-semibold">100% Private</h3>
+              <h3 className="text-lg font-semibold">100% private</h3>
               <p className="text-sm text-gray-400">
-                Zero uploads - everything processed locally in your browser
+                Browser-based audio pitch shifter; files stay on your device (no uploads).
               </p>
             </div>
             <div className="text-center space-y-3">
               <div className="text-5xl">🎯</div>
-              <h3 className="text-lg font-semibold">Preserve Duration</h3>
+              <h3 className="text-lg font-semibold">Format friendly</h3>
               <p className="text-sm text-gray-400">
-                Change pitch without affecting playback speed
+                MP3 pitch changer plus WAV, FLAC, M4A, AAC — free, instant, no install.
               </p>
             </div>
           </div>
@@ -111,27 +119,77 @@ export default function Home() {
                 <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center text-lg font-semibold">
                   1
                 </div>
-                <h3 className="text-lg font-semibold">Upload Audio</h3>
+                <h3 className="text-lg font-semibold">Upload your audio file</h3>
                 <p className="text-sm text-gray-400">
-                  Drag and drop your audio file (MP3, WAV, FLAC, M4A, AAC - up to 250MB)
+                  Drag and drop MP3, WAV, FLAC, M4A, AAC (up to 250MB).
                 </p>
               </div>
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center text-lg font-semibold">
                   2
                 </div>
-                <h3 className="text-lg font-semibold">Adjust Pitch</h3>
+                <h3 className="text-lg font-semibold">Move the slider to change pitch</h3>
                 <p className="text-sm text-gray-400">
-                  Use the slider to shift pitch up or down by semitones while listening in real-time
+                  Shift pitch up or down in semitones with real-time preview (no tempo change).
                 </p>
               </div>
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center text-lg font-semibold">
                   3
                 </div>
-                <h3 className="text-lg font-semibold">Download</h3>
+                <h3 className="text-lg font-semibold">Download your new track</h3>
                 <p className="text-sm text-gray-400">
-                  Export your pitch-shifted audio when you're satisfied with the result
+                  Export instantly in your browser; nothing leaves your device.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Why Use PitchChanger.io */}
+          <div className="border-t border-divider pt-12 space-y-6">
+            <h2 className="text-3xl font-bold text-center">Why Use PitchChanger.io?</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Musicians & singers</h3>
+                <p className="text-sm text-gray-400">
+                  Transpose music, shift keys, adjust vocals for practice or performance.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">DJs & producers</h3>
+                <p className="text-sm text-gray-400">
+                  Quickly change pitch for remixes and edits without changing speed.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Teaching & karaoke</h3>
+                <p className="text-sm text-gray-400">
+                  Shift keys for lessons, sing-alongs, and rehearsals with instant feedback.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* FAQ */}
+          <div className="border-t border-divider pt-12 space-y-6">
+            <h2 className="text-3xl font-bold text-center">FAQ</h2>
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold">Does this change the pitch without changing speed?</h3>
+                <p className="text-sm text-gray-400">
+                  Yes. PitchChanger.io lets you change pitch without tempo change (preserve duration).
+                </p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">Is it really online and free?</h3>
+                <p className="text-sm text-gray-400">
+                  Yes. It’s a free online pitch changer that works directly in your browser with real-time preview.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">Are my files private?</h3>
+                <p className="text-sm text-gray-400">
+                  100%. This audio pitch changer processes everything locally — nothing is uploaded.
                 </p>
               </div>
             </div>
