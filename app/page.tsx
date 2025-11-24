@@ -41,7 +41,7 @@ export default function Home() {
                 className="text-5xl md:text-6xl font-black bg-clip-text text-transparent leading-tight pb-1"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
-                Free Online Pitch Changer
+                Free Online Pitch Changer - Change Pitch of Any Song or Audio
               </h1>
               <p
                 className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-2"
