@@ -32,7 +32,7 @@ export default function Home() {
               </p>
 
               {/* Glowing gradient line */}
-              <div className="mt-6 md:mt-6 mb-2 flex justify-center">
+              <div className="mt-12 md:mt-12 mb-2 flex justify-center">
                 <div
                   className="h-1 w-48 rounded-full"
                   style={{
@@ -137,7 +137,7 @@ export default function Home() {
             </p>
 
             {/* Glowing gradient line */}
-            <div className="mt-6 md:mt-6 mb-2 flex justify-center">
+            <div className="mt-12 md:mt-12 mb-2 flex justify-center">
               <div
                 className="h-1 w-48 rounded-full"
                 style={{
