@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -43,6 +44,12 @@ export default function RootLayout({
             <footer className="border-t border-divider py-6 mt-auto bg-bg-card">
               <div className="container mx-auto px-4 text-center text-sm text-gray-400">
                 <p>&copy; 2025 PitchChanger.io - Free Audio Pitch Shifting Tool</p>
+                <div className="mt-2 space-x-4">
+                  <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                  <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+                  <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+                  <Link href="/about" className="hover:text-white transition-colors">About</Link>
+                </div>
               </div>
             </footer>
           </div>
