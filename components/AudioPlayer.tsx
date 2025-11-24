@@ -467,9 +467,10 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     if (!audioBufferRef.current) return
 
     if (isPrivateMode) {
-      setProcessError('Processing may not work in private browsing. Please use a regular window or try a smaller file.')
+      setProcessError('Processing may not work in private browsing. Please use a regular window.')
       setIsProcessing(false)
       setProcessProgress(0)
+      setShowProcessingWarning(true)
       return
     }
 
@@ -766,11 +767,16 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 disabled={!audioBufferRef.current || !isReady || pitchShiftValue === 0}
                 variant="download"
                 size="md"
-              className="px-12"
-            >
-              ⬇ Process Audio (WAV)
-            </Button>
+                className="px-12"
+              >
+                ⬇ Process Audio (WAV)
+              </Button>
             </div>
+            {isPrivateMode && (
+              <p className="text-xs text-red-300 text-center font-semibold mt-2">
+                ⚠️ Processing may not work in private browsing mode
+              </p>
+            )}
           ) : isProcessing ? (
             <div className="space-y-4">
               <div className="space-y-2">
