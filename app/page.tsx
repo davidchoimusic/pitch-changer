@@ -51,7 +51,7 @@ export default function Home() {
                 Free Online Pitch Changer
               </h1>
               <p className="text-lg md:text-xl text-gray-200 mt-2">
-                Change Pitch of Any Song or Audio
+                PitchChanger.io is a free online pitch changer that lets you instantly change the pitch of a song without changing speed.
               </p>
 
               {/* Glowing gradient line */}
@@ -75,7 +75,7 @@ export default function Home() {
                 Change the Pitch of Any Song or Audio Instantly
               </h2>
               <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-                A fast, free audio pitch changer for MP3, WAV, FLAC, M4A, AAC. Change pitch without changing speed — 100% browser-based, no uploads.
+                This audio pitch changer works directly in your browser — no uploads, no installation required.
               </p>
               <div className="pt-2 flex justify-center">
                 <Button
