@@ -792,8 +792,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   ⬇ Download
                 </Button>
               </div>
-              <p className="text-xs text-gray-400 text-center">
-                Thank you for supporting PitchChanger.io! 🙏
+              <p className="text-center text-lg font-semibold text-pink-400 animate-pulse drop-shadow-[0_0_12px_rgba(236,72,153,0.8)]">
+                PitchChanger.io
               </p>
             </div>
           )}
