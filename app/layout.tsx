@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="font-sans">
+      <body className="font-sans overflow-x-hidden">
         {/* Top Ad Banner - Reserved height for CLS */}
         <div className="w-full bg-bg-card border-b border-divider">
           <div className="container mx-auto px-4 py-2">
@@ -47,8 +47,8 @@ export default function RootLayout({
           </aside>
 
           {/* Main Content */}
-          <div className="flex-1 flex flex-col">
-            <main className="flex-1">
+          <div className="flex-1 flex flex-col overflow-x-hidden">
+            <main className="flex-1 overflow-x-hidden">
               {children}
             </main>
             <footer className="border-t border-divider py-6 mt-auto bg-bg-card">
