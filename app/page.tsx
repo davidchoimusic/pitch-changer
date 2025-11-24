@@ -32,8 +32,8 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       {/* Nav */}
-      <header className="w-full mb-8">
-        <div className="flex items-center">
+      <header className="w-full mb-8 sticky top-0 z-20 bg-bg-page/90 backdrop-blur border-b border-divider">
+        <div className="flex items-center py-3">
           <span className="text-lg md:text-xl font-semibold text-white">PitchChanger.io</span>
         </div>
       </header>

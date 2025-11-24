@@ -27,25 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans overflow-x-hidden">
-        {/* Top Ad Banner - Reserved height for CLS */}
-        <div className="w-full bg-bg-card border-b border-divider">
-          <div className="container mx-auto px-4 py-2">
-            <div className="h-[90px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center text-gray-500 text-sm">
-              Ad Space - Top Banner (728x90)
-            </div>
-          </div>
-        </div>
-
         <div className="min-h-screen flex">
-          {/* Left Ad Sidebar */}
-          <aside className="hidden lg:block w-40 border-r border-divider bg-bg-card">
-            <div className="sticky top-0 p-4">
-              <div className="h-[600px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
-                <p className="text-gray-500 text-xs text-center rotate-0">Ad Space<br/>160x600</p>
-              </div>
-            </div>
-          </aside>
-
           {/* Main Content */}
           <div className="flex-1 flex flex-col overflow-x-hidden">
             <main className="flex-1 overflow-x-hidden">
@@ -57,15 +39,6 @@ export default function RootLayout({
               </div>
             </footer>
           </div>
-
-          {/* Right Ad Sidebar */}
-          <aside className="hidden lg:block w-40 border-l border-divider bg-bg-card">
-            <div className="sticky top-0 p-4">
-              <div className="h-[600px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
-                <p className="text-gray-500 text-xs text-center">Ad Space<br/>160x600</p>
-              </div>
-            </div>
-          </aside>
         </div>
       </body>
     </html>
