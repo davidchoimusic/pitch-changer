@@ -4,6 +4,11 @@ import { useState } from 'react'
 import { FileUpload } from '@/components/FileUpload'
 import { AudioPlayer } from '@/components/AudioPlayer'
 
+// Force dynamic rendering and no caching to avoid stale HTML on Safari
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+export const fetchCache = 'force-no-store'
+
 // Deterministic spectrum analyzer values (no Math.random for hydration)
 const spectrumSpeeds = [0.6, 0.9, 0.5, 1.1, 0.7, 0.8, 1.0, 0.6, 0.9, 0.7, 0.5, 0.8, 1.2, 0.6, 0.9, 0.7, 0.8, 0.6, 1.0, 0.5, 0.9, 0.7, 0.8, 0.6, 1.1, 0.5, 0.9, 0.8, 0.7, 1.0, 0.6, 0.8, 0.9, 0.7, 0.5, 1.1, 0.8, 0.6, 0.9, 0.7]
 
