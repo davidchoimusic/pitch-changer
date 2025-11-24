@@ -113,11 +113,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   // FIX: Spacebar to play/pause with stable callback (attach once)
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      // Don't intercept space if focused on input/textarea
+      // Allow range sliders to toggle play; skip text-entry fields
       const target = e.target as HTMLElement
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-        return
+      if (target instanceof HTMLInputElement) {
+        const blockTypes = ['text', 'search', 'email', 'url', 'tel', 'number', 'password']
+        if (blockTypes.includes(target.type)) return
       }
+      if (target.tagName === 'TEXTAREA') return
 
       if (e.code === 'Space' && isReadyRef.current) {
         e.preventDefault()
