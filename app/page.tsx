@@ -102,19 +102,19 @@ export default function Home() {
             </div>
             <h2 className="text-3xl font-bold text-center mb-6 md:mb-8">Why Use PitchChanger.io?</h2>
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="space-y-2">
+              <div className="space-y-2 bg-bg-card border border-divider rounded-lg p-5">
                 <h3 className="text-lg font-semibold">Musicians & Vocalists</h3>
                 <p className="text-sm text-gray-400">
                   Transpose songs, change pitch for practice, adjust keys for your vocal range, or prepare backing tracks.
                 </p>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 bg-bg-card border border-divider rounded-lg p-5">
                 <h3 className="text-lg font-semibold">DJs & Producers</h3>
                 <p className="text-sm text-gray-400">
                   A fast online pitch changer for remixes, edits, and mixing — shift pitch without changing speed.
                 </p>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 bg-bg-card border border-divider rounded-lg p-5">
                 <h3 className="text-lg font-semibold">Teachers & Karaoke Users</h3>
                 <p className="text-sm text-gray-400">
                   Change pitch of a song instantly for lessons, sing-alongs, and rehearsals with real-time preview.
