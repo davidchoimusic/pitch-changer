@@ -16,7 +16,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [pitchShiftValue, setPitchShiftValue] = useState(0)
-  const [preserveDuration, setPreserveDuration] = useState(true)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [isReady, setIsReady] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -27,17 +26,17 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
   const tonePlayerRef = useRef<Tone.Player | null>(null)
   const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
-  const audioContextRef = useRef<AudioContext | null>(null)
-  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null)
   const audioBufferRef = useRef<AudioBuffer | null>(null)
   const animationFrameRef = useRef<number | null>(null)
-  const startTimeRef = useRef<number>(0)
-  const offsetRef = useRef<number>(0)
-  const lastCurrentTimeRef = useRef<number>(0)
   const downloadSectionRef = useRef<HTMLDivElement | null>(null)
-  // FIX: Refs for stable keydown callback
+  // Ref for stable keydown callback
   const isReadyRef = useRef(isReady)
-  const isPlayingRef = useRef(isPlaying)
+  // Track playback timing to keep slider in sync
+  const playStartTimeRef = useRef<number>(0)
+  const playStartOffsetRef = useRef<number>(0)
+  // Track user seek interactions
+  const isSeekingRef = useRef(false)
+  const pendingSeekRef = useRef<number | null>(null)
 
   // Load audio file
   useEffect(() => {
@@ -58,20 +57,12 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
         setUploadProgress(30)
 
-        // FIX: Close old AudioContext before creating new one
-        if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-          try {
-            await audioContextRef.current.close()
-          } catch (e) {
-            console.error('Error closing old context:', e)
-          }
-        }
-
-        // Decode audio buffer for Web Audio API (reuses same ArrayBuffer, no copy)
+        // Decode with regular AudioContext (Tone.start() requires user gesture)
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        audioContextRef.current = audioContext
-
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
+
+        // Close immediately after decode - we'll use Tone's context for playback
+        await audioContext.close()
 
         // Check again before setting state
         if (abortController.signal.aborted) return
@@ -103,10 +94,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
       }
-      // FIX: Close context on cleanup
-      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-        audioContextRef.current.close().catch(e => console.error('Cleanup context close error:', e))
-      }
+      // SIMPLIFIED: Tone.js manages its own context, no manual close needed
     }
   }, [file])
 
@@ -114,10 +102,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   useEffect(() => {
     isReadyRef.current = isReady
   }, [isReady])
-
-  useEffect(() => {
-    isPlayingRef.current = isPlaying
-  }, [isPlaying])
 
   // FIX: Spacebar to play/pause with stable callback (attach once)
   useEffect(() => {
@@ -138,40 +122,23 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     return () => window.removeEventListener('keydown', handleKeyPress)
   }, []) // Empty deps = attach once only
 
-  const stopPlayback = (shouldDispose = false) => {
-    // Stop Tone playback path
+  const stopPlayback = () => {
+    // SIMPLIFIED: Tone.js only
     if (tonePlayerRef.current) {
       try {
         tonePlayerRef.current.stop()
-        // FIX: Only dispose on cleanup, not on seek/pause
-        if (shouldDispose) {
-          tonePlayerRef.current.dispose()
-          tonePlayerRef.current = null
-        }
+        tonePlayerRef.current.dispose()
       } catch (e) {
         console.error('Error stopping Tone player:', e)
       }
     }
 
-    // Dispose pitch shift effect too
-    if (pitchShiftRef.current && shouldDispose) {
+    if (pitchShiftRef.current) {
       try {
         pitchShiftRef.current.dispose()
-        pitchShiftRef.current = null
       } catch (e) {
         console.error('Error disposing pitch shift:', e)
       }
-    }
-
-    // Stop native Web Audio path
-    if (sourceNodeRef.current) {
-      try {
-        sourceNodeRef.current.stop()
-        sourceNodeRef.current.disconnect()
-      } catch (e) {
-        console.error('Error stopping native player:', e)
-      }
-      sourceNodeRef.current = null
     }
 
     setIsPlaying(false)
@@ -180,82 +147,63 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
   }
 
-  // Update time for Tone.js
-  const updateTimeTone = () => {
-    // FIX: Use ref instead of state to avoid stale closure
-    if (!tonePlayerRef.current || !isPlayingRef.current) return
+  // SIMPLIFIED: Single animation loop for Tone.js only
+  const updateTime = () => {
+    if (!tonePlayerRef.current) return
 
-    const time = tonePlayerRef.current.immediate()
-    setCurrentTime(time)
+    // Compute position based on start offset and elapsed time
+    const elapsed = Tone.now() - playStartTimeRef.current
+    const time = playStartOffsetRef.current + elapsed
+    // Avoid fighting user drag
+    if (!isSeekingRef.current) {
+      setCurrentTime(time)
+    }
 
     if (time >= duration - 0.1) {
       setIsPlaying(false)
       setCurrentTime(0)
       tonePlayerRef.current.stop()
+      // Clear any pending RAF
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
+      }
     } else {
-      animationFrameRef.current = requestAnimationFrame(updateTimeTone)
-    }
-  }
-
-  // Update time for native Web Audio
-  const updateTimeNative = () => {
-    // FIX: Use ref instead of state to avoid stale closure
-    if (!audioContextRef.current || !isPlayingRef.current) return
-
-    const elapsed = audioContextRef.current.currentTime - startTimeRef.current + offsetRef.current
-    const newTime = Math.min(elapsed, duration)
-    setCurrentTime(newTime)
-    lastCurrentTimeRef.current = newTime
-
-    if (elapsed >= duration) {
-      stopPlayback()
-      setCurrentTime(0)
-      offsetRef.current = 0
-      lastCurrentTimeRef.current = 0
-    } else {
-      animationFrameRef.current = requestAnimationFrame(updateTimeNative)
+      animationFrameRef.current = requestAnimationFrame(updateTime)
     }
   }
 
   useEffect(() => {
     if (isPlaying) {
-      if (preserveDuration) {
-        animationFrameRef.current = requestAnimationFrame(updateTimeTone)
-      } else {
-        animationFrameRef.current = requestAnimationFrame(updateTimeNative)
-      }
+      animationFrameRef.current = requestAnimationFrame(updateTime)
     } else {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
       }
     }
 
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
       }
     }
-  }, [isPlaying, preserveDuration, duration])
+  }, [isPlaying, duration])
 
   const handlePlayPause = async () => {
     if (!isReady) return
 
-    // FIX: Unlock Tone.js context FIRST (critical for first load)
-    await Tone.start()
-
-    // Safari unlock pattern for BOTH contexts (run once on first user gesture)
+    // SIMPLIFIED: Safari unlock for Tone.js context only
     if (!safariUnlocked) {
-      // Unlock our native AudioContext
-      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-        await audioContextRef.current.resume()
+      await Tone.start()
 
-        // Create silent buffer to fully unlock Safari audio
-        const buffer = audioContextRef.current.createBuffer(1, 1, 22050)
-        const source = audioContextRef.current.createBufferSource()
-        source.buffer = buffer
-        source.connect(audioContextRef.current.destination)
-        source.start(0)
+      if (Tone.context.state === 'suspended') {
+        await Tone.context.resume()
       }
+
+      setSafariUnlocked(true)
+    }
 
       // FIX: Also unlock Tone's context (they might be different!)
       if (Tone.context.state === 'suspended') {
@@ -266,13 +214,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
 
     // Lazy init Tone.js on first play (Safari requires user gesture)
-    if (preserveDuration && !tonePlayerRef.current && audioBufferRef.current) {
-      // FIX: Ensure Tone.context is actually running before creating player
-      if (Tone.context.state !== 'running') {
-        console.warn('Tone.context not running, attempting to resume...')
-        await Tone.context.resume()
-      }
-
+    if (!tonePlayerRef.current && audioBufferRef.current) {
       const player = new Tone.Player()
       player.buffer.set(audioBufferRef.current)
       player.loop = false
@@ -280,112 +222,64 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
       const pitchShiftEffect = new Tone.PitchShift({
         pitch: pitchShiftValue,
-        windowSize: 0.1, // Higher quality, bugs were causing Safari delay
+        windowSize: 0.1,
         delayTime: 0,
         feedback: 0
       }).toDestination()
 
       player.connect(pitchShiftEffect)
       pitchShiftRef.current = pitchShiftEffect
-      console.log('Tone.js initialized on first play (Safari compatibility)')
+      console.log('Tone.js initialized on first play')
     }
 
     if (isPlaying) {
       stopPlayback()
-      if (preserveDuration) {
-        offsetRef.current = currentTime
-      } else {
-        offsetRef.current = lastCurrentTimeRef.current
-      }
     } else {
-      if (preserveDuration) {
-        if (!tonePlayerRef.current) return
+      if (!tonePlayerRef.current) return
 
-        if (pitchShiftRef.current) {
-          pitchShiftRef.current.pitch = pitchShiftValue
-        }
-
-        if (currentTime > 0) {
-          tonePlayerRef.current.start(undefined, currentTime)
-        } else {
-          tonePlayerRef.current.start()
-        }
-        setIsPlaying(true)
-      } else {
-        if (!audioBufferRef.current || !audioContextRef.current) return
-
-        const source = audioContextRef.current.createBufferSource()
-        source.buffer = audioBufferRef.current
-
-        const playbackRate = Math.pow(2, pitchShiftValue / 12)
-        source.playbackRate.value = playbackRate
-
-        source.connect(audioContextRef.current.destination)
-        source.start(0, offsetRef.current)
-
-        startTimeRef.current = audioContextRef.current.currentTime
-        sourceNodeRef.current = source
-        setIsPlaying(true)
-
-        source.onended = () => {
-          stopPlayback()
-          setCurrentTime(0)
-          offsetRef.current = 0
-          lastCurrentTimeRef.current = 0
-        }
+      if (pitchShiftRef.current) {
+        pitchShiftRef.current.pitch = pitchShiftValue
       }
+
+      const startOffset = currentTime > 0 ? currentTime : 0
+      playStartOffsetRef.current = startOffset
+      playStartTimeRef.current = Tone.now()
+      tonePlayerRef.current.start(undefined, startOffset)
+      setIsPlaying(true)
     }
   }
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeekStart = () => {
+    isSeekingRef.current = true
+  }
+
+  const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value)
+    pendingSeekRef.current = newTime
     setCurrentTime(newTime)
-    offsetRef.current = newTime
-    lastCurrentTimeRef.current = newTime
+  }
 
-    if (isPlaying) {
-      // FIX: Don't call stopPlayback() - keep RAF running to prevent timecode freeze
+  const handleSeekEnd = () => {
+    const target = pendingSeekRef.current
+    isSeekingRef.current = false
+    pendingSeekRef.current = null
 
-      if (preserveDuration && tonePlayerRef.current) {
-        // Stop Tone player without disposing
-        try {
-          tonePlayerRef.current.stop()
-        } catch (e) {
-          console.error('Tone stop error during seek:', e)
-        }
-        // Start at new position
-        tonePlayerRef.current.start(undefined, newTime)
-        // Don't touch isPlaying - stays true, RAF keeps running
+    if (target == null) return
 
-      } else if (audioBufferRef.current && audioContextRef.current) {
-        // Stop old native source
-        if (sourceNodeRef.current) {
-          try {
-            sourceNodeRef.current.stop()
-            sourceNodeRef.current.disconnect()
-          } catch (e) {
-            console.error('Native stop error during seek:', e)
-          }
-        }
-
-        // Create new source at new position
-        const source = audioContextRef.current.createBufferSource()
-        source.buffer = audioBufferRef.current
-        const playbackRate = Math.pow(2, pitchShiftValue / 12)
-        source.playbackRate.value = playbackRate
-        source.connect(audioContextRef.current.destination)
-        source.start(0, newTime)
-        startTimeRef.current = audioContextRef.current.currentTime
-        sourceNodeRef.current = source
-        // Don't touch isPlaying - stays true, RAF keeps running
-
-        source.onended = () => {
-          stopPlayback()
-          setCurrentTime(0)
-          offsetRef.current = 0
-          lastCurrentTimeRef.current = 0
-        }
+    if (isPlaying && tonePlayerRef.current) {
+      try {
+        tonePlayerRef.current.stop()
+      } catch (e) {
+        // Player might already be stopped
       }
+      // Restart and update timing baseline
+      playStartOffsetRef.current = target
+      playStartTimeRef.current = Tone.now()
+      tonePlayerRef.current.start(undefined, target)
+    } else {
+      // Paused: set position; next play starts from here
+      setCurrentTime(target)
+      playStartOffsetRef.current = target
     }
   }
 
@@ -393,29 +287,10 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     const newPitch = parseInt(e.target.value)
     setPitchShiftValue(newPitch)
 
-    // Always update Tone.js pitch shift (even when paused)
+    // SIMPLIFIED: Tone.js updates pitch in real-time, no restart needed
     if (pitchShiftRef.current) {
       pitchShiftRef.current.pitch = newPitch
     }
-
-    // If playing in simple mode (native), restart with new pitch
-    if (isPlaying && !preserveDuration && audioBufferRef.current && audioContextRef.current) {
-      const currentOffset = lastCurrentTimeRef.current
-
-      stopPlayback()
-
-      const source = audioContextRef.current.createBufferSource()
-      source.buffer = audioBufferRef.current
-      const playbackRate = Math.pow(2, newPitch / 12)
-      source.playbackRate.value = playbackRate
-      source.connect(audioContextRef.current.destination)
-      source.start(0, currentOffset)
-      startTimeRef.current = audioContextRef.current.currentTime
-      offsetRef.current = currentOffset
-      sourceNodeRef.current = source
-      setIsPlaying(true)
-    }
-    // Note: Tone.js updates pitch in real-time, no restart needed
   }
 
   const handleStartProcessing = async () => {
@@ -426,23 +301,12 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     setProcessedBlob(null)
 
     try {
-      let processed: AudioBuffer
-
-      if (preserveDuration) {
-        // Use Tone.js for export (matches preview)
-        processed = await exportWithTone(
-          audioBufferRef.current,
-          pitchShiftValue,
-          (progress) => setProcessProgress(progress)
-        )
-      } else {
-        // Use simple playbackRate mode
-        processed = await pitchShift(audioBufferRef.current, {
-          semitones: pitchShiftValue,
-          mode: 'simple',
-          onProgress: (progress) => setProcessProgress(progress)
-        })
-      }
+      // SIMPLIFIED: Always use Tone.js for export (matches preview)
+      const processed = await exportWithTone(
+        audioBufferRef.current,
+        pitchShiftValue,
+        (progress) => setProcessProgress(progress)
+      )
 
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
@@ -487,16 +351,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
-  const getAdjustedDuration = () => {
-    if (preserveDuration || pitchShiftValue === 0) {
-      return duration
-    }
-    const playbackRate = Math.pow(2, pitchShiftValue / 12)
-    return duration / playbackRate
-  }
-
-  const adjustedDuration = getAdjustedDuration()
-
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* File Info & Upload Progress */}
@@ -509,8 +363,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
             <p className="text-lg font-medium mt-1">{file.name}</p>
             <p className="text-sm text-gray-500 mt-1">
               {(file.size / 1024 / 1024).toFixed(2)} MB
-              {duration > 0 && ` • ${formatTime(duration)} original`}
-              {!preserveDuration && pitchShiftValue !== 0 && duration > 0 && ` → ${formatTime(adjustedDuration)} adjusted`}
+              {duration > 0 && ` • ${formatTime(duration)}`}
             </p>
           </div>
         </div>
@@ -548,12 +401,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               <span className="text-2xl font-bold text-accent block">
                 {pitchShiftValue > 0 ? '+' : ''}{pitchShiftValue} semitones
               </span>
-              {!preserveDuration && pitchShiftValue !== 0 && (
-                <span className="text-sm text-gray-400 block mt-1">
-                  Playback: {(Math.pow(2, pitchShiftValue / 12) * 100).toFixed(1)}% speed
-                  {pitchShiftValue > 0 ? ' (faster)' : ' (slower)'}
-                </span>
-              )}
             </div>
           </div>
           <div className="space-y-2">
@@ -610,107 +457,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           </div>
         </div>
 
-        {/* Preserve Duration Checkbox */}
-        <div className="p-5 bg-gray-800/50 rounded-lg border border-divider space-y-3">
-          <div className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              id="preserve-duration"
-              checked={preserveDuration}
-              onChange={async (e) => {
-                const newValue = e.target.checked
-                const wasPlaying = isPlaying
-                const currentPosition = currentTime
-
-                stopPlayback(true) // FIX: Dispose when switching modes
-                offsetRef.current = currentPosition
-
-                setPreserveDuration(newValue)
-
-                if (wasPlaying) {
-                  await Tone.start()
-
-                  // FIX: Ensure Tone.context is running before resume
-                  if (Tone.context.state === 'suspended') {
-                    await Tone.context.resume()
-                  }
-
-                  if (newValue) {
-                    // FIX: Re-initialize Tone player/effect if null
-                    if (!tonePlayerRef.current || !pitchShiftRef.current) {
-                      if (audioBufferRef.current) {
-                        const player = new Tone.Player()
-                        player.buffer.set(audioBufferRef.current)
-                        player.loop = false
-                        tonePlayerRef.current = player
-
-                        const pitchShiftEffect = new Tone.PitchShift({
-                          pitch: pitchShiftValue,
-                          windowSize: 0.1,
-                          delayTime: 0,
-                          feedback: 0
-                        }).toDestination()
-
-                        player.connect(pitchShiftEffect)
-                        pitchShiftRef.current = pitchShiftEffect
-                      }
-                    }
-
-                    if (tonePlayerRef.current && pitchShiftRef.current) {
-                      pitchShiftRef.current.pitch = pitchShiftValue
-                      tonePlayerRef.current.start(undefined, currentPosition)
-                      setIsPlaying(true)
-                    }
-                  } else {
-                    if (audioBufferRef.current && audioContextRef.current) {
-                      const source = audioContextRef.current.createBufferSource()
-                      source.buffer = audioBufferRef.current
-                      const playbackRate = Math.pow(2, pitchShiftValue / 12)
-                      source.playbackRate.value = playbackRate
-                      source.connect(audioContextRef.current.destination)
-                      source.start(0, currentPosition)
-                      startTimeRef.current = audioContextRef.current.currentTime
-                      sourceNodeRef.current = source
-                      setIsPlaying(true)
-
-                      source.onended = () => {
-                        stopPlayback()
-                        setCurrentTime(0)
-                        offsetRef.current = 0
-                        lastCurrentTimeRef.current = 0
-                      }
-                    }
-                  }
-                }
-              }}
-              className="w-5 h-5 rounded border-gray-600 text-accent focus:ring-accent focus:ring-offset-0 cursor-pointer flex-shrink-0"
-            />
-            <label htmlFor="preserve-duration" className="font-medium cursor-pointer">
-              Preserve Duration
-            </label>
-          </div>
-
-          <div className="text-sm text-gray-400 space-y-2 ml-8">
-            {preserveDuration ? (
-              <>
-                <p className="font-medium text-white">Checked (Recommended):</p>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>Song stays the same length</li>
-                  <li>Only pitch changes</li>
-                </ul>
-              </>
-            ) : (
-              <>
-                <p className="font-medium text-white">When unchecked:</p>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>Higher pitch = audio speeds up and length gets shorter</li>
-                  <li>Lower pitch = audio slows down and length gets longer</li>
-                </ul>
-              </>
-            )}
-          </div>
-        </div>
-
         {/* Playback Controls */}
         <div className="space-y-4">
           <div className="flex items-center gap-4">
@@ -727,10 +473,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               <input
                 type="range"
                 min="0"
-                max={adjustedDuration || 100}
+                max={duration || 100}
                 step="0.1"
                 value={currentTime}
-                onChange={handleSeek}
+                onMouseDown={handleSeekStart}
+                onTouchStart={handleSeekStart}
+                onChange={handleSeekChange}
+                onMouseUp={handleSeekEnd}
+                onTouchEnd={handleSeekEnd}
                 disabled={!isReady}
                 className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
                            [&::-webkit-slider-thumb]:appearance-none
@@ -752,7 +502,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                            [&::-moz-range-thumb]:hover:scale-110
                            [&::-moz-range-thumb]:transition-transform"
               />
-              <span className="text-sm text-gray-400 w-14 font-mono">{formatTime(adjustedDuration)}</span>
+              <span className="text-sm text-gray-400 w-14 font-mono">{formatTime(duration)}</span>
             </div>
           </div>
           <p className="text-xs text-gray-500 text-center">

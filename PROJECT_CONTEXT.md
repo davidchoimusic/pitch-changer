@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR:** LIVE at pitchchanger.io - ✅ Safari audio FIXED - All critical bugs resolved (memory leaks, context leaks, keydown duplication) | 2025-11-22
+**TL;DR:** Production (main) is still broken from prior dual-mode churn. Staging (`staging-tone-only`, commit df36482) is Tone-only with working playback, pitch, and seek; in final testing before merge. | 2025-11-22
 
 ---
 
@@ -8,20 +8,21 @@
 
 - **Repo Path:** `/Users/davidchoi/Documents/0 projects/pitch-changer`
 - **Repo URL:** https://github.com/davidchoimusic/pitch-changer
-- **Domain:** pitchchanger.io (LIVE and stable)
+- **Domain:** pitchchanger.io (production currently broken; staging in test)
 - **Branding:** PitchChanger.io (capital P and C)
-- **Main Branch:** `main`
-- **Current Branch:** `main`
-- **Current Commit:** d9f9dca (CODEX review fixes - all critical bugs resolved)
-- **Open PRs/Issues:** None - Safari fixed, production stable
-- **Production:** https://pitchchanger.io (LIVE and STABLE - Safari working)
+- **Main Branch:** `main` (broken)
+- **Current Branch:** `staging-tone-only`
+- **Current Commit:** df36482 (seek timing fix, Tone-only player)
+- **Open PRs/Issues:** Verify staging, then merge to main
+- **Production:** https://pitchchanger.io (broken; awaiting merge from staging)
+- **Staging:** latest deploy from `staging-tone-only` (Tone-only, seek fixed)
 
 ---
 
 ## Project Overview
 
 **What it does:**
-Web-based audio pitch shifting tool. Users upload audio files (MP3, WAV, FLAC, M4A, AAC - max 250MB), adjust pitch ±12 semitones in real-time with Tone.js, toggle preserve duration mode, and download as WAV. 100% client-side processing with strategic ad placement.
+Web-based audio pitch shifting tool. Users upload audio files (MP3, WAV, FLAC, M4A, AAC - max 250MB), adjust pitch ±12 semitones in real-time with Tone.js (Tone-only path), and download as WAV. 100% client-side processing with strategic ad placement.
 
 **Purpose:**
 Free, fast, browser-based pitch-shifting for musicians, audio engineers, and creators. Monetized via Google AdSense ads shown during processing.
@@ -40,15 +41,12 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 - **Font:** System UI (native fonts for fast loading)
 
 ### Audio Processing
-- **Tone.js 15.1.22:** Real-time pitch shifting (windowSize: 0.1 for quality)
-- **Web Audio API:** Native browser API for simple mode
+- **Tone.js 15.1.22:** Real-time pitch shifting (windowSize: 0.1 for quality), Tone-only playback/export
 - **Supported Formats:** MP3, WAV, FLAC, M4A, AAC
-- **Two playback modes:**
-  1. Preserve Duration (Tone.js): Pitch changes, length preserved
-  2. Simple Mode (Native): Pitch + speed change together
+- **Playback modes:** Single Tone.js path (preserve duration always; native path removed)
 
 ### Infrastructure
-- **Deployment:** Vercel (free tier, LIVE)
+- **Deployment:** Vercel (free tier; production broken, staging in test)
 - **Build System:** Webpack (Turbopack disabled via env var)
 - **Storage:** None (client-side only, zero server uploads)
 - **Rate Limiting:** Not implemented
@@ -71,17 +69,18 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Deployments
 
-- **Status:** ✅ LIVE AND STABLE (Safari working)
-- **Production URL:** https://pitchchanger.io
+- **Status:** Production broken; staging in test
+- **Production URL:** https://pitchchanger.io (do not trust until staging merged)
+- **Staging URL:** latest deploy from `staging-tone-only` (Tone-only, seek fixed) — e.g., https://pitch-changer-mujyxej8w-davidchoimusics-projects.vercel.app
 - **Vercel Project:** https://vercel.com/davidchoimusics-projects/pitch-changer
 - **Build System:** Webpack (Turbopack disabled via `NEXT_DISABLE_TURBOPACK=1`)
   - **Why:** Turbopack port binding errors in Vercel sandbox
   - **Set in:** Vercel dashboard Environment Variables (Production & Preview)
-- **GitHub:** Auto-deploy on push to main (working)
+- **GitHub:** Auto-deploy on push to main (once staging merges)
 - **DNS:** Configured via Namecheap → Vercel
 - **SSL:** Automatic HTTPS via Vercel
 - **Deployment Time:** ~30-40 seconds per push
-- **Release Process:** `git push origin main` → Auto-deploy
+- **Release Process:** push to `main` after staging verified
 
 ---
 
@@ -104,26 +103,17 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Current State
 
-### Working Features (All Browsers)
+### Working Features (Staging - Tone-only)
 ✅ File upload: MP3, WAV, FLAC, M4A, AAC (max 250MB)
 ✅ File validation with memory guard (<4GB devices)
-✅ Real-time pitch shifting ±12 semitones (Tone.js)
-✅ Dual playback modes with seamless switching
-✅ Safari audio FIXED (all modes working)
-✅ Chrome working (all features functional)
-✅ Safari unlock pattern (context resume + silent buffer)
+✅ Real-time pitch shifting ±12 semitones (Tone.js only)
+✅ Single playback path (preserve duration always; native path removed)
 ✅ Spacebar keyboard shortcut
-✅ Dynamic timecode (adjusts for playback speed)
-✅ Playback speed % indicator
-✅ Strategic ad placement (2 inline spaces during processing)
-✅ Branded filenames: "Song - SPED UP/SLOWED - PitchChanger.io.wav"
-✅ Shiny gradient buttons (blue play, green download)
-✅ Clean UI: white→blue gradient titles, glowing divider line
-✅ WAV export using Tone.js (matches preview quality)
-✅ Mobile responsive with ad sidebars
+✅ Slider advances during playback
+✅ Seek jumps audio and slider together (staging)
+✅ Pitch changes in real time
+✅ WAV export using Tone.js (matches preview)
 ✅ Client-side only (zero uploads, zero server costs)
-✅ Memory optimized (single ArrayBuffer, no double-buffering)
-✅ Defensive error handling (Tone.js refs nulled on stop)
 
 ### Working Flows
 1. **Upload → Preview → Adjust → Download:**
@@ -140,21 +130,10 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Known Issues
 
-### Fixed Issues (Session 3 - 2025-11-22)
-✅ **Safari No Audio** - FIXED with unlock pattern (resume + silent buffer)
-✅ **Memory Leaks** - FIXED with proper Tone.js disposal
-✅ **AudioContext Leaks** - FIXED by closing contexts on cleanup
-✅ **Preserve Toggle Resume** - FIXED by re-initializing Tone refs
-✅ **Keydown Listener Duplication** - FIXED with stable callback (empty deps)
-✅ **Stale Decodes** - FIXED with AbortController
-✅ **Silent Decode Errors** - FIXED with user-visible error messages
-
-### Current Issues
-1. **Tailwind v4 Custom Gradient Classes**
-   - Issue: bg-gradient-brand not generating in production
-   - Workaround: Using inline `style={{ backgroundImage: ... }}`
-   - Status: Working - inline styles are reliable
-   - Note: Tailwind v4 has breaking changes for custom utilities
+### Known Issues
+- Production (main) is broken from prior dual-mode churn; do not trust until staging is merged.
+- Staging tests pending on iOS/Android and a final Safari/Chrome verification.
+- Tailwind v4 custom gradients: using inline gradients as a reliable workaround.
 
 ### Fixed Issues (Session 2)
 - ✅ Safari 60% hang (lazy Tone.js init on first play)
@@ -232,40 +211,18 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## TODO
 
-### CRITICAL - Safari Fix (1-2 hours)
-- [ ] Add debug logging to identify Safari failure point
-- [ ] Test simple mode vs preserve mode separately
-- [ ] Add Safari unlock pattern (once on first gesture)
-- [ ] Ensure Tone.start() called on every play
-- [ ] Fix Tone.js memory leaks (.dispose() before null)
-- [ ] Fix preserve toggle resume bug
-- [ ] Fix keydown listener (stable callback)
-- [ ] Add abort flag for stale decodes
-- [ ] Add user-visible decode errors
-- [ ] Remove unused AudioEngine.ts file (190 lines)
-- [ ] Test on Safari after fixes
+### Critical (before merging staging to main)
+- [ ] Final verification on staging: slider moves; seek jumps correctly; no jumps on play/pause
+- [ ] Cross-browser test: Safari (non-private), Chrome
+- [ ] Mobile test: iOS Safari, Android Chrome
+- [ ] Merge `staging-tone-only` into `main` once verified
 
-### Must Have (After Safari Fixed)
+### After Merge
 - [ ] Apply for Google AdSense
-- [ ] Add Google Analytics or Vercel Analytics
-- [ ] Test on iOS Safari (iPhone/iPad)
-- [ ] Test on Android Chrome
-- [ ] Test FLAC, M4A, AAC file uploads
-- [ ] Replace ad placeholders with real AdSense (after approval)
-
-### Should Have (Architecture)
-- [ ] Consider minimal AudioEngine (30 lines, not 190)
-- [ ] Consolidate duplicate pitch-change logic (3 places)
-- [ ] Simplify mode switching conditionals
-- [ ] Add FAQ section with SEO keywords
+- [ ] Enable Vercel/GA analytics
+- [ ] Test FLAC, M4A, AAC uploads on target browsers
+- [ ] Add FAQ/SEO content
 - [ ] Run Lighthouse audit
-
-### Nice to Have
-- [ ] Full component refactor (split 743 lines)
-- [ ] Custom hooks (useAudioPlayback, useAudioProcessing)
-- [ ] MP3 export option
-- [ ] Waveform visualization
-- [ ] Batch processing
 
 ---
 
