@@ -25,9 +25,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [error, setError] = useState<string | null>(null)
   const [processError, setProcessError] = useState<string | null>(null)
   const [isPrivateMode, setIsPrivateMode] = useState(false)
-  const [showProcessingWarning, setShowProcessingWarning] = useState(false)
   const processTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const processingHintTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const tonePlayerRef = useRef<Tone.Player | null>(null)
   const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
@@ -162,9 +160,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
         if (!cancelled) {
           setIsPrivateMode(privateGuess)
-          if (privateGuess) {
-            setShowProcessingWarning(true)
-          }
         }
       } catch (e) {
         // Ignore detection errors; assume normal mode
@@ -470,7 +465,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       setProcessError('Processing may not work in private browsing. Please use a regular window.')
       setIsProcessing(false)
       setProcessProgress(0)
-      setShowProcessingWarning(true)
       return
     }
 
@@ -481,7 +475,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     setProcessProgress(0)
     setProcessedBlob(null)
     setProcessError(null)
-    setShowProcessingWarning(false)
 
     if (processTimeoutRef.current) {
       clearTimeout(processTimeoutRef.current)
@@ -507,7 +500,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
       setProcessProgress(100)
-      setShowProcessingWarning(false)
     } catch (error) {
       console.error('Error processing audio:', error)
       setIsProcessing(false)
@@ -516,7 +508,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         clearTimeout(processTimeoutRef.current)
         processTimeoutRef.current = null
       }
-      setShowProcessingWarning(false)
     }
   }
 
@@ -534,32 +525,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
   }
 
-  // Show a gentle hint after 4s if still processing (helps private browsing users)
-  useEffect(() => {
-    if (processingHintTimeoutRef.current) {
-      clearTimeout(processingHintTimeoutRef.current)
-      processingHintTimeoutRef.current = null
-    }
-
-    if (isProcessing) {
-      if (isPrivateMode) {
-        setShowProcessingWarning(true)
-      } else {
-        processingHintTimeoutRef.current = setTimeout(() => {
-          setShowProcessingWarning(true)
-        }, 4000)
-      }
-    } else {
-      setShowProcessingWarning(false)
-    }
-
-    return () => {
-      if (processingHintTimeoutRef.current) {
-        clearTimeout(processingHintTimeoutRef.current)
-        processingHintTimeoutRef.current = null
-      }
-    }
-  }, [isProcessing])
+  // No delayed hint; warning shown inline
 
   const handleFinalDownload = () => {
     if (!processedBlob) return
@@ -765,7 +731,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               <div className="flex justify-center">
                 <Button
                   onClick={handleStartProcessing}
-                  disabled={!audioBufferRef.current || !isReady || pitchShiftValue === 0}
+                  disabled={!audioBufferRef.current || !isReady || pitchShiftValue === 0 || isPrivateMode}
                   variant="download"
                   size="md"
                   className="px-12"
@@ -800,6 +766,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   <p className="text-lg text-gray-300">Check out these ads below.</p>
                   <div className="text-4xl animate-bounce">⬇️</div>
                   <p className="text-sm text-gray-400">The ads keep this tool free for you</p>
+                  <p className="text-xs text-red-300 font-semibold">⚠️ Processing may not work in private browsing. Use a regular window.</p>
                   {showProcessingWarning && (
                     <p className="text-xs text-red-300 font-semibold">⚠️ Having trouble? Processing may not work in private browsing mode. Please restart. 🙏</p>
                   )}
