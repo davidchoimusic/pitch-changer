@@ -31,6 +31,13 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
+      {/* Nav */}
+      <header className="w-full mb-8">
+        <div className="flex items-center">
+          <span className="text-lg md:text-xl font-semibold text-white">PitchChanger.io</span>
+        </div>
+      </header>
+
       {!selectedFile ? (
         <div className="max-w-4xl mx-auto space-y-8 md:space-y-16">
           {/* Hero Section */}
@@ -43,12 +50,6 @@ export default function Home() {
               >
                 Free Online Pitch Changer
               </h1>
-              <p
-                className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent mt-2"
-                style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
-              >
-                PitchChanger.io
-              </p>
               <p className="text-lg md:text-xl text-gray-200 mt-2">
                 Change Pitch of Any Song or Audio
               </p>
