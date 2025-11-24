@@ -559,7 +559,8 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               variant="play"
               className="w-32"
             >
-              {isPlaying ? '⏸ Pause' : '▶ Play'}
+              <span className="md:hidden">{isPlaying ? '⏸' : '▶'}</span>
+              <span className="hidden md:inline">{isPlaying ? '⏸ Pause' : '▶ Play'}</span>
             </Button>
             <div className="flex-1 flex items-center gap-3">
               <span className="text-sm text-gray-400 w-14 text-right font-mono">{formatTime(currentTime)}</span>
