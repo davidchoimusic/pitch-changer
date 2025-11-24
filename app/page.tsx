@@ -89,6 +89,13 @@ export default function Home() {
             <FileUpload onFileSelect={setSelectedFile} maxSizeMB={250} />
           </div>
 
+          {/* Supporting Copy */}
+          <div className="text-center max-w-3xl mx-auto text-sm md:text-base text-gray-300 leading-relaxed space-y-2">
+            <p>
+              This free music pitch changer supports MP3, WAV, FLAC, and M4A. Easily transpose songs, shift keys, adjust vocals, or prepare tracks for karaoke, practice, teaching, and remixes — all without altering tempo.
+            </p>
+          </div>
+
           {/* Why Use PitchChanger.io */}
           <div className="space-y-4">
             <div className="mt-6 md:mt-8 mb-6 md:mb-8 flex justify-center">
