@@ -173,7 +173,7 @@ export default function Home() {
                       aria-expanded={isOpen}
                       aria-controls={`faq-${idx}`}
                     >
-                      <span className="text-lg font-semibold text-white">{item.q}</span>
+                      <span className="text-lg md:text-lg font-semibold text-white">{item.q}</span>
                       <span className="text-accent text-xl">{isOpen ? '−' : '+'}</span>
                     </button>
                     {isOpen && (
