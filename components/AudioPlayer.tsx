@@ -767,9 +767,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   <div className="text-4xl animate-bounce">⬇️</div>
                   <p className="text-sm text-gray-400">The ads keep this tool free for you</p>
                   <p className="text-xs text-red-300 font-semibold">⚠️ Processing may not work in private browsing. Use a regular window.</p>
-                  {showProcessingWarning && (
-                    <p className="text-xs text-red-300 font-semibold">⚠️ Having trouble? Processing may not work in private browsing mode. Please restart. 🙏</p>
-                  )}
                 </div>
               ) : (
                 <div className="text-center space-y-3 py-4">
