@@ -24,6 +24,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [safariUnlocked, setSafariUnlocked] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [processError, setProcessError] = useState<string | null>(null)
+  const processTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const tonePlayerRef = useRef<Tone.Player | null>(null)
   const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
@@ -406,6 +407,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     setProcessedBlob(null)
     setProcessError(null)
 
+    if (processTimeoutRef.current) {
+      clearTimeout(processTimeoutRef.current)
+    }
+    processTimeoutRef.current = setTimeout(() => {
+      setIsProcessing(false)
+      setProcessError('Processing timed out on this device. Try a smaller file or use desktop.')
+    }, 90000) // 90s guard for slower mobile devices
+
     try {
       // SIMPLIFIED: Always use Tone.js for export (matches preview)
       const processed = await exportWithTone(
@@ -414,6 +423,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         (progress) => setProcessProgress(progress)
       )
 
+      if (processTimeoutRef.current) {
+        clearTimeout(processTimeoutRef.current)
+        processTimeoutRef.current = null
+      }
+
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
       setProcessProgress(100)
@@ -421,12 +435,20 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       console.error('Error processing audio:', error)
       setIsProcessing(false)
       setProcessError('Processing failed on this device. Try a smaller file or use desktop for large files.')
+      if (processTimeoutRef.current) {
+        clearTimeout(processTimeoutRef.current)
+        processTimeoutRef.current = null
+      }
     }
   }
 
   const handleCancelProcessing = () => {
     setIsProcessing(false)
     setProcessProgress(0)
+    if (processTimeoutRef.current) {
+      clearTimeout(processTimeoutRef.current)
+      processTimeoutRef.current = null
+    }
   }
 
   const handleFinalDownload = () => {

@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR:** Production is now Tone-only and stable (commit 00d4833). Dual-mode removed; playback/seek/pitch working in production and staging. | 2025-11-23
+**TL;DR (2025-11-23):** Production is stable on Tone-only (main current ~86a49e6). All core flows work on desktop/mobile; Safari dev caching quirk documented but not blocking users.
 
 ---
 
@@ -12,9 +12,9 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** 00d4833 (Tone-only player, seek fixes)
-- **Open PRs/Issues:** None critical; mobile verification pending
-- **Production:** https://pitchchanger.io (Tone-only, working)
+- **Current Commit:** ~86a49e6 (Tone-only, stabilized UI/spacebar fixes)
+- **Open PRs/Issues:** None critical
+- **Production:** https://pitchchanger.io (Tone-only, stable)
 - **Staging:** N/A (staging-tone-only merged)
 
 ---
@@ -46,7 +46,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 - **Playback modes:** Single Tone.js path (preserve duration always; native path removed)
 
 ### Infrastructure
-- **Deployment:** Vercel (free tier; production broken, staging in test)
+- **Deployment:** Vercel (free tier; production live)
 - **Build System:** Webpack (Turbopack disabled via env var)
 - **Storage:** None (client-side only, zero server uploads)
 - **Rate Limiting:** Not implemented
@@ -104,25 +104,24 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 ## Current State
 
 ### Working Features (Production Tone-only)
-✅ File upload: MP3, WAV, FLAC, M4A, AAC (max 250MB)
-✅ File validation with memory guard (<4GB devices)
-✅ Real-time pitch shifting ±12 semitones (Tone.js only)
-✅ Single playback path (preserve duration always; native path removed)
-✅ Spacebar keyboard shortcut
-✅ Slider advances during playback
-✅ Seek jumps audio and slider together
-✅ Pitch changes in real time
-✅ WAV export using Tone.js (matches preview)
+✅ File upload: MP3, WAV, FLAC, M4A, AAC (max 250MB)  
+✅ File validation with memory guard (<4GB devices; mobile soft cap 120MB)  
+✅ Real-time pitch shifting ±12 semitones (Tone.js only)  
+✅ Single playback path (preserve duration always; native path removed)  
+✅ Spacebar keyboard shortcut (stale closure fixed)  
+✅ Slider advances during playback (RAF with Tone.now())  
+✅ Seek jumps audio and slider together (playStartOffsetRef/playStartTimeRef)  
+✅ Pitch changes in real time  
+✅ WAV export using Tone.js (matches preview)  
 ✅ Client-side only (zero uploads, zero server costs)
 
 ### Working Flows
 1. **Upload → Preview → Adjust → Download:**
    - Upload audio (5 formats supported)
    - Decodes in browser (no server upload)
-   - Play/pause with spacebar
+   - Play/pause with spacebar or button
    - Real-time pitch adjustment
-   - Toggle preserve duration (seamless)
-   - Click "Process & Download" → progress + "scroll to sponsors"
+   - Click "Process Audio (WAV)" → progress + "scroll to sponsors"
    - "SUCCESS! YOUR FILE IS READY!"
    - Scroll past ads → download with branded filename
 
@@ -131,7 +130,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 ## Known Issues
 
 ### Known Issues
-- Pending mobile verification (iOS Safari, Android Chrome)
+- Safari aggressive caching during rapid development only: may need Cmd+Q to fetch fresh HTML; end users not impacted. Headers set to `no-store, no-cache, must-revalidate` + `Pragma` + `Expires: 0`.
 - Tailwind v4 custom gradients: using inline gradients as a reliable workaround.
 
 ### Fixed Issues (Session 2)
@@ -210,150 +209,63 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## TODO
 
-### Critical (before merging staging to main)
-- [ ] Final verification on staging: slider moves; seek jumps correctly; no jumps on play/pause
-- [ ] Cross-browser test: Safari (non-private), Chrome
-- [ ] Mobile test: iOS Safari, Android Chrome
-- [ ] Merge `staging-tone-only` into `main` once verified
-
-### After Merge
+### Next
 - [ ] Apply for Google AdSense
-- [ ] Enable Vercel/GA analytics
-- [ ] Test FLAC, M4A, AAC uploads on target browsers
-- [ ] Add FAQ/SEO content
-- [ ] Run Lighthouse audit
+- [ ] Enable Vercel analytics
+- [ ] Add FAQ/SEO content and run Lighthouse audit
+- [ ] Broaden device testing (iPad, Android tablets)
+
+### Later
+- [ ] Monitor first-week traffic and gather feedback
 
 ---
 
 ## Troubleshooting
 
-### Safari No Audio Diagnosis
-
-1. **Test Simple Mode First**
-   - Uncheck "Preserve Duration"
-   - Try to play
-   - If works → Tone.js issue
-   - If silent → Core AudioContext issue
-
-2. **Check Console for:**
-   - AudioContext state (suspended?)
-   - Tone.context state
-   - Any promise rejections
-
-3. **Common Safari Fixes:**
-   - Add audioContext.resume() after user gesture
-   - Ensure Tone.start() on EVERY play
-   - Add Safari unlock pattern (silent buffer)
-
-### Safari Stale Cache (No Audio in Regular Mode)
+### Safari No Audio (Stale Cache During Development)
 
 Symptoms:
-- Regular Safari: plays but silent
-- Safari Private Mode: works
-- Other browsers/devices: works
+- Plays but silent in regular Safari
+- Works in Private mode, other machines, or after Safari restart
 
-Cause:
-- Safari occasionally serves stale JS even after hard refresh.
-
-Workaround (nuclear):
-1. Safari → Settings → Privacy → Manage Website Data → Remove All
-2. Quit Safari completely
-3. Reopen and reload pitchchanger.io
+Workaround (development only):
+1. Safari → Quit (Cmd+Q)
+2. Reopen, reload
 
 Notes:
-- Hard refresh / closing tab / reopening Safari is insufficient.
-- Happens rarely; likely tied to rapid successive deploys.
-- Consider adding cache-busting headers if this recurs in production.
+- Hard refresh often insufficient; headers set to `no-store, no-cache, must-revalidate` + `Pragma` + `Expires: 0`.
+- End users on production should not hit this; observed during rapid dev.
 
-### Memory Leak Detection
+### Spacebar Toggle Not Working (Resolved)
+- Cause: stale closure on handlePlayPause (using state instead of ref)
+- Fix: handlePlayPauseRef with isReadyRef; broadened spacebar detection (Space/Spacebar/keyCode 32)
 
-1. **Chrome DevTools:**
-   - Memory tab → Take heap snapshot
-   - Upload/play 5 files
-   - Take second snapshot → Compare
-   - Look for retained Tone.Player instances
-
-2. **Signs of Leaks:**
-   - Performance degrades over time
-   - Multiple AudioContext warnings
-   - Browser tab crashes after many files
+### Memory/Processing Guards
+- Mobile soft cap: 120MB (blocks larger files on mobile to avoid crashes)
+- Device memory guard: warns on <4GB devices for large files
 
 ### Common Errors
-
-1. **"Please upload MP3, WAV, FLAC, M4A, or AAC file"**
-   - Cause: Unsupported format
-   - Fix: Convert to supported format
-   - File: components/FileUpload.tsx:33-36
-
-2. **"Large file on low-memory device"**
-   - Cause: 100MB+ file on <4GB RAM device
-   - Fix: Use smaller file or desktop
-   - File: components/FileUpload.tsx:39-42
-
-3. **Safari AudioContext Limit**
-   - Cause: >6 contexts created
-   - Fix: Reuse single context
-   - Prevention: Centralized AudioEngine
+- "Please upload MP3, WAV, FLAC, M4A, or AAC file" → Unsupported format (components/FileUpload.tsx)
+- "Large file on low-memory device" → >100MB on <4GB device; try smaller file or desktop (components/FileUpload.tsx)
 
 ---
 
 ## Recently Completed
 
-### Session 3 (2025-11-22) - Safari Fix & Critical Bug Resolution
-- ✅ **FIXED Safari Audio** - Discovered audio worked in private mode (cached state issue)
-- ✅ **Safari Unlock Pattern:**
-  - Resume suspended AudioContext on first user gesture
-  - Create silent buffer to fully unlock Safari
-  - Runs once per file load
-- ✅ **Memory Leak Fixes:**
-  - Dispose Tone.Player before nulling ref
-  - Dispose PitchShift before nulling ref
-  - Prevents state corruption from accumulated memory
-- ✅ **AudioContext Leak Fix:**
-  - Close old AudioContext before creating new one
-  - Close context in cleanup function
-  - Prevents Safari 6-context limit crashes
-- ✅ **Keydown Listener Duplication Fix:**
-  - Use refs for stable callback (no re-attachment)
-  - Empty dependency array = attach once
-  - Don't intercept space when focused on INPUT/TEXTAREA
-- ✅ **Preserve Toggle Resume Fix:**
-  - Re-initialize Tone refs if null when switching modes
-  - Playback now resumes correctly after mode switch
-- ✅ **Stale Decode Prevention:**
-  - AbortController cancels old decodes on new file upload
-  - Prevents state corruption from rapid file switching
-- ✅ **User-Visible Decode Errors:**
-  - Display red error banner for decode failures
-  - Friendly message for unsupported formats
-- ✅ **Removed unused AudioEngine.ts** (190 lines)
-- ✅ **CODEX review** identified and fixed 4 critical issues
-- ✅ **Tested on Safari** - All modes working after cache clear
+### Session (2025-11-23) - Production Stabilized
+- ✅ Tone.js-only path; dual-mode removed (components/AudioPlayer.tsx)
+- ✅ RAF timing with Tone.now(), playStartTimeRef/playStartOffsetRef (seek + slider sync)
+- ✅ Seek state refs (isSeekingRef/pendingSeekRef)
+- ✅ Safari unlock hardened (close stale contexts, rebuild Tone context, silent buffer)
+- ✅ Spacebar toggle fixed (handlePlayPauseRef, broader key detection)
+- ✅ Mobile UI: tighter spacing, smaller upload box, larger play button, focus outline removed on sliders; overflow hidden to stop horizontal bleed
+- ✅ Mobile processing guard: 120MB limit + friendly errors
+- ✅ Cache headers: `no-store, no-cache, must-revalidate`, `Pragma: no-cache`, `Expires: 0`
+- ✅ CTA text: "Process Audio (WAV)"; helper text white
+- ✅ Staging-tone-only merged into main; production live and stable
 
-### Session 2 (2025-11-22/23)
-- ✅ **DEPLOYED TO PRODUCTION** at https://pitchchanger.io
-- ✅ Fixed Vercel build failures (Webpack via env var)
-- ✅ Fixed Safari 60% hang (lazy Tone.js init)
-- ✅ Fixed double playback bug
-- ✅ Fixed Tone.setContext memory leak
-- ✅ Optimized memory (single ArrayBuffer)
-- ✅ Added 3 new formats: FLAC, M4A, AAC
-- ✅ Removed sticky header (cleaner layout)
-- ✅ Added inline title sections
-- ✅ Simplified gradients (white→blue, inline styles)
-- ✅ Added glowing gradient line divider
-- ✅ Fixed text cutoff with leading-tight pb-2
-- ✅ Symmetrical spacing around divider
-- ✅ Defensive ref cleanup (null after stop)
-- ✅ Tested windowSize 0.1 (works great after bug fixes)
-- ✅ Updated branding consistency
-
-### Session 1 (2025-11-22)
-- ✅ Built complete Next.js app with Tone.js
-- ✅ Implemented dual-mode playback
-- ✅ Created strategic ad flow
-- ✅ Designed shiny UI
-- ✅ Set up GitHub + Vercel deployment
+### Earlier Sessions (2025-11-22)
+- Safari unlock pattern, memory leak fixes, AudioContext cleanup, AbortController for decode, error banners, inline gradients, branding/spacing improvements, additional format support (FLAC/M4A/AAC), Webpack build fix via env var.
 
 ---
 
@@ -366,22 +278,19 @@ Notes:
 - **Lazy Tone.js:** Fast initial load
 - **Inline gradients:** Reliable rendering
 - **5 audio formats:** Broad compatibility
+- **Mobile soft cap:** 120MB to prevent crashes on devices
 
 ---
 
 ## Next Steps
 
-1. **Apply for Google AdSense** (site live, Safari working, ready for monetization)
-2. **Enable Vercel Analytics** (one click in dashboard)
-3. **Test on iOS Safari** (iPhone/iPad - verify mobile UX)
-4. **Test on Android Chrome** (verify mobile playback)
-5. **Test new formats** (FLAC, M4A, AAC - verify browser support)
-6. **Monitor first week traffic** (baseline metrics)
-7. **Add FAQ section** (SEO optimization, common questions)
-8. **Run Lighthouse audit** (performance optimization)
-9. **Gather user feedback** (beta testers, social media)
-10. **Consider architecture refactor** (optional - site is stable now)
+1. **Apply for Google AdSense** (site stable)
+2. **Enable Vercel Analytics**
+3. **Add FAQ/SEO content**; run Lighthouse audit
+4. **Broaden device testing** (iPad, Android tablets)
+5. **Monitor first-week traffic and gather feedback**
+6. **Consider versioned query on /** if Safari dev caching recurs
 
 ---
 
-**Last Updated:** 2025-11-22 (Safari FIXED, all critical bugs resolved, production stable)
+**Last Updated:** 2025-11-23 (Production stable; Tone-only; mobile/desktop verified; Safari dev cache documented)
