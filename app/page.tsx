@@ -82,16 +82,6 @@ export default function Home() {
               <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
                 PitchChanger.io is a free online pitch changer that lets you instantly change the pitch of a song without changing speed. This audio pitch changer works directly in your browser — no uploads, no installation required.
               </p>
-              <div className="pt-2 flex justify-center">
-                <Button
-                  variant="primary"
-                  size="md"
-                  className="px-6 py-3"
-                  onClick={() => document.getElementById('upload')?.scrollIntoView({ behavior: 'smooth' })}
-                >
-                  Start Changing Pitch (Free)
-                </Button>
-              </div>
             </div>
           </div>
 
