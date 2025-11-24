@@ -126,6 +126,21 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           if (!cancelled && est.quota && est.quota < 120 * 1024 * 1024) {
             setIsPrivateMode(true)
           }
+          // Additional Safari/iOS heuristic: extremely low quota or storage undefined
+          const ua = navigator.userAgent || ''
+          const isiOS = /iPhone|iPad|iPod/i.test(ua)
+          const isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS/i.test(ua)
+          if (!cancelled && isiOS && isSafari && (!est.quota || est.quota < 200 * 1024 * 1024)) {
+            setIsPrivateMode(true)
+          }
+        } else {
+          // If storage API is unavailable on iOS Safari private, assume private mode
+          const ua = navigator.userAgent || ''
+          const isiOS = /iPhone|iPad|iPod/i.test(ua)
+          const isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS/i.test(ua)
+          if (!cancelled && isiOS && isSafari) {
+            setIsPrivateMode(true)
+          }
         }
       } catch (e) {
         // Ignore detection errors; assume normal mode
@@ -502,9 +517,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
 
     if (isProcessing) {
-      processingHintTimeoutRef.current = setTimeout(() => {
+      if (isPrivateMode) {
         setShowProcessingWarning(true)
-      }, 4000)
+      } else {
+        processingHintTimeoutRef.current = setTimeout(() => {
+          setShowProcessingWarning(true)
+        }, 4000)
+      }
     } else {
       setShowProcessingWarning(false)
     }
