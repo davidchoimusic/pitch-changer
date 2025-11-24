@@ -38,7 +38,7 @@ export default function Home() {
             {/* Branding */}
             <div className="pb-3 md:pb-8">
               <h1
-                className="text-5xl md:text-6xl font-black bg-clip-text text-transparent leading-tight pb-1"
+                className="text-3xl md:text-4xl font-black bg-clip-text text-transparent leading-tight pb-1"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
               >
                 Free Online Pitch Changer - Change Pitch of Any Song or Audio
