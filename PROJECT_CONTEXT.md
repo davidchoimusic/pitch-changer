@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR:** Production (main) is still broken from prior dual-mode churn. Staging (`staging-tone-only`, commit df36482) is Tone-only with working playback, pitch, and seek; in final testing before merge. | 2025-11-22
+**TL;DR:** Production is now Tone-only and stable (commit 00d4833). Dual-mode removed; playback/seek/pitch working in production and staging. | 2025-11-23
 
 ---
 
@@ -8,14 +8,14 @@
 
 - **Repo Path:** `/Users/davidchoi/Documents/0 projects/pitch-changer`
 - **Repo URL:** https://github.com/davidchoimusic/pitch-changer
-- **Domain:** pitchchanger.io (production currently broken; staging in test)
+- **Domain:** pitchchanger.io (production live)
 - **Branding:** PitchChanger.io (capital P and C)
-- **Main Branch:** `main` (broken)
-- **Current Branch:** `staging-tone-only`
-- **Current Commit:** df36482 (seek timing fix, Tone-only player)
-- **Open PRs/Issues:** Verify staging, then merge to main
-- **Production:** https://pitchchanger.io (broken; awaiting merge from staging)
-- **Staging:** latest deploy from `staging-tone-only` (Tone-only, seek fixed)
+- **Main Branch:** `main`
+- **Current Branch:** `main`
+- **Current Commit:** 00d4833 (Tone-only player, seek fixes)
+- **Open PRs/Issues:** None critical; mobile verification pending
+- **Production:** https://pitchchanger.io (Tone-only, working)
+- **Staging:** N/A (staging-tone-only merged)
 
 ---
 
@@ -69,18 +69,18 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Deployments
 
-- **Status:** Production broken; staging in test
-- **Production URL:** https://pitchchanger.io (do not trust until staging merged)
-- **Staging URL:** latest deploy from `staging-tone-only` (Tone-only, seek fixed) — e.g., https://pitch-changer-mujyxej8w-davidchoimusics-projects.vercel.app
+- **Status:** Production live with Tone-only
+- **Production URL:** https://pitchchanger.io
+- **Latest Deploy URL:** https://pitch-changer-71fr6z6rn-davidchoimusics-projects.vercel.app
 - **Vercel Project:** https://vercel.com/davidchoimusics-projects/pitch-changer
 - **Build System:** Webpack (Turbopack disabled via `NEXT_DISABLE_TURBOPACK=1`)
   - **Why:** Turbopack port binding errors in Vercel sandbox
   - **Set in:** Vercel dashboard Environment Variables (Production & Preview)
-- **GitHub:** Auto-deploy on push to main (once staging merges)
+- **GitHub:** Auto-deploy on push to main
 - **DNS:** Configured via Namecheap → Vercel
 - **SSL:** Automatic HTTPS via Vercel
 - **Deployment Time:** ~30-40 seconds per push
-- **Release Process:** push to `main` after staging verified
+- **Release Process:** `git push origin main`
 
 ---
 
@@ -103,14 +103,14 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Current State
 
-### Working Features (Staging - Tone-only)
+### Working Features (Production Tone-only)
 ✅ File upload: MP3, WAV, FLAC, M4A, AAC (max 250MB)
 ✅ File validation with memory guard (<4GB devices)
 ✅ Real-time pitch shifting ±12 semitones (Tone.js only)
 ✅ Single playback path (preserve duration always; native path removed)
 ✅ Spacebar keyboard shortcut
 ✅ Slider advances during playback
-✅ Seek jumps audio and slider together (staging)
+✅ Seek jumps audio and slider together
 ✅ Pitch changes in real time
 ✅ WAV export using Tone.js (matches preview)
 ✅ Client-side only (zero uploads, zero server costs)
@@ -131,8 +131,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 ## Known Issues
 
 ### Known Issues
-- Production (main) is broken from prior dual-mode churn; do not trust until staging is merged.
-- Staging tests pending on iOS/Android and a final Safari/Chrome verification.
+- Pending mobile verification (iOS Safari, Android Chrome)
 - Tailwind v4 custom gradients: using inline gradients as a reliable workaround.
 
 ### Fixed Issues (Session 2)
