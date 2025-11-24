@@ -74,8 +74,13 @@ export default function Home() {
                 A fast, free audio pitch changer for MP3, WAV, FLAC, M4A, AAC. Change pitch without changing speed — 100% browser-based, no uploads.
               </p>
               <div className="pt-2 flex justify-center">
-                <Button asChild variant="primary" size="md" className="px-6 py-3">
-                  <a href="#upload">Start Changing Pitch (Free)</a>
+                <Button
+                  variant="primary"
+                  size="md"
+                  className="px-6 py-3"
+                  onClick={() => document.getElementById('upload')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Start Changing Pitch (Free)
                 </Button>
               </div>
             </div>
