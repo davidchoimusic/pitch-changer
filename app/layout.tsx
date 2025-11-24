@@ -26,6 +26,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2950955479321117"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="font-sans overflow-x-hidden">
         <div className="min-h-screen flex">
           {/* Main Content */}
