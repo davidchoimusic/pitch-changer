@@ -789,10 +789,10 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   size="md"
                   className="px-12"
                 >
-                  ⬇ Download
+                  Download
                 </Button>
               </div>
-              <p className="text-center text-sm font-semibold text-pink-400 animate-pulse drop-shadow-[0_0_12px_rgba(236,72,153,0.8)]">
+              <p className="text-center text-sm font-semibold text-pink-400 animate-pulse drop-shadow-[0_0_12px_rgba(236,72,153,0.8)] animate-[pulse_0.6s_ease-in-out_infinite]">
                 Made with ❤️ by PitchChanger.io
               </p>
             </div>
