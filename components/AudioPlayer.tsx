@@ -461,9 +461,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         processTimeoutRef.current = null
       }
 
-      // Ensure playback is stopped when processing completes
-      stopPlayback()
-
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
       setProcessProgress(100)

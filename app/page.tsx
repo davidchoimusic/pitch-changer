@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FileUpload } from '@/components/FileUpload'
 import { AudioPlayer } from '@/components/AudioPlayer'
 
