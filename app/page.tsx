@@ -10,6 +10,7 @@ const spectrumSpeeds = [0.6, 0.9, 0.5, 1.1, 0.7, 0.8, 1.0, 0.6, 0.9, 0.7, 0.5, 0
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   // Ensure page loads at top (avoid restoring deep scroll on refresh)
   useEffect(() => {
@@ -142,25 +143,44 @@ export default function Home() {
               />
             </div>
             <h2 className="text-3xl font-bold text-center mb-6 md:mb-8">FAQ</h2>
-            <div className="space-y-4 max-w-3xl mx-auto text-left">
-              <div>
-                <h3 className="text-lg font-semibold">Does this change the pitch without changing speed?</h3>
-                <p className="text-sm text-gray-400">
-                  Yes. PitchChanger.io lets you change pitch without tempo change (preserve duration).
-                </p>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">Is it really online and free?</h3>
-                <p className="text-sm text-gray-400">
-                  Yes. It’s a free online pitch changer that works directly in your browser with real-time preview.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">Are my files private?</h3>
-                <p className="text-sm text-gray-400">
-                  100%. This audio pitch changer processes everything locally — nothing is uploaded.
-                </p>
-              </div>
+            <div className="space-y-3 max-w-3xl mx-auto text-left">
+              {[
+                {
+                  q: 'Does this change the pitch without changing speed?',
+                  a: 'Yes. PitchChanger.io lets you change pitch without tempo change (preserve duration).'
+                },
+                {
+                  q: 'Is it really online and free?',
+                  a: 'Yes. It’s a free online pitch changer that works directly in your browser with real-time preview.'
+                },
+                {
+                  q: 'Are my files private?',
+                  a: '100%. This audio pitch changer processes everything locally — nothing is uploaded.'
+                }
+              ].map((item, idx) => {
+                const isOpen = openFaq === idx
+                return (
+                  <div
+                    key={item.q}
+                    className="rounded-lg bg-bg-card border border-divider transition-colors"
+                  >
+                    <button
+                      className="w-full px-4 py-3 flex items-center justify-between text-left"
+                      onClick={() => setOpenFaq(isOpen ? null : idx)}
+                      aria-expanded={isOpen}
+                      aria-controls={`faq-${idx}`}
+                    >
+                      <span className="text-lg font-semibold text-white">{item.q}</span>
+                      <span className="text-accent text-xl">{isOpen ? '−' : '+'}</span>
+                    </button>
+                    {isOpen && (
+                      <div id={`faq-${idx}`} className="px-4 pb-4 text-sm text-gray-400">
+                        {item.a}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
