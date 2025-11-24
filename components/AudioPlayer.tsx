@@ -413,7 +413,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     processTimeoutRef.current = setTimeout(() => {
       setIsProcessing(false)
       setProcessError('Processing timed out on this device. Try a smaller file or use desktop.')
-    }, 90000) // 90s guard for slower mobile devices
+    }, 45000) // 45s guard for slower mobile devices
 
     try {
       // SIMPLIFIED: Always use Tone.js for export (matches preview)
@@ -445,6 +445,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const handleCancelProcessing = () => {
     setIsProcessing(false)
     setProcessProgress(0)
+    setProcessError('Processing canceled. Try again with a smaller file on mobile or use desktop.')
     if (processTimeoutRef.current) {
       clearTimeout(processTimeoutRef.current)
       processTimeoutRef.current = null
@@ -540,6 +541,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               step="1"
               value={pitchShiftValue}
               onChange={handlePitchChange}
+              disabled={isProcessing}
               style={{
                 background: `linear-gradient(to right,
                   rgb(59 130 246) 0%,
@@ -565,13 +567,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                          [&::-moz-range-thumb]:rounded-full
                          [&::-moz-range-thumb]:bg-white
                          [&::-moz-range-thumb]:border-4
-                         [&::-moz-range-thumb]:border-accent
-                         [&::-moz-range-thumb]:cursor-grab
-                         [&::-moz-range-thumb]:shadow-lg
-                         [&::-moz-range-thumb]:active:cursor-grabbing
-                         [&::-moz-range-thumb]:hover:scale-110
-                         [&::-moz-range-thumb]:transition-transform
-                         focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                        [&::-moz-range-thumb]:border-accent
+                        [&::-moz-range-thumb]:cursor-grab
+                        [&::-moz-range-thumb]:shadow-lg
+                        [&::-moz-range-thumb]:active:cursor-grabbing
+                        [&::-moz-range-thumb]:hover:scale-110
+                        [&::-moz-range-thumb]:transition-transform
+                        focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
             />
 
             <div className="flex justify-between text-sm text-gray-500 px-2">
@@ -592,7 +594,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           <div className="flex items-center gap-4">
             <Button
               onClick={handlePlayPause}
-              disabled={!isReady}
+              disabled={!isReady || isProcessing}
               variant="play"
               className="w-[3.6rem] h-[3.6rem] flex-none px-0 py-0 text-4xl md:w-32 md:h-auto md:px-6 md:py-3 md:text-base"
             >
@@ -612,7 +614,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 onChange={handleSeekChange}
                 onMouseUp={handleSeekEnd}
                 onTouchEnd={handleSeekEnd}
-                disabled={!isReady}
+                disabled={!isReady || isProcessing}
                 className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
                            [&::-webkit-slider-thumb]:appearance-none
                            [&::-webkit-slider-thumb]:w-5
