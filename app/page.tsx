@@ -56,7 +56,10 @@ export default function Home() {
               >
                 Free Online Pitch Changer
               </h1>
-              <p className="text-lg md:text-xl text-gray-200 mt-2">
+              <p
+                className="text-lg md:text-xl font-semibold bg-clip-text text-transparent mt-2"
+                style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
+              >
                 Change Pitch of Any Song or Audio
               </p>
 
