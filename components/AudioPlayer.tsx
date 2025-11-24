@@ -37,9 +37,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   // Track user seek interactions
   const isSeekingRef = useRef(false)
   const pendingSeekRef = useRef<number | null>(null)
-  // Track user seek interactions
-  const isSeekingRef = useRef(false)
-  const pendingSeekRef = useRef<number | null>(null)
 
   // Load audio file
   useEffect(() => {
