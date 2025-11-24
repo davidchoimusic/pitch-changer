@@ -178,7 +178,7 @@ export default function Home() {
           {/* FAQ */}
           <div className="border-t border-divider pt-12 space-y-6">
             <h2 className="text-3xl font-bold text-center">FAQ</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 max-w-3xl mx-auto text-left">
               <div>
                 <h3 className="text-lg font-semibold">Does this change the pitch without changing speed?</h3>
                 <p className="text-sm text-gray-400">
