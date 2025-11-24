@@ -121,7 +121,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       }
       if (target.tagName === 'TEXTAREA') return
 
-      if (e.code === 'Space' && isReadyRef.current) {
+      const isSpace =
+        e.code === 'Space' ||
+        e.key === ' ' ||
+        e.key === 'Spacebar' ||
+        e.keyCode === 32
+
+      if (isSpace && isReadyRef.current) {
         e.preventDefault()
         handlePlayPause()
       }
