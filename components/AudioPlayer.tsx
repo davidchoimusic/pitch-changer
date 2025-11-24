@@ -120,18 +120,35 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     let cancelled = false
     const detectPrivate = async () => {
       try {
+        let privateGuess = false
+
+        // Heuristic 1: indexedDB open failure (common in iOS Safari private mode)
+        try {
+          await new Promise<void>((resolve, reject) => {
+            const req = indexedDB.open('pc-private-check')
+            req.onerror = () => reject(req.error)
+            req.onsuccess = () => {
+              req.result.close()
+              resolve()
+            }
+          })
+        } catch {
+          privateGuess = true
+        }
+
+        // Heuristic 2: storage quota
         if (navigator.storage?.estimate) {
           const est = await navigator.storage.estimate()
           // Heuristic: very low quota often indicates private mode on Safari/iOS
           if (!cancelled && est.quota && est.quota < 120 * 1024 * 1024) {
-            setIsPrivateMode(true)
+            privateGuess = true
           }
           // Additional Safari/iOS heuristic: extremely low quota or storage undefined
           const ua = navigator.userAgent || ''
           const isiOS = /iPhone|iPad|iPod/i.test(ua)
           const isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS/i.test(ua)
           if (!cancelled && isiOS && isSafari && (!est.quota || est.quota < 200 * 1024 * 1024)) {
-            setIsPrivateMode(true)
+            privateGuess = true
           }
         } else {
           // If storage API is unavailable on iOS Safari private, assume private mode
@@ -139,7 +156,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
           const isiOS = /iPhone|iPad|iPod/i.test(ua)
           const isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS/i.test(ua)
           if (!cancelled && isiOS && isSafari) {
-            setIsPrivateMode(true)
+            privateGuess = true
+          }
+        }
+
+        if (!cancelled) {
+          setIsPrivateMode(privateGuess)
+          if (privateGuess) {
+            setShowProcessingWarning(true)
           }
         }
       } catch (e) {
