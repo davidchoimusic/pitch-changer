@@ -32,7 +32,7 @@ export async function exportWithTone(
     // Create pitch shift effect
     pitchShift = new Tone.PitchShift({
       pitch: semitones,
-      windowSize: 0.1, // Higher quality, bugs were causing Safari delay
+      windowSize: 0.2, // Higher quality, balanced with offline render time
       delayTime: 0,
       feedback: 0
     }).toDestination()
