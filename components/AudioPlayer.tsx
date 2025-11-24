@@ -32,6 +32,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const downloadSectionRef = useRef<HTMLDivElement | null>(null)
   // Ref for stable keydown callback
   const isReadyRef = useRef(isReady)
+  const handlePlayPauseRef = useRef<() => void>(() => {})
   // Track playback timing to keep slider in sync
   const playStartTimeRef = useRef<number>(0)
   const playStartOffsetRef = useRef<number>(0)
@@ -110,6 +111,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     isReadyRef.current = isReady
   }, [isReady])
 
+  // Keep latest play/pause handler for keydown listener
+  useEffect(() => {
+    handlePlayPauseRef.current = handlePlayPause
+  })
+
   // FIX: Spacebar to play/pause with stable callback (attach once)
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -129,7 +135,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
       if (isSpace && isReadyRef.current) {
         e.preventDefault()
-        handlePlayPause()
+        handlePlayPauseRef.current()
       }
     }
 
@@ -286,7 +292,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   }, [isPlaying, duration])
 
   const handlePlayPause = async () => {
-    if (!isReady) return
+    if (!isReadyRef.current) return
 
     const rawContext = Tone.getContext().rawContext as AudioContext | undefined
     const needsUnlock =
