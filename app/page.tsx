@@ -13,6 +13,19 @@ export default function Home() {
   // Ensure page loads at top (avoid restoring deep scroll on refresh)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' })
+    const id = setTimeout(() => window.scrollTo({ top: 0, behavior: 'auto' }), 50)
+    return () => clearTimeout(id)
+  }, [])
+
+  // Disable browser scroll restoration (especially on mobile Safari)
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      const prev = window.history.scrollRestoration
+      window.history.scrollRestoration = 'manual'
+      return () => {
+        window.history.scrollRestoration = prev
+      }
+    }
   }, [])
 
   return (
