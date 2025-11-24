@@ -789,7 +789,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   size="md"
                   className="px-12"
                 >
-                  ⬇ Download Your Processed Audio
+                  ⬇ Download
                 </Button>
               </div>
               <p className="text-xs text-gray-400 text-center">
