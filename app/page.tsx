@@ -73,9 +73,14 @@ export default function Home() {
 
             {/* Tagline */}
             <div className="space-y-1 mt-0">
-              <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-                This audio pitch changer works directly in your browser — no uploads, no installation required.
-              </p>
+              <div className="text-left max-w-3xl mx-auto text-gray-200 text-sm md:text-base leading-relaxed space-y-1.5">
+                <p className="font-medium">
+                  PitchChanger.io is a free online pitch changer that lets you instantly change the pitch of a song without changing speed.
+                </p>
+                <p>
+                  This audio pitch changer works directly in your browser — no uploads, no installation required.
+                </p>
+              </div>
             </div>
           </div>
 
