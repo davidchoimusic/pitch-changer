@@ -10,6 +10,11 @@ const spectrumSpeeds = [0.6, 0.9, 0.5, 1.1, 0.7, 0.8, 1.0, 0.6, 0.9, 0.7, 0.5, 0
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
+  // Ensure page loads at top (avoid restoring deep scroll on refresh)
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [])
+
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       {!selectedFile ? (

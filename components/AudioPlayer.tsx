@@ -432,6 +432,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       return
     }
 
+    // Stop any ongoing playback before processing/export
+    stopPlayback()
+
     setIsProcessing(true)
     setProcessProgress(0)
     setProcessedBlob(null)
@@ -457,6 +460,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         clearTimeout(processTimeoutRef.current)
         processTimeoutRef.current = null
       }
+
+      // Ensure playback is stopped when processing completes
+      stopPlayback()
 
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
