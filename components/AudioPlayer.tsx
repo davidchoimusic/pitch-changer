@@ -557,7 +557,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
               onClick={handlePlayPause}
               disabled={!isReady}
               variant="play"
-              className="w-32"
+              className="w-36 h-14 text-2xl md:w-32 md:h-auto md:text-base"
             >
               <span className="md:hidden">{isPlaying ? '⏸' : '▶'}</span>
               <span className="hidden md:inline">{isPlaying ? '⏸ Pause' : '▶ Play'}</span>
