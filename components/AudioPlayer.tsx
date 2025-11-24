@@ -25,7 +25,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [error, setError] = useState<string | null>(null)
   const [processError, setProcessError] = useState<string | null>(null)
   const [isPrivateMode, setIsPrivateMode] = useState(false)
+  const [showProcessingWarning, setShowProcessingWarning] = useState(false)
   const processTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const processingHintTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const tonePlayerRef = useRef<Tone.Player | null>(null)
   const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
@@ -439,6 +441,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     setProcessProgress(0)
     setProcessedBlob(null)
     setProcessError(null)
+    setShowProcessingWarning(false)
 
     if (processTimeoutRef.current) {
       clearTimeout(processTimeoutRef.current)
@@ -464,6 +467,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
       setProcessProgress(100)
+      setShowProcessingWarning(false)
     } catch (error) {
       console.error('Error processing audio:', error)
       setIsProcessing(false)
@@ -472,6 +476,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         clearTimeout(processTimeoutRef.current)
         processTimeoutRef.current = null
       }
+      setShowProcessingWarning(false)
     }
   }
 
@@ -488,6 +493,29 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       window.location.href = '/'
     }
   }
+
+  // Show a gentle hint after 4s if still processing (helps private browsing users)
+  useEffect(() => {
+    if (processingHintTimeoutRef.current) {
+      clearTimeout(processingHintTimeoutRef.current)
+      processingHintTimeoutRef.current = null
+    }
+
+    if (isProcessing) {
+      processingHintTimeoutRef.current = setTimeout(() => {
+        setShowProcessingWarning(true)
+      }, 4000)
+    } else {
+      setShowProcessingWarning(false)
+    }
+
+    return () => {
+      if (processingHintTimeoutRef.current) {
+        clearTimeout(processingHintTimeoutRef.current)
+        processingHintTimeoutRef.current = null
+      }
+    }
+  }, [isProcessing])
 
   const handleFinalDownload = () => {
     if (!processedBlob) return
@@ -721,15 +749,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   <p className="text-lg text-gray-300">Check out these ads below.</p>
                   <div className="text-4xl animate-bounce">⬇️</div>
                   <p className="text-sm text-gray-400">The ads keep this tool free for you</p>
-                  <Button
-                    onClick={handleCancelProcessing}
-                    variant="secondary"
-                    size="sm"
-                    className="bg-red-600 text-white border-red-500 hover:bg-red-500 hover:border-red-400"
-                  >
-                    Cancel
-                  </Button>
-                  <p className="text-xs text-red-300 font-semibold">⚠️ Audio may not process in private browsing mode</p>
+                  {showProcessingWarning && (
+                    <p className="text-xs text-red-300 font-semibold">⚠️ Having trouble? Processing may not work in private browsing mode. Please restart. 🙏</p>
+                  )}
                 </div>
               ) : (
                 <div className="text-center space-y-3 py-4">
