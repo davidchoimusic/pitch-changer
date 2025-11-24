@@ -102,7 +102,7 @@ export default function Home() {
                 }}
               />
             </div>
-            <h2 className="text-3xl font-bold text-center">Why Use PitchChanger.io?</h2>
+            <h2 className="text-3xl font-bold text-center mb-12 md:mb-16">Why Use PitchChanger.io?</h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <h3 className="text-lg font-semibold">Musicians & Vocalists</h3>
@@ -136,7 +136,7 @@ export default function Home() {
                 }}
               />
             </div>
-            <h2 className="text-3xl font-bold text-center">FAQ</h2>
+            <h2 className="text-3xl font-bold text-center mb-12 md:mb-16">FAQ</h2>
             <div className="space-y-4 max-w-3xl mx-auto text-left">
               <div>
                 <h3 className="text-lg font-semibold">Does this change the pitch without changing speed?</h3>
