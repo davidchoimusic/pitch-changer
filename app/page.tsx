@@ -55,14 +55,8 @@ export default function Home() {
               >
                 Free Online Pitch Changer
               </h1>
-              <h2
-                className="text-4xl md:text-5xl font-black bg-clip-text text-transparent leading-tight"
-                style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
-              >
-                Change Pitch of Any Song or Audio
-              </h2>
               <p className="text-lg md:text-xl text-gray-200 mt-2">
-                PitchChanger.io is a free online pitch changer that lets you instantly change the pitch of a song without changing speed.
+                Change Pitch of Any Song or Audio
               </p>
 
               {/* Glowing gradient line */}
