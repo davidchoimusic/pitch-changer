@@ -24,7 +24,6 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [safariUnlocked, setSafariUnlocked] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // SIMPLIFIED: Tone.js only - no dual mode
   const tonePlayerRef = useRef<Tone.Player | null>(null)
   const pitchShiftRef = useRef<Tone.PitchShift | null>(null)
   const audioBufferRef = useRef<AudioBuffer | null>(null)
@@ -32,6 +31,9 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const downloadSectionRef = useRef<HTMLDivElement | null>(null)
   // Ref for stable keydown callback
   const isReadyRef = useRef(isReady)
+  // Track user seek interactions
+  const isSeekingRef = useRef(false)
+  const pendingSeekRef = useRef<number | null>(null)
 
   // Load audio file
   useEffect(() => {
@@ -156,7 +158,10 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
     // immediate() returns absolute position in buffer
     const time = tonePlayerRef.current.immediate()
-    setCurrentTime(time)
+    // Avoid fighting user drag
+    if (!isSeekingRef.current) {
+      setCurrentTime(time)
+    }
 
     if (time >= duration - 0.1) {
       setIsPlaying(false)
@@ -243,21 +248,33 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     }
   }
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = parseFloat(e.target.value)
-    setCurrentTime(newTime)
+  const handleSeekStart = () => {
+    isSeekingRef.current = true
+  }
 
-    // If playing, restart from new position
+  const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = parseFloat(e.target.value)
+    pendingSeekRef.current = newTime
+    setCurrentTime(newTime)
+  }
+
+  const handleSeekEnd = () => {
+    const target = pendingSeekRef.current
+    isSeekingRef.current = false
+    pendingSeekRef.current = null
+
+    if (target == null) return
+
     if (isPlaying && tonePlayerRef.current) {
       try {
         tonePlayerRef.current.stop()
       } catch (e) {
         // Player might already be stopped
       }
-
-      // FIX: immediate() already returns absolute position in buffer
-      // Just restart player at new position
-      tonePlayerRef.current.start(undefined, newTime)
+      tonePlayerRef.current.start(undefined, target)
+    } else {
+      // Paused: set position; next play starts from here
+      setCurrentTime(target)
     }
   }
 
@@ -454,7 +471,11 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                 max={duration || 100}
                 step="0.1"
                 value={currentTime}
-                onChange={handleSeek}
+                onMouseDown={handleSeekStart}
+                onTouchStart={handleSeekStart}
+                onChange={handleSeekChange}
+                onMouseUp={handleSeekEnd}
+                onTouchEnd={handleSeekEnd}
                 disabled={!isReady}
                 className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
                            [&::-webkit-slider-thumb]:appearance-none
