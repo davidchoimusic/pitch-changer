@@ -15,9 +15,9 @@ export default function Home() {
       {!selectedFile ? (
         <div className="max-w-4xl mx-auto space-y-8 md:space-y-16">
           {/* Hero Section */}
-          <div className="text-center space-y-8 md:space-y-10">
+          <div className="text-center space-y-7 md:space-y-9">
             {/* Branding */}
-            <div className="pb-4 md:pb-8">
+            <div className="pb-3 md:pb-8">
               <h1
                 className="text-5xl md:text-6xl font-black bg-clip-text text-transparent leading-tight pb-1"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
@@ -32,7 +32,7 @@ export default function Home() {
               </p>
 
               {/* Glowing gradient line */}
-              <div className="mt-2 md:mt-4 flex justify-center">
+              <div className="mt-1 md:mt-4 flex justify-center">
                 <div
                   className="h-1 w-48 rounded-full"
                   style={{
@@ -44,7 +44,7 @@ export default function Home() {
             </div>
 
             {/* Tagline */}
-            <div className="space-y-2 mt-0">
+            <div className="space-y-1 mt-0">
               <h2
                 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent"
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
@@ -120,9 +120,9 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-6 md:space-y-8">
           {/* Inline Title */}
-          <div className="text-center pb-4 md:pb-6">
+          <div className="text-center pb-3 md:pb-6">
             <h1
               className="text-5xl md:text-6xl font-black bg-clip-text text-transparent leading-tight pb-1"
               style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
@@ -137,7 +137,7 @@ export default function Home() {
             </p>
 
             {/* Glowing gradient line */}
-            <div className="mt-2 md:mt-4 flex justify-center">
+            <div className="mt-1 md:mt-4 flex justify-center">
               <div
                 className="h-1 w-48 rounded-full"
                 style={{
