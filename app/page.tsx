@@ -117,7 +117,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold">Teachers, Students & Karaoke Users</h3>
+                <h3 className="text-lg font-semibold">Teachers & Karaoke Users</h3>
                 <p className="text-sm text-gray-400">
                   Change pitch of a song instantly for lessons, sing-alongs, and rehearsals with real-time preview.
                 </p>
