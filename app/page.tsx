@@ -51,7 +51,7 @@ export default function Home() {
               </p>
 
               {/* Glowing gradient line */}
-              <div className="mt-12 md:mt-12 mb-2 flex justify-center">
+              <div className="mt-6 md:mt-8 mb-2 flex justify-center">
                 <div
                   className="h-1 w-48 rounded-full"
                   style={{
@@ -91,92 +91,51 @@ export default function Home() {
             <FileUpload onFileSelect={setSelectedFile} maxSizeMB={250} />
           </div>
 
-          {/* Features */}
-          <div className="grid md:grid-cols-3 gap-8 pt-8">
-            <div className="text-center space-y-3">
-              <div className="text-5xl">⚡</div>
-              <h3 className="text-lg font-semibold">Online pitch changer</h3>
-              <p className="text-sm text-gray-400">
-                Real-time preview; change pitch of a song up or down with no speed change.
-              </p>
-            </div>
-            <div className="text-center space-y-3">
-              <div className="text-5xl">🔒</div>
-              <h3 className="text-lg font-semibold">100% private</h3>
-              <p className="text-sm text-gray-400">
-                Browser-based audio pitch shifter; files stay on your device (no uploads).
-              </p>
-            </div>
-            <div className="text-center space-y-3">
-              <div className="text-5xl">🎯</div>
-              <h3 className="text-lg font-semibold">Format friendly</h3>
-              <p className="text-sm text-gray-400">
-                MP3 pitch changer plus WAV, FLAC, M4A, AAC — free, instant, no install.
-              </p>
-            </div>
-          </div>
-
-          {/* How It Works */}
-          <div className="border-t border-divider pt-16 space-y-8">
-            <h2 className="text-3xl font-bold text-center">How It Works</h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center text-lg font-semibold">
-                  1
-                </div>
-                <h3 className="text-lg font-semibold">Upload your audio file</h3>
-                <p className="text-sm text-gray-400">
-                  Drag and drop MP3, WAV, FLAC, M4A, AAC (up to 250MB).
-                </p>
-              </div>
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center text-lg font-semibold">
-                  2
-                </div>
-                <h3 className="text-lg font-semibold">Move the slider to change pitch</h3>
-                <p className="text-sm text-gray-400">
-                  Shift pitch up or down in semitones with real-time preview (no tempo change).
-                </p>
-              </div>
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center text-lg font-semibold">
-                  3
-                </div>
-                <h3 className="text-lg font-semibold">Download your new track</h3>
-                <p className="text-sm text-gray-400">
-                  Export instantly in your browser; nothing leaves your device.
-                </p>
-              </div>
-            </div>
-          </div>
-
           {/* Why Use PitchChanger.io */}
-          <div className="border-t border-divider pt-12 space-y-6">
+          <div className="pt-12 space-y-6">
+            <div className="flex justify-center">
+              <div
+                className="h-1 w-48 rounded-full"
+                style={{
+                  backgroundImage: 'linear-gradient(to right, transparent, rgb(59 130 246), transparent)',
+                  boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
+                }}
+              />
+            </div>
             <h2 className="text-3xl font-bold text-center">Why Use PitchChanger.io?</h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold">Musicians & singers</h3>
+                <h3 className="text-lg font-semibold">Musicians & Vocalists</h3>
                 <p className="text-sm text-gray-400">
-                  Transpose music, shift keys, adjust vocals for practice or performance.
+                  Transpose songs, change pitch for practice, adjust keys for your vocal range, or prepare backing tracks.
                 </p>
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold">DJs & producers</h3>
+                <h3 className="text-lg font-semibold">DJs & Producers</h3>
                 <p className="text-sm text-gray-400">
-                  Quickly change pitch for remixes and edits without changing speed.
+                  A fast online pitch changer for remixes, edits, and mixing — shift pitch without changing speed.
                 </p>
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold">Teaching & karaoke</h3>
+                <h3 className="text-lg font-semibold">Teachers, Students & Karaoke Users</h3>
                 <p className="text-sm text-gray-400">
-                  Shift keys for lessons, sing-alongs, and rehearsals with instant feedback.
+                  Change pitch of a song instantly for lessons, sing-alongs, and rehearsals with real-time preview.
                 </p>
               </div>
             </div>
           </div>
 
           {/* FAQ */}
-          <div className="border-t border-divider pt-12 space-y-6">
+          <div className="pt-12 space-y-6">
+            <div className="flex justify-center">
+              <div
+                className="h-1 w-48 rounded-full"
+                style={{
+                  backgroundImage: 'linear-gradient(to right, transparent, rgb(59 130 246), transparent)',
+                  boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
+                }}
+              />
+            </div>
             <h2 className="text-3xl font-bold text-center">FAQ</h2>
             <div className="space-y-4 max-w-3xl mx-auto text-left">
               <div>

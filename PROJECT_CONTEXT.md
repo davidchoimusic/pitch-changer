@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR (2025-11-23):** Production is stable on Tone-only (main current ~86a49e6). All core flows work on desktop/mobile; Safari dev caching quirk documented but not blocking users.
+**TL;DR (2025-11-23):** Production is stable on Tone-only (main current ~[UNKNOWN]). All core flows work on desktop/mobile; Safari dev caching and Safari private-mode processing limits documented.
 
 ---
 
@@ -12,7 +12,7 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** ~86a49e6 (Tone-only, stabilized UI/spacebar fixes)
+- **Current Commit:** ~[UNKNOWN] (Tone-only, stabilized UI/spacebar fixes)
 - **Open PRs/Issues:** None critical
 - **Production:** https://pitchchanger.io (Tone-only, stable)
 - **Staging:** N/A (staging-tone-only merged)
@@ -131,7 +131,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ### Known Issues
 - Safari aggressive caching during rapid development only: may need Cmd+Q to fetch fresh HTML; end users not impacted. Headers set to `no-store, no-cache, must-revalidate` + `Pragma` + `Expires: 0`.
-- Private browsing (especially iOS Safari) may fail processing due to storage/memory limits; warn users to use regular mode or smaller files.
+- Safari private browsing: processing disabled (button disabled + warning); use regular mode. Chrome private still works.
 - Tailwind v4 custom gradients: using inline gradients as a reliable workaround.
 
 ### Fixed Issues (Session 2)
@@ -237,6 +237,10 @@ Notes:
 - Hard refresh often insufficient; headers set to `no-store, no-cache, must-revalidate` + `Pragma` + `Expires: 0`.
 - End users on production should not hit this; observed during rapid dev.
 
+### Safari Private Browsing (Processing Disabled)
+- Processing button disabled; warning shown to use regular window.
+- Rationale: private mode storage/memory limits can crash export.
+
 ### Spacebar Toggle Not Working (Resolved)
 - Cause: stale closure on handlePlayPause (using state instead of ref)
 - Fix: handlePlayPauseRef with isReadyRef; broadened spacebar detection (Space/Spacebar/keyCode 32)
@@ -260,9 +264,9 @@ Notes:
 - ✅ Safari unlock hardened (close stale contexts, rebuild Tone context, silent buffer)
 - ✅ Spacebar toggle fixed (handlePlayPauseRef, broader key detection)
 - ✅ Mobile UI: tighter spacing, smaller upload box, larger play button, focus outline removed on sliders; overflow hidden to stop horizontal bleed
-- ✅ Mobile processing guard: 120MB limit + friendly errors
+- ✅ Mobile processing guard: 120MB limit + friendly errors; processing disabled in Safari private mode with warning
 - ✅ Cache headers: `no-store, no-cache, must-revalidate`, `Pragma: no-cache`, `Expires: 0`
-- ✅ CTA text: "Process Audio (WAV)"; helper text white
+- ✅ CTA text: "Process Audio (WAV)"; helper text white; ads copy updated
 - ✅ Staging-tone-only merged into main; production live and stable
 
 ### Earlier Sessions (2025-11-22)
