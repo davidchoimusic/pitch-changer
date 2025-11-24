@@ -717,6 +717,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
                   <p className="text-lg text-gray-300">Check out these ads below.</p>
                   <div className="text-4xl animate-bounce">⬇️</div>
                   <p className="text-sm text-gray-400">The ads keep this tool free for you</p>
+                  <p className="text-xs text-red-300 font-semibold">⚠️ Audio may not process in private browsing mode</p>
                   <Button
                     onClick={handleCancelProcessing}
                     variant="ghost"
