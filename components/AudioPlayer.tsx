@@ -24,6 +24,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   const [safariUnlocked, setSafariUnlocked] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [processError, setProcessError] = useState<string | null>(null)
+  const [isPrivateMode, setIsPrivateMode] = useState(false)
   const processTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const tonePlayerRef = useRef<Tone.Player | null>(null)
@@ -111,6 +112,28 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
   useEffect(() => {
     isReadyRef.current = isReady
   }, [isReady])
+
+  // Detect likely private mode with low storage quota (best-effort)
+  useEffect(() => {
+    let cancelled = false
+    const detectPrivate = async () => {
+      try {
+        if (navigator.storage?.estimate) {
+          const est = await navigator.storage.estimate()
+          // Heuristic: very low quota often indicates private mode on Safari/iOS
+          if (!cancelled && est.quota && est.quota < 120 * 1024 * 1024) {
+            setIsPrivateMode(true)
+          }
+        }
+      } catch (e) {
+        // Ignore detection errors; assume normal mode
+      }
+    }
+    detectPrivate()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // Keep latest play/pause handler for keydown listener
   useEffect(() => {
@@ -401,6 +424,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
 
   const handleStartProcessing = async () => {
     if (!audioBufferRef.current) return
+
+    if (isPrivateMode) {
+      setProcessError('Processing may not work in private browsing. Please use a regular window or try a smaller file.')
+      setIsProcessing(false)
+      setProcessProgress(0)
+      return
+    }
 
     setIsProcessing(true)
     setProcessProgress(0)

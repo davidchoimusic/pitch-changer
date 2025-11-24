@@ -131,6 +131,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ### Known Issues
 - Safari aggressive caching during rapid development only: may need Cmd+Q to fetch fresh HTML; end users not impacted. Headers set to `no-store, no-cache, must-revalidate` + `Pragma` + `Expires: 0`.
+- Private browsing (especially iOS Safari) may fail processing due to storage/memory limits; warn users to use regular mode or smaller files.
 - Tailwind v4 custom gradients: using inline gradients as a reliable workaround.
 
 ### Fixed Issues (Session 2)
