@@ -33,6 +33,9 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
   const playStartTimeRef = useRef<number>(0)
   const playStartOffsetRef = useRef<number>(0)
   const waveformCanvasRef = useRef<HTMLCanvasElement | null>(null)
+  // Refs for spacebar handler
+  const isReadyRef = useRef(isReady)
+  const handlePlayPauseRef = useRef<(() => void) | null>(null)
 
   // Load audio file
   useEffect(() => {
@@ -158,35 +161,13 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     }
   }
 
+  // Update refs for spacebar handler
+  useEffect(() => {
+    isReadyRef.current = isReady
+  }, [isReady])
+
   // Calculate playhead position percentage for CSS
   const playheadPercent = duration > 0 ? (currentTime / duration) * 100 : 0
-
-  // Spacebar to play/pause
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      // Allow sliders; skip text inputs
-      const target = e.target as HTMLElement
-      if (target instanceof HTMLInputElement) {
-        const blockTypes = ['text', 'search', 'email', 'url', 'tel', 'number', 'password']
-        if (blockTypes.includes(target.type)) return
-      }
-      if (target.tagName === 'TEXTAREA') return
-
-      const isSpace =
-        e.code === 'Space' ||
-        e.key === ' ' ||
-        e.key === 'Spacebar' ||
-        e.keyCode === 32
-
-      if (isSpace && isReady) {
-        e.preventDefault()
-        handlePlayPause()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyPress)
-    return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [isReady, isPlaying, handlePlayPause])
 
   // Stop playback
   const stopPlayback = () => {
@@ -277,6 +258,37 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
       setIsPlaying(true)
     }
   }
+
+  // Keep handlePlayPauseRef updated for spacebar
+  useEffect(() => {
+    handlePlayPauseRef.current = handlePlayPause
+  })
+
+  // Spacebar to play/pause with stable callback
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement
+      if (target instanceof HTMLInputElement) {
+        const blockTypes = ['text', 'search', 'email', 'url', 'tel', 'number', 'password']
+        if (blockTypes.includes(target.type)) return
+      }
+      if (target.tagName === 'TEXTAREA') return
+
+      const isSpace =
+        e.code === 'Space' ||
+        e.key === ' ' ||
+        e.key === 'Spacebar' ||
+        e.keyCode === 32
+
+      if (isSpace && isReadyRef.current && handlePlayPauseRef.current) {
+        e.preventDefault()
+        handlePlayPauseRef.current()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, []) // Empty deps = stable callback
 
   // Seek
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
