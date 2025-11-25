@@ -94,8 +94,8 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     }
   }, [file])
 
-  // Draw waveform visualization with playhead
-  const drawWaveform = (buffer: AudioBuffer, playheadPosition?: number) => {
+  // Draw waveform visualization (ONCE - no playhead in canvas)
+  const drawWaveform = (buffer: AudioBuffer) => {
     if (!waveformCanvasRef.current) return
 
     const canvas = waveformCanvasRef.current
@@ -132,22 +132,6 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     }
 
     ctx.stroke()
-
-    // Draw playhead line
-    if (playheadPosition !== undefined && duration > 0) {
-      const playheadX = (playheadPosition / duration) * width
-      ctx.strokeStyle = '#f59e0b'
-      ctx.lineWidth = 2
-      ctx.beginPath()
-      ctx.moveTo(playheadX, 0)
-      ctx.lineTo(playheadX, height)
-      ctx.stroke()
-
-      // Playhead time label
-      ctx.fillStyle = '#f59e0b'
-      ctx.font = '12px monospace'
-      ctx.fillText(formatTime(playheadPosition), playheadX + 5, 15)
-    }
   }
 
   // Click on waveform to seek
@@ -174,12 +158,8 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     }
   }
 
-  // Update waveform playhead during playback
-  useEffect(() => {
-    if (audioBufferRef.current) {
-      drawWaveform(audioBufferRef.current, currentTime)
-    }
-  }, [currentTime])
+  // Calculate playhead position percentage for CSS
+  const playheadPercent = duration > 0 ? (currentTime / duration) * 100 : 0
 
   // Stop playback
   const stopPlayback = () => {
@@ -419,13 +399,14 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
 
       {/* Controls */}
       <div className="bg-bg-card border border-divider rounded-lg p-8 space-y-6">
-        {/* Waveform Scrubber - Integrated */}
+        {/* Waveform Scrubber - Integrated with CSS Overlay Playhead */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm text-gray-400">
             <span className="font-mono">{formatTime(currentTime)}</span>
             <span className="font-mono">{formatTime(adjustedDuration)}</span>
           </div>
           <div className="relative">
+            {/* Waveform canvas (drawn once) */}
             <canvas
               ref={waveformCanvasRef}
               width={800}
@@ -434,6 +415,20 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
               className="w-full h-auto rounded cursor-pointer hover:opacity-90 transition-opacity"
               title="Click to seek"
             />
+            {/* CSS Playhead Overlay (GPU accelerated) */}
+            <div
+              className="absolute top-0 bottom-0 w-0.5 bg-orange-400 shadow-lg pointer-events-none transition-transform duration-75 ease-linear"
+              style={{
+                left: 0,
+                transform: `translateX(${playheadPercent}%)`,
+                boxShadow: '0 0 10px rgba(251, 146, 60, 0.8)'
+              }}
+            >
+              {/* Time label on playhead */}
+              <div className="absolute -top-6 left-1 bg-orange-500 text-white text-xs px-2 py-0.5 rounded font-mono whitespace-nowrap">
+                {formatTime(currentTime)}
+              </div>
+            </div>
           </div>
           <p className="text-xs text-gray-500 text-center">Click waveform to seek</p>
         </div>
