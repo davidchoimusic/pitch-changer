@@ -56,10 +56,29 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Google AdSense */}
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2950955479321117"
           crossOrigin="anonymous"
+        />
+
+        {/* Google Analytics 4 */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-RB68Q82Z1B"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-RB68Q82Z1B', {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
         />
       </head>
       <body className="font-sans overflow-x-hidden">

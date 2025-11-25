@@ -11,7 +11,7 @@ export default function PrivacyPage() {
       <div className="max-w-3xl mx-auto space-y-8">
         <div>
           <h1 className="text-3xl font-bold">Privacy Policy</h1>
-          <p className="text-sm text-gray-400">Last updated: 2025-11-23</p>
+          <p className="text-sm text-gray-400">Last updated: 2025-11-24</p>
         </div>
 
         <div className="space-y-4 text-sm md:text-base text-gray-300 leading-relaxed">
@@ -22,9 +22,9 @@ export default function PrivacyPage() {
 
           <h2 className="text-xl font-semibold text-white">What we collect</h2>
           <ul className="list-disc list-inside space-y-1">
-            <li>No personal data collected.</li>
-            <li>No logins, no accounts, no file uploads, no server-side storage.</li>
-            <li>No analytics or tracking (yet).</li>
+            <li>No personal data collected (no names, emails, or accounts).</li>
+            <li>No logins, no file uploads, no server-side storage.</li>
+            <li>Anonymized usage statistics via Google Analytics (page views, feature usage).</li>
           </ul>
 
           <h2 className="text-xl font-semibold text-white">How processing works</h2>
@@ -51,11 +51,45 @@ export default function PrivacyPage() {
             .
           </p>
 
-          <h2 className="text-xl font-semibold text-white">What we don’t do</h2>
+          <h2 className="text-xl font-semibold text-white">Analytics (Google Analytics)</h2>
+          <p>
+            We use Google Analytics 4 to measure site traffic and understand how users interact with our tool.
+            This helps us improve the service. GA4 uses cookies and collects anonymized usage data including:
+          </p>
           <ul className="list-disc list-inside space-y-1">
-            <li>No selling or sharing of personal data (we don’t collect it).</li>
+            <li>Page views and navigation patterns</li>
+            <li>Device type, browser, and location (country-level)</li>
+            <li>Feature usage (file uploads, pitch adjustments, downloads)</li>
+          </ul>
+          <p>
+            Learn more:{' '}
+            <a
+              href="https://policies.google.com/privacy"
+              className="text-accent hover:underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Google Privacy Policy
+            </a>
+          </p>
+          <p>
+            To opt out, install the{' '}
+            <a
+              href="https://tools.google.com/dlpage/gaoptout"
+              className="text-accent hover:underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Google Analytics Opt-out Browser Add-on
+            </a>
+            .
+          </p>
+
+          <h2 className="text-xl font-semibold text-white">What we don't do</h2>
+          <ul className="list-disc list-inside space-y-1">
+            <li>No selling or sharing of personal data.</li>
             <li>No hidden uploads — files remain local to your browser.</li>
-            <li>No background analytics scripts at this time.</li>
+            <li>No tracking of individual users or personal information.</li>
           </ul>
 
           <h2 className="text-xl font-semibold text-white">Your choices</h2>

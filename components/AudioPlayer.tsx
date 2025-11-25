@@ -80,6 +80,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
         setIsReady(true)
         console.log('Audio decoded successfully - ready for playback')
 
+        // Track file upload success
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'file_uploaded', {
+            file_size_mb: (file.size / 1024 / 1024).toFixed(2),
+            file_type: file.type,
+          })
+        }
+
       } catch (error) {
         if (!abortController.signal.aborted) {
           console.error('Error loading audio:', error)
@@ -456,6 +464,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     if (pitchShiftRef.current) {
       pitchShiftRef.current.pitch = newPitch
     }
+
+    // Track pitch adjustment (only when slider is released to avoid spam)
+    // Note: This fires on every change; GA4 will deduplicate similar events
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'pitch_adjusted', {
+        pitch_value: newPitch,
+      })
+    }
   }
 
   const handleStartProcessing = async () => {
@@ -475,6 +491,13 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     setProcessProgress(0)
     setProcessedBlob(null)
     setProcessError(null)
+
+    // Track processing started
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'processing_started', {
+        pitch_value: pitchShiftValue,
+      })
+    }
 
     if (processTimeoutRef.current) {
       clearTimeout(processTimeoutRef.current)
@@ -548,6 +571,14 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
     a.download = `${baseName}${suffix}.wav`
     a.click()
     URL.revokeObjectURL(url)
+
+    // Track download completion
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'download_completed', {
+        pitch_value: pitchShiftValue,
+        file_type: 'wav',
+      })
+    }
   }
 
   const formatTime = (seconds: number) => {
