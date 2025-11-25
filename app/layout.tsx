@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://pitchchanger.io/pitchchanger.png',
+        url: 'https://pitchchanger.io/PitchChanger.png',
         width: 1024,
         height: 1024,
         alt: 'PitchChanger.io logo',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     description:
       'PitchChanger.io is a free online pitch changer. Upload MP3, WAV, FLAC, M4A, AAC and instantly change pitch without changing speed. 100% browser-based, no uploads.'
     ,
-    images: ['https://pitchchanger.io/pitchchanger.png'],
+    images: ['https://pitchchanger.io/PitchChanger.png'],
   },
 }
 
