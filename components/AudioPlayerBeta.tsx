@@ -94,8 +94,8 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     }
   }, [file])
 
-  // Draw waveform visualization
-  const drawWaveform = (buffer: AudioBuffer) => {
+  // Draw waveform visualization with playhead
+  const drawWaveform = (buffer: AudioBuffer, playheadPosition?: number) => {
     if (!waveformCanvasRef.current) return
 
     const canvas = waveformCanvasRef.current
@@ -104,15 +104,17 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
 
     const width = canvas.width
     const height = canvas.height
-    const data = buffer.getChannelData(0) // Use first channel
+    const data = buffer.getChannelData(0)
     const step = Math.ceil(data.length / width)
     const amp = height / 2
 
+    // Background
     ctx.fillStyle = '#1e293b'
     ctx.fillRect(0, 0, width, height)
 
+    // Waveform
     ctx.strokeStyle = '#3b82f6'
-    ctx.lineWidth = 1
+    ctx.lineWidth = 1.5
     ctx.beginPath()
 
     for (let i = 0; i < width; i++) {
@@ -130,7 +132,54 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     }
 
     ctx.stroke()
+
+    // Draw playhead line
+    if (playheadPosition !== undefined && duration > 0) {
+      const playheadX = (playheadPosition / duration) * width
+      ctx.strokeStyle = '#f59e0b'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.moveTo(playheadX, 0)
+      ctx.lineTo(playheadX, height)
+      ctx.stroke()
+
+      // Playhead time label
+      ctx.fillStyle = '#f59e0b'
+      ctx.font = '12px monospace'
+      ctx.fillText(formatTime(playheadPosition), playheadX + 5, 15)
+    }
   }
+
+  // Click on waveform to seek
+  const handleWaveformClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!waveformCanvasRef.current || !audioBufferRef.current) return
+
+    const canvas = waveformCanvasRef.current
+    const rect = canvas.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const percentageClicked = clickX / rect.width
+    const newTime = percentageClicked * duration
+
+    setCurrentTime(newTime)
+
+    // Restart playback from new position if playing
+    if (isPlaying && playerRef.current) {
+      try {
+        playerRef.current.stop()
+      } catch (err) {}
+
+      playStartOffsetRef.current = newTime
+      playStartTimeRef.current = Tone.now()
+      playerRef.current.start(undefined, newTime)
+    }
+  }
+
+  // Update waveform playhead during playback
+  useEffect(() => {
+    if (audioBufferRef.current) {
+      drawWaveform(audioBufferRef.current, currentTime)
+    }
+  }, [currentTime])
 
   // Stop playback
   const stopPlayback = () => {
@@ -368,18 +417,39 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
         )}
       </div>
 
-      {/* Waveform */}
-      <div className="bg-bg-card border border-divider rounded-lg p-6">
-        <canvas
-          ref={waveformCanvasRef}
-          width={800}
-          height={120}
-          className="w-full h-auto rounded"
-        />
-      </div>
-
       {/* Controls */}
       <div className="bg-bg-card border border-divider rounded-lg p-8 space-y-6">
+        {/* Waveform Scrubber - Integrated */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-sm text-gray-400">
+            <span className="font-mono">{formatTime(currentTime)}</span>
+            <span className="font-mono">{formatTime(adjustedDuration)}</span>
+          </div>
+          <div className="relative">
+            <canvas
+              ref={waveformCanvasRef}
+              width={800}
+              height={120}
+              onClick={handleWaveformClick}
+              className="w-full h-auto rounded cursor-pointer hover:opacity-90 transition-opacity"
+              title="Click to seek"
+            />
+          </div>
+          <p className="text-xs text-gray-500 text-center">Click waveform to seek</p>
+        </div>
+
+        {/* Playback Button */}
+        <div className="flex justify-center pt-2 pb-4 border-b border-divider">
+          <Button
+            onClick={handlePlayPause}
+            disabled={!isReady}
+            variant="play"
+            className="w-40"
+          >
+            {isPlaying ? '⏸ Pause' : '▶ Play'}
+          </Button>
+        </div>
+
         {/* Pitch Slider */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -444,48 +514,6 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
             <span>0.5x (slower)</span>
             <span>1.0x (normal)</span>
             <span>2.0x (faster)</span>
-          </div>
-        </div>
-
-        {/* Playback Controls */}
-        <div className="space-y-4 pt-4 border-t border-divider">
-          <div className="flex items-center gap-4">
-            <Button
-              onClick={handlePlayPause}
-              disabled={!isReady}
-              variant="play"
-              className="w-32"
-            >
-              {isPlaying ? '⏸ Pause' : '▶ Play'}
-            </Button>
-            <div className="flex-1 flex items-center gap-3">
-              <span className="text-sm text-gray-400 w-14 text-right font-mono">
-                {formatTime(currentTime)}
-              </span>
-              <input
-                type="range"
-                min="0"
-                max={adjustedDuration || 100}
-                step="0.1"
-                value={currentTime}
-                onChange={handleSeek}
-                disabled={!isReady}
-                className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer
-                           [&::-webkit-slider-thumb]:appearance-none
-                           [&::-webkit-slider-thumb]:w-4
-                           [&::-webkit-slider-thumb]:h-4
-                           [&::-webkit-slider-thumb]:rounded-full
-                           [&::-webkit-slider-thumb]:bg-white
-                           [&::-moz-range-thumb]:w-4
-                           [&::-moz-range-thumb]:h-4
-                           [&::-moz-range-thumb]:rounded-full
-                           [&::-moz-range-thumb]:bg-white
-                           [&::-moz-range-thumb]:border-0"
-              />
-              <span className="text-sm text-gray-400 w-14 font-mono">
-                {formatTime(adjustedDuration)}
-              </span>
-            </div>
           </div>
         </div>
 
