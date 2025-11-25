@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR (2025-11-23):** Production is stable on Tone-only (main current ~[UNKNOWN]). All core flows work on desktop/mobile; Safari dev caching and Safari private-mode processing limits documented.
+**TL;DR (2025-11-24):** Production is stable on Tone-only (main current ~cb5c096). All core flows work on desktop/mobile; legal pages live; AdSense assets in place; Safari dev caching and Safari private-mode limits documented.
 
 ---
 
@@ -12,7 +12,7 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** ~[UNKNOWN] (Tone-only, stabilized UI/spacebar fixes)
+- **Current Commit:** ~cb5c096 (Tone-only, SEO/legal pages, AdSense assets; deployed after rate-limit cleared)
 - **Open PRs/Issues:** None critical
 - **Production:** https://pitchchanger.io (Tone-only, stable)
 - **Staging:** N/A (staging-tone-only merged)
@@ -90,7 +90,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 - `NEXT_DISABLE_TURBOPACK=1` - Forces Webpack builds (set in Vercel)
 
 ### External Services
-- **Google AdSense:** Pending approval - ad spaces ready
+- **Google AdSense:** Pending approval ("Getting ready"); auto-ads/auto-optimize enabled; script in layout; ads.txt published (`google.com, pub-2950955479321117, DIRECT, f08c47fec0942fa0`)
 - **Analytics:** Not yet configured
 
 ### DNS/Domain
@@ -113,7 +113,9 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 ✅ Seek jumps audio and slider together (playStartOffsetRef/playStartTimeRef)  
 ✅ Pitch changes in real time  
 ✅ WAV export using Tone.js (matches preview)  
-✅ Client-side only (zero uploads, zero server costs)
+✅ Client-side only (zero uploads, zero server costs)  
+✅ Legal pages live: /privacy, /contact, /terms, /about  
+✅ AdSense assets in place (script + ads.txt); footer links added  
 
 ### Working Flows
 1. **Upload → Preview → Adjust → Download:**
@@ -133,6 +135,8 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 - Safari aggressive caching during rapid development only: may need Cmd+Q to fetch fresh HTML; end users not impacted. Headers set to `no-store, no-cache, must-revalidate` + `Pragma` + `Expires: 0`.
 - Safari private browsing: processing disabled (button disabled + warning); use regular mode. Chrome private still works.
 - Tailwind v4 custom gradients: using inline gradients as a reliable workaround.
+- Vercel rate-limit reminder: if GitHub checks show "rate limited", wait and redeploy later; failed builds may not appear in Vercel logs.
+- Vercel rate-limit reminder: if GitHub checks show "rate limited", wait and redeploy later; failed builds may not appear in Vercel logs.
 
 ### Fixed Issues (Session 2)
 - ✅ Safari 60% hang (lazy Tone.js init on first play)
@@ -198,7 +202,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
    - Why: Good balance of quality + responsiveness
    - Note: Original Safari delay was bugs, not windowSize
    - Result: Works smoothly on both Chrome and Safari
-   - File: components/AudioPlayer.tsx:193, utils/audio/toneExport.ts:35
+   - File: components/AudioPlayer.tsx:193, utils/audio/toneExport.ts:35 (export now uses 0.2 for higher quality)
 
 6. **Symmetrical Visual Design**
    - Why: Professional, balanced layout
@@ -211,7 +215,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 ## TODO
 
 ### Next
-- [ ] Apply for Google AdSense
+- [ ] Monitor AdSense approval (status: Getting ready; auto-ads/auto-optimize enabled)
 - [ ] Enable Vercel analytics
 - [ ] Add FAQ/SEO content and run Lighthouse audit
 - [ ] Broaden device testing (iPad, Android tablets)
@@ -241,6 +245,9 @@ Notes:
 - Processing button disabled; warning shown to use regular window.
 - Rationale: private mode storage/memory limits can crash export.
 
+### Vercel Rate Limits
+- If GitHub checks show "rate limited", Vercel may not build or show logs; wait for the limit to clear, then redeploy without cache from the latest commit.
+
 ### Spacebar Toggle Not Working (Resolved)
 - Cause: stale closure on handlePlayPause (using state instead of ref)
 - Fix: handlePlayPauseRef with isReadyRef; broadened spacebar detection (Space/Spacebar/keyCode 32)
@@ -257,7 +264,7 @@ Notes:
 
 ## Recently Completed
 
-### Session (2025-11-23) - Production Stabilized
+### Session (2025-11-23/24) - Production Stabilized + Legal/Ads
 - ✅ Tone.js-only path; dual-mode removed (components/AudioPlayer.tsx)
 - ✅ RAF timing with Tone.now(), playStartTimeRef/playStartOffsetRef (seek + slider sync)
 - ✅ Seek state refs (isSeekingRef/pendingSeekRef)
@@ -268,6 +275,10 @@ Notes:
 - ✅ Cache headers: `no-store, no-cache, must-revalidate`, `Pragma: no-cache`, `Expires: 0`
 - ✅ CTA text: "Process Audio (WAV)"; helper text white; ads copy updated
 - ✅ Staging-tone-only merged into main; production live and stable
+- ✅ Added legal pages: /privacy, /contact, /terms, /about; footer links added
+- ✅ AdSense assets added (head script + ads.txt)
+- ✅ Homepage SEO copy redesign and spacing fixes
+- ⚠️ Rate-limit incident: commits c48ecea/f7672f7/42b9897 were rate-limited and didn’t deploy; later commit cb5c096 succeeded once limit cleared
 
 ### Earlier Sessions (2025-11-22)
 - Safari unlock pattern, memory leak fixes, AudioContext cleanup, AbortController for decode, error banners, inline gradients, branding/spacing improvements, additional format support (FLAC/M4A/AAC), Webpack build fix via env var.
@@ -298,4 +309,4 @@ Notes:
 
 ---
 
-**Last Updated:** 2025-11-23 (Production stable; Tone-only; mobile/desktop verified; Safari dev cache documented)
+**Last Updated:** 2025-11-24 (Production stable; Tone-only; legal pages live; AdSense assets ready)

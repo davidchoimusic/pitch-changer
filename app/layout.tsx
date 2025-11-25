@@ -22,6 +22,14 @@ export const metadata: Metadata = {
     url: 'https://pitchchanger.io',
     siteName: 'PitchChanger.io',
     type: 'website',
+    images: [
+      {
+        url: 'https://pitchchanger.io/pitchchanger.png',
+        width: 1024,
+        height: 1024,
+        alt: 'PitchChanger.io logo',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
@@ -30,6 +38,8 @@ export const metadata: Metadata = {
     title: 'Free Online Pitch Changer | Change Pitch Without Changing Speed',
     description:
       'PitchChanger.io is a free online pitch changer. Upload MP3, WAV, FLAC, M4A, AAC and instantly change pitch without changing speed. 100% browser-based, no uploads.'
+    ,
+    images: ['https://pitchchanger.io/pitchchanger.png'],
   },
 }
 
