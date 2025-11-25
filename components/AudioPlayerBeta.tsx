@@ -498,7 +498,10 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
             step="1"
             value={pitchValue}
             onChange={handlePitchChange}
-            className="w-full h-3 rounded-lg appearance-none cursor-pointer bg-gray-700
+            className="w-full h-3 rounded-lg appearance-none cursor-pointer
+                       [&::-webkit-slider-runnable-track]:bg-gray-700
+                       [&::-webkit-slider-runnable-track]:rounded-lg
+                       [&::-webkit-slider-runnable-track]:h-3
                        [&::-webkit-slider-thumb]:appearance-none
                        [&::-webkit-slider-thumb]:w-6
                        [&::-webkit-slider-thumb]:h-6
@@ -506,6 +509,9 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
                        [&::-webkit-slider-thumb]:bg-accent
                        [&::-webkit-slider-thumb]:cursor-grab
                        [&::-webkit-slider-thumb]:shadow-lg
+                       [&::-moz-range-track]:bg-gray-700
+                       [&::-moz-range-track]:rounded-lg
+                       [&::-moz-range-track]:h-3
                        [&::-moz-range-thumb]:w-6
                        [&::-moz-range-thumb]:h-6
                        [&::-moz-range-thumb]:rounded-full
@@ -529,7 +535,10 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
             step="0.05"
             value={speedValue}
             onChange={handleSpeedChange}
-            className="w-full h-3 rounded-lg appearance-none cursor-pointer bg-gray-700
+            className="w-full h-3 rounded-lg appearance-none cursor-pointer
+                       [&::-webkit-slider-runnable-track]:bg-gray-700
+                       [&::-webkit-slider-runnable-track]:rounded-lg
+                       [&::-webkit-slider-runnable-track]:h-3
                        [&::-webkit-slider-thumb]:appearance-none
                        [&::-webkit-slider-thumb]:w-6
                        [&::-webkit-slider-thumb]:h-6
@@ -537,6 +546,9 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
                        [&::-webkit-slider-thumb]:bg-green-400
                        [&::-webkit-slider-thumb]:cursor-grab
                        [&::-webkit-slider-thumb]:shadow-lg
+                       [&::-moz-range-track]:bg-gray-700
+                       [&::-moz-range-track]:rounded-lg
+                       [&::-moz-range-track]:h-3
                        [&::-moz-range-thumb]:w-6
                        [&::-moz-range-thumb]:h-6
                        [&::-moz-range-thumb]:rounded-full
