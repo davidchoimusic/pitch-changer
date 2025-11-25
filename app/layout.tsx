@@ -3,15 +3,33 @@ import Link from 'next/link'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PitchChanger.io - Change the Pitch of Your Song or Audio',
-  description: 'Free web-based audio pitch shifting tool. Upload MP3 or WAV files and adjust pitch instantly.',
-  keywords: ['pitch shift', 'audio editor', 'pitch changer', 'music tool', 'audio processing'],
+  title: 'Free Online Pitch Changer | Change Pitch Without Changing Speed',
+  description:
+    'PitchChanger.io is a free online pitch changer. Upload MP3, WAV, FLAC, M4A, AAC and instantly change pitch without changing speed. 100% browser-based, no uploads.',
+  keywords: [
+    'free online pitch changer',
+    'change pitch of a song',
+    'pitch shifter',
+    'change pitch without changing speed',
+    'mp3 pitch changer',
+    'transpose music',
+    'audio pitch changer'
+  ],
   openGraph: {
-    title: 'PitchChanger.io',
-    description: 'Free audio pitch shifting tool for musicians and creators',
+    title: 'Free Online Pitch Changer | Change Pitch Without Changing Speed',
+    description:
+      'PitchChanger.io is a free online pitch changer. Upload MP3, WAV, FLAC, M4A, AAC and instantly change pitch without changing speed. 100% browser-based, no uploads.',
     url: 'https://pitchchanger.io',
     siteName: 'PitchChanger.io',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@PitchChangerIO',
+    creator: '@PitchChangerIO',
+    title: 'Free Online Pitch Changer | Change Pitch Without Changing Speed',
+    description:
+      'PitchChanger.io is a free online pitch changer. Upload MP3, WAV, FLAC, M4A, AAC and instantly change pitch without changing speed. 100% browser-based, no uploads.'
   },
 }
 
