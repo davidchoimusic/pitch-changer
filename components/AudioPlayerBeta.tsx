@@ -161,6 +161,33 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
   // Calculate playhead position percentage for CSS
   const playheadPercent = duration > 0 ? (currentTime / duration) * 100 : 0
 
+  // Spacebar to play/pause
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Allow sliders; skip text inputs
+      const target = e.target as HTMLElement
+      if (target instanceof HTMLInputElement) {
+        const blockTypes = ['text', 'search', 'email', 'url', 'tel', 'number', 'password']
+        if (blockTypes.includes(target.type)) return
+      }
+      if (target.tagName === 'TEXTAREA') return
+
+      const isSpace =
+        e.code === 'Space' ||
+        e.key === ' ' ||
+        e.key === 'Spacebar' ||
+        e.keyCode === 32
+
+      if (isSpace && isReady) {
+        e.preventDefault()
+        handlePlayPause()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [isReady, isPlaying, handlePlayPause])
+
   // Stop playback
   const stopPlayback = () => {
     if (playerRef.current) {
@@ -417,15 +444,14 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
             />
             {/* CSS Playhead Overlay (GPU accelerated) */}
             <div
-              className="absolute top-0 bottom-0 w-0.5 bg-orange-400 shadow-lg pointer-events-none transition-transform duration-75 ease-linear"
+              className="absolute top-0 bottom-0 w-0.5 bg-orange-400 shadow-lg pointer-events-none"
               style={{
-                left: 0,
-                transform: `translateX(${playheadPercent}%)`,
+                left: `${playheadPercent}%`,
                 boxShadow: '0 0 10px rgba(251, 146, 60, 0.8)'
               }}
             >
               {/* Time label on playhead */}
-              <div className="absolute -top-6 left-1 bg-orange-500 text-white text-xs px-2 py-0.5 rounded font-mono whitespace-nowrap">
+              <div className="absolute -top-6 -left-8 bg-orange-500 text-white text-xs px-2 py-0.5 rounded font-mono whitespace-nowrap">
                 {formatTime(currentTime)}
               </div>
             </div>
