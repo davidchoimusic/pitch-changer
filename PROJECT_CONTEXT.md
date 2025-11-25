@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR (2025-11-24):** Production is stable on Tone-only (main current ~cb5c096). All core flows work on desktop/mobile; legal pages live; AdSense assets in place; Safari dev caching and Safari private-mode limits documented.
+**TL;DR (2025-11-24):** Production is stable on Tone-only (main current e274548). All core flows work on desktop/mobile; legal pages live; AdSense assets in place; OG/Twitter cards configured; Safari dev caching and Safari private-mode limits documented.
 
 ---
 
@@ -12,7 +12,7 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** ~cb5c096 (Tone-only, SEO/legal pages, AdSense assets; deployed after rate-limit cleared)
+- **Current Commit:** e274548 (Tone-only, SEO/legal pages, AdSense assets, OG/Twitter cards; logo case fix)
 - **Open PRs/Issues:** None critical
 - **Production:** https://pitchchanger.io (Tone-only, stable)
 - **Staging:** N/A (staging-tone-only merged)
@@ -71,7 +71,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 - **Status:** Production live with Tone-only
 - **Production URL:** https://pitchchanger.io
-- **Latest Deploy URL:** https://pitch-changer-71fr6z6rn-davidchoimusics-projects.vercel.app
+- **Latest Deploy URL:** https://pitch-changer-xp763fqgx-davidchoimusics-projects.vercel.app
 - **Vercel Project:** https://vercel.com/davidchoimusics-projects/pitch-changer
 - **Build System:** Webpack (Turbopack disabled via `NEXT_DISABLE_TURBOPACK=1`)
   - **Why:** Turbopack port binding errors in Vercel sandbox
@@ -135,7 +135,6 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 - Safari aggressive caching during rapid development only: may need Cmd+Q to fetch fresh HTML; end users not impacted. Headers set to `no-store, no-cache, must-revalidate` + `Pragma` + `Expires: 0`.
 - Safari private browsing: processing disabled (button disabled + warning); use regular mode. Chrome private still works.
 - Tailwind v4 custom gradients: using inline gradients as a reliable workaround.
-- Vercel rate-limit reminder: if GitHub checks show "rate limited", wait and redeploy later; failed builds may not appear in Vercel logs.
 - Vercel rate-limit reminder: if GitHub checks show "rate limited", wait and redeploy later; failed builds may not appear in Vercel logs.
 
 ### Fixed Issues (Session 2)
@@ -247,6 +246,7 @@ Notes:
 
 ### Vercel Rate Limits
 - If GitHub checks show "rate limited", Vercel may not build or show logs; wait for the limit to clear, then redeploy without cache from the latest commit.
+- Note: Free tier has ~100 deployments/day; rapid testing can hit this limit
 
 ### Spacebar Toggle Not Working (Resolved)
 - Cause: stale closure on handlePlayPause (using state instead of ref)
@@ -278,7 +278,11 @@ Notes:
 - ✅ Added legal pages: /privacy, /contact, /terms, /about; footer links added
 - ✅ AdSense assets added (head script + ads.txt)
 - ✅ Homepage SEO copy redesign and spacing fixes
-- ⚠️ Rate-limit incident: commits c48ecea/f7672f7/42b9897 were rate-limited and didn’t deploy; later commit cb5c096 succeeded once limit cleared
+- ✅ SEO metadata optimized: better title/description with target keywords ("free online pitch changer", "change pitch without changing speed")
+- ✅ OG/Twitter cards: Added social media preview metadata for sharing
+- ✅ Logo image: Added public/pitchchanger.png for social sharing (1024x1024, 1.1MB)
+- ✅ Fixed case sensitivity: Aligned filename and metadata to lowercase (pitchchanger.png)
+- ⚠️ Rate-limit incident: commits c48ecea/f7672f7/42b9897 were rate-limited and didn't deploy; later commit cb5c096 succeeded once limit cleared
 
 ### Earlier Sessions (2025-11-22)
 - Safari unlock pattern, memory leak fixes, AudioContext cleanup, AbortController for decode, error banners, inline gradients, branding/spacing improvements, additional format support (FLAC/M4A/AAC), Webpack build fix via env var.
@@ -300,12 +304,13 @@ Notes:
 
 ## Next Steps
 
-1. **Apply for Google AdSense** (site stable)
-2. **Enable Vercel Analytics**
-3. **Add FAQ/SEO content**; run Lighthouse audit
-4. **Broaden device testing** (iPad, Android tablets)
-5. **Monitor first-week traffic and gather feedback**
-6. **Consider versioned query on /** if Safari dev caching recurs
+1. **Monitor AdSense approval** (application submitted, status: "Getting ready")
+2. **Set up CMP** (Consent Management Platform for GDPR - pending from AdSense dashboard)
+3. **Enable Vercel Analytics**
+4. **Run Lighthouse audit** (SEO/performance optimization)
+5. **Broaden device testing** (iPad, Android tablets)
+6. **Monitor first-week traffic and gather feedback**
+7. **Replace ad placeholders** with real AdSense units once approved
 
 ---
 
