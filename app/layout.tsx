@@ -46,8 +46,8 @@ export default function RootLayout({
                 <p>&copy; 2025 PitchChanger.io - Free Audio Pitch Shifting Tool</p>
                 <div className="mt-2 space-x-4">
                   <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                  <Link href="/terms" className="hover:text-white transition-colors">Terms of Condition</Link>
                   <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
-                  <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
                   <Link href="/about" className="hover:text-white transition-colors">About</Link>
                 </div>
               </div>
