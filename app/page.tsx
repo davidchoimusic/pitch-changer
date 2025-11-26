@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Script from 'next/script'
 import Link from 'next/link'
 import { FileUpload } from '@/components/FileUpload'
 import { AudioPlayerBeta } from '@/components/AudioPlayerBeta'
@@ -32,8 +33,47 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12">
-      {/* Nav */}
+    <>
+      {/* FAQ Schema for Google Rich Results */}
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'Does this change the pitch without changing speed?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes. PitchChanger.io lets you change pitch without tempo change (preserve duration).'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: 'Is it really online and free?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: "Yes. It's a free online pitch changer that works directly in your browser with real-time preview."
+                }
+              },
+              {
+                '@type': 'Question',
+                name: 'Are my files private?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '100%. This audio pitch changer processes everything locally — nothing is uploaded.'
+                }
+              }
+            ]
+          })
+        }}
+      />
+
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        {/* Nav */}
       <header className="w-full mb-8 sticky top-0 z-20 bg-bg-page/90 backdrop-blur border-b border-divider">
         <div className="flex items-center py-3">
           <span
@@ -224,5 +264,6 @@ export default function Home() {
         </div>
       )}
     </div>
+    </>
   )
 }
