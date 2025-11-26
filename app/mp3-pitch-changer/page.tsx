@@ -7,6 +7,21 @@ export const metadata = {
   alternates: {
     canonical: 'https://pitchchanger.io/mp3-pitch-changer',
   },
+  openGraph: {
+    title: 'Free Online MP3 Pitch Changer',
+    description: 'Change the pitch of any MP3 file online without changing speed. Free, browser-based MP3 pitch changer for vocals, instruments, karaoke.',
+    url: 'https://pitchchanger.io/mp3-pitch-changer',
+    siteName: 'Pitch Changer',
+    type: 'website',
+    images: [
+      {
+        url: 'https://pitchchanger.io/pitchchanger.png',
+        width: 1024,
+        height: 1024,
+        alt: 'MP3 Pitch Changer Tool',
+      },
+    ],
+  },
 }
 
 export default function Mp3PitchChangerPage() {

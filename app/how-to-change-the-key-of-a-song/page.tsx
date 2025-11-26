@@ -7,6 +7,21 @@ export const metadata = {
   alternates: {
     canonical: 'https://pitchchanger.io/how-to-change-the-key-of-a-song',
   },
+  openGraph: {
+    title: 'How to Change the Key of a Song (Free & Easy)',
+    description: 'Learn the fastest and easiest way to transpose music online for free. Perfect for singers and musicians.',
+    url: 'https://pitchchanger.io/how-to-change-the-key-of-a-song',
+    siteName: 'Pitch Changer',
+    type: 'article',
+    images: [
+      {
+        url: 'https://pitchchanger.io/pitchchanger.png',
+        width: 1024,
+        height: 1024,
+        alt: 'How to Change Song Key Guide',
+      },
+    ],
+  },
 }
 
 export default function HowToChangeKeyPage() {

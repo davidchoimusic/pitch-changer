@@ -7,6 +7,21 @@ export const metadata = {
   alternates: {
     canonical: 'https://pitchchanger.io/change-pitch-vs-change-speed',
   },
+  openGraph: {
+    title: 'Change Pitch vs Change Speed — What\'s the Difference?',
+    description: 'A simple explanation of pitch shifting vs tempo changing. Learn the difference between changing pitch and changing speed for audio files.',
+    url: 'https://pitchchanger.io/change-pitch-vs-change-speed',
+    siteName: 'Pitch Changer',
+    type: 'article',
+    images: [
+      {
+        url: 'https://pitchchanger.io/pitchchanger.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Pitch vs Speed Explanation',
+      },
+    ],
+  },
 }
 
 export default function PitchVsSpeedPage() {

@@ -7,6 +7,21 @@ export const metadata = {
   alternates: {
     canonical: 'https://pitchchanger.io/how-to-slow-down-audio',
   },
+  openGraph: {
+    title: 'How to Slow Down Audio (Works on Any File)',
+    description: 'Learn how to slow down a song, voice recording, or podcast without losing pitch. Step-by-step guide with examples.',
+    url: 'https://pitchchanger.io/how-to-slow-down-audio',
+    siteName: 'Pitch Changer',
+    type: 'article',
+    images: [
+      {
+        url: 'https://pitchchanger.io/pitchchanger.png',
+        width: 1024,
+        height: 1024,
+        alt: 'How to Slow Down Audio Guide',
+      },
+    ],
+  },
 }
 
 export default function HowToSlowDownAudioPage() {

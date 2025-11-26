@@ -7,6 +7,21 @@ export const metadata = {
   alternates: {
     canonical: 'https://pitchchanger.io/slow-down-audio',
   },
+  openGraph: {
+    title: 'Slow Down Audio Online (Free Tool)',
+    description: 'Slow down any song, speech, or recording without changing pitch. Perfect for musicians, transcription, and language study.',
+    url: 'https://pitchchanger.io/slow-down-audio',
+    siteName: 'Pitch Changer',
+    type: 'website',
+    images: [
+      {
+        url: 'https://pitchchanger.io/pitchchanger.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Slow Down Audio Tool',
+      },
+    ],
+  },
 }
 
 export default function SlowDownAudioPage() {

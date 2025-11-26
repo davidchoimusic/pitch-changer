@@ -7,6 +7,21 @@ export const metadata = {
   alternates: {
     canonical: 'https://pitchchanger.io/audio-speed-changer',
   },
+  openGraph: {
+    title: 'Free Online Audio Speed Changer | Speed Up or Slow Down Audio',
+    description: 'Change audio speed online — slow down or speed up any song or recording without changing pitch. Free, fast, and private.',
+    url: 'https://pitchchanger.io/audio-speed-changer',
+    siteName: 'Pitch Changer',
+    type: 'website',
+    images: [
+      {
+        url: 'https://pitchchanger.io/pitchchanger.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Audio Speed Changer Tool',
+      },
+    ],
+  },
 }
 
 export default function AudioSpeedChangerPage() {

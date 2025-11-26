@@ -7,6 +7,21 @@ export const metadata = {
   alternates: {
     canonical: 'https://pitchchanger.io/speed-up-audio',
   },
+  openGraph: {
+    title: 'Speed Up Audio Online (Free Tool)',
+    description: 'Increase the speed of any song or recording without changing pitch. Free online audio speed-up tool for workouts, dance practice, studying.',
+    url: 'https://pitchchanger.io/speed-up-audio',
+    siteName: 'Pitch Changer',
+    type: 'website',
+    images: [
+      {
+        url: 'https://pitchchanger.io/pitchchanger.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Speed Up Audio Tool',
+      },
+    ],
+  },
 }
 
 export default function SpeedUpAudioPage() {

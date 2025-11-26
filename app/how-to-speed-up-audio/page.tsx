@@ -7,6 +7,21 @@ export const metadata = {
   alternates: {
     canonical: 'https://pitchchanger.io/how-to-speed-up-audio',
   },
+  openGraph: {
+    title: 'How to Speed Up Audio Online | Free Step-by-Step Guide',
+    description: 'Learn how to increase playback speed without affecting pitch. Great for studying, editing, or workouts.',
+    url: 'https://pitchchanger.io/how-to-speed-up-audio',
+    siteName: 'Pitch Changer',
+    type: 'article',
+    images: [
+      {
+        url: 'https://pitchchanger.io/pitchchanger.png',
+        width: 1024,
+        height: 1024,
+        alt: 'How to Speed Up Audio Guide',
+      },
+    ],
+  },
 }
 
 export default function HowToSpeedUpAudioPage() {
