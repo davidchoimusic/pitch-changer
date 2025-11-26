@@ -6,10 +6,24 @@ import { AudioPlayerBeta } from '@/components/AudioPlayerBeta'
 
 export default function BetaPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' })
+    const id = setTimeout(() => window.scrollTo({ top: 0, behavior: 'auto' }), 50)
+    return () => clearTimeout(id)
+  }, [])
+
+  // Disable browser scroll restoration
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      const prev = window.history.scrollRestoration
+      window.history.scrollRestoration = 'manual'
+      return () => {
+        window.history.scrollRestoration = prev
+      }
+    }
   }, [])
 
   return (
@@ -30,35 +44,146 @@ export default function BetaPage() {
       </header>
 
       {!selectedFile ? (
-        <div className="max-w-4xl mx-auto space-y-8 md:space-y-12">
-          {/* Hero */}
-          <div className="text-center space-y-4">
-            <h1
-              className="text-4xl md:text-5xl font-black bg-clip-text text-transparent leading-tight"
-              style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
-            >
-              Beta: Pitch + Speed Control
-            </h1>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Experimental version with independent pitch and speed controls. Built with Tone.js only for simpler, more reliable audio processing.
-            </p>
-            <p className="text-sm text-yellow-400">
-              ⚠️ Beta - Experimental features. Use at your own risk.
+        <div className="max-w-4xl mx-auto space-y-8 md:space-y-16">
+          {/* Hero Section - Production Copy */}
+          <div className="text-center space-y-0">
+            {/* Branding */}
+            <div className="pb-3 md:pb-8">
+              <h1
+                className="text-4xl md:text-5xl font-black bg-clip-text text-transparent leading-tight pb-1"
+                style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
+              >
+                Free Online Pitch Changer
+              </h1>
+              <p
+                className="text-lg md:text-xl font-semibold bg-clip-text text-transparent mt-2"
+                style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
+              >
+                Change Pitch of Any Song or Audio
+              </p>
+
+              {/* Glowing gradient line */}
+              <div className="mt-6 md:mt-8 mb-2 flex justify-center">
+                <div
+                  className="h-1 w-48 rounded-full"
+                  style={{
+                    backgroundImage: 'linear-gradient(to right, transparent, rgb(59 130 246), transparent)',
+                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Tagline */}
+            <div className="space-y-1 mt-0">
+              <div className="text-center max-w-3xl mx-auto text-sm md:text-base leading-relaxed px-4">
+                <p
+                  className="font-semibold bg-clip-text text-transparent"
+                  style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
+                >
+                  PitchChanger.io is a free online pitch changer that lets you instantly change the pitch of a song without changing speed. This audio pitch changer works directly in your browser — no uploads, no installation required.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Upload Section */}
+          <div id="upload">
+            <FileUpload onFileSelect={setSelectedFile} maxSizeMB={250} />
+          </div>
+
+          {/* Supporting Copy */}
+          <div className="text-center max-w-3xl mx-auto text-sm md:text-base text-gray-300 leading-relaxed space-y-2">
+            <p>
+              This free music pitch changer supports MP3, WAV, FLAC, and M4A. Easily transpose songs, shift keys, adjust vocals, or prepare tracks for karaoke, practice, teaching, and remixes — all without altering tempo.
             </p>
           </div>
 
-          {/* Upload */}
-          <FileUpload onFileSelect={setSelectedFile} maxSizeMB={250} />
+          {/* Why Use PitchChanger.io */}
+          <div className="space-y-4">
+            <div className="mt-6 md:mt-8 mb-6 md:mb-8 flex justify-center">
+              <div
+                className="h-1 w-48 rounded-full"
+                style={{
+                  backgroundImage: 'linear-gradient(to right, transparent, rgb(59 130 246), transparent)',
+                  boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
+                }}
+              />
+            </div>
+            <h2 className="text-3xl font-bold text-center mb-6 md:mb-8">Why Use PitchChanger.io?</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="space-y-2 bg-bg-card border border-divider rounded-lg p-5">
+                <h3 className="text-lg font-semibold">Musicians & Vocalists</h3>
+                <p className="text-sm text-gray-400">
+                  Transpose songs, change pitch for practice, adjust keys for your vocal range, or prepare backing tracks.
+                </p>
+              </div>
+              <div className="space-y-2 bg-bg-card border border-divider rounded-lg p-5">
+                <h3 className="text-lg font-semibold">DJs & Producers</h3>
+                <p className="text-sm text-gray-400">
+                  A fast online pitch changer for remixes, edits, and mixing — shift pitch without changing speed.
+                </p>
+              </div>
+              <div className="space-y-2 bg-bg-card border border-divider rounded-lg p-5">
+                <h3 className="text-lg font-semibold">Teachers & Karaoke Users</h3>
+                <p className="text-sm text-gray-400">
+                  Change pitch of a song instantly for lessons, sing-alongs, and rehearsals with real-time preview.
+                </p>
+              </div>
+            </div>
+          </div>
 
-          {/* What's Different */}
-          <div className="bg-bg-card border border-divider rounded-lg p-6 max-w-2xl mx-auto">
-            <h2 className="text-xl font-bold mb-4">What's Different in Beta?</h2>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li>✅ <strong>Independent Pitch & Speed:</strong> Control pitch and tempo separately</li>
-              <li>✅ <strong>Waveform Visualization:</strong> See your audio as you edit</li>
-              <li>✅ <strong>Single Tone.js Engine:</strong> Simpler, cleaner architecture</li>
-              <li>✅ <strong>No Mode Toggle:</strong> Direct control over both parameters</li>
-            </ul>
+          {/* FAQ */}
+          <div className="space-y-4">
+            <div className="mt-6 md:mt-8 mb-6 md:mb-8 flex justify-center">
+              <div
+                className="h-1 w-48 rounded-full"
+                style={{
+                  backgroundImage: 'linear-gradient(to right, transparent, rgb(59 130 246), transparent)',
+                  boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
+                }}
+              />
+            </div>
+            <h2 className="text-3xl font-bold text-center mb-6 md:mb-8">FAQ</h2>
+            <div className="space-y-3 max-w-3xl mx-auto text-left">
+              {[
+                {
+                  q: 'Does this change the pitch without changing speed?',
+                  a: 'Yes. PitchChanger.io lets you change pitch without tempo change (preserve duration).'
+                },
+                {
+                  q: 'Is it really online and free?',
+                  a: "Yes. It's a free online pitch changer that works directly in your browser with real-time preview."
+                },
+                {
+                  q: 'Are my files private?',
+                  a: '100%. This audio pitch changer processes everything locally — nothing is uploaded.'
+                }
+              ].map((item, idx) => {
+                const isOpen = openFaq === idx
+                return (
+                  <div
+                    key={item.q}
+                    className="rounded-lg bg-bg-card border border-divider transition-colors"
+                  >
+                    <button
+                      className="w-full px-4 py-3 flex items-center justify-between text-left"
+                      onClick={() => setOpenFaq(isOpen ? null : idx)}
+                      aria-expanded={isOpen}
+                      aria-controls={`faq-${idx}`}
+                    >
+                      <span className="text-lg md:text-lg font-semibold text-white">{item.q}</span>
+                      <span className="text-accent text-xl">{isOpen ? '−' : '+'}</span>
+                    </button>
+                    {isOpen && (
+                      <div id={`faq-${idx}`} className="px-4 pb-4 text-sm text-gray-400">
+                        {item.a}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
       ) : (

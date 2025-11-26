@@ -24,6 +24,8 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [processProgress, setProcessProgress] = useState(0)
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null)
+  const [isPrivateMode, setIsPrivateMode] = useState(false)
+  const [processError, setProcessError] = useState<string | null>(null)
 
   // Refs - SIMPLIFIED: Only Tone.js, no dual systems
   const playerRef = useRef<Tone.Player | null>(null)
@@ -33,6 +35,8 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
   const playStartTimeRef = useRef<number>(0)
   const playStartOffsetRef = useRef<number>(0)
   const waveformCanvasRef = useRef<HTMLCanvasElement | null>(null)
+  const downloadSectionRef = useRef<HTMLDivElement | null>(null)
+  const processTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   // Refs for spacebar handler
   const isReadyRef = useRef(isReady)
   const handlePlayPauseRef = useRef<(() => void) | null>(null)
@@ -165,6 +169,27 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
   useEffect(() => {
     isReadyRef.current = isReady
   }, [isReady])
+
+  // Detect private mode (from production)
+  useEffect(() => {
+    let cancelled = false
+    const detectPrivate = async () => {
+      try {
+        if (navigator.storage?.estimate) {
+          const est = await navigator.storage.estimate()
+          if (!cancelled && est.quota && est.quota < 120 * 1024 * 1024) {
+            setIsPrivateMode(true)
+          }
+        }
+      } catch (e) {
+        // Ignore detection errors
+      }
+    }
+    detectPrivate()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // Calculate playhead position percentage for CSS
   const playheadPercent = duration > 0 ? (currentTime / duration) * 100 : 0
@@ -355,10 +380,18 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
   const handleStartProcessing = async () => {
     if (!audioBufferRef.current) return
 
+    if (isPrivateMode) {
+      setProcessError('Processing may not work in private browsing. Please use a regular window.')
+      setIsProcessing(false)
+      setProcessProgress(0)
+      return
+    }
+
     stopPlayback()
     setIsProcessing(true)
     setProcessProgress(0)
     setProcessedBlob(null)
+    setProcessError(null)
 
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'processing_started_beta', {
@@ -366,6 +399,15 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
         speed_value: speedValue,
       })
     }
+
+    // Add timeout guard for slower devices
+    if (processTimeoutRef.current) {
+      clearTimeout(processTimeoutRef.current)
+    }
+    processTimeoutRef.current = setTimeout(() => {
+      setIsProcessing(false)
+      setProcessError('Processing timed out on this device. Try a smaller file or use desktop.')
+    }, 45000)
 
     try {
       // Use Tone.js for export
@@ -375,13 +417,28 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
         (progress) => setProcessProgress(progress)
       )
 
+      if (processTimeoutRef.current) {
+        clearTimeout(processTimeoutRef.current)
+        processTimeoutRef.current = null
+      }
+
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
       setProcessProgress(100)
-      setIsProcessing(false) // FIX: Allow UI to show download button
+      setIsProcessing(false)
+
+      // Scroll to download section
+      setTimeout(() => {
+        downloadSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 300)
     } catch (error) {
       console.error('Processing error:', error)
+      if (processTimeoutRef.current) {
+        clearTimeout(processTimeoutRef.current)
+        processTimeoutRef.current = null
+      }
       setIsProcessing(false)
+      setProcessError('Processing failed. Please try again or use a smaller file.')
     }
   }
 
@@ -392,8 +449,18 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     const a = document.createElement('a')
     a.href = url
 
+    // Generate filename based on pitch direction (production format)
     const baseName = file.name.replace(/\.[^/.]+$/, '')
-    a.download = `${baseName} - PITCH ${pitchValue > 0 ? '+' : ''}${pitchValue} - PitchChanger.io.wav`
+    let suffix = ''
+    if (pitchValue > 0) {
+      suffix = ' - SPED UP - PitchChanger.io'
+    } else if (pitchValue < 0) {
+      suffix = ' - SLOWED - PitchChanger.io'
+    } else {
+      suffix = ' - PitchChanger.io'
+    }
+
+    a.download = `${baseName}${suffix}.wav`
     a.click()
     URL.revokeObjectURL(url)
 
@@ -591,49 +658,125 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
           </div>
         </div>
 
-        {/* Export */}
+        {/* Process Button / Progress - Production Flow */}
         <div className="pt-4 border-t border-divider">
-          {!isProcessing && !processedBlob ? (
-            <Button
-              onClick={handleStartProcessing}
-              disabled={!isReady || (pitchValue === 0 && speedValue === 1.0)}
-              variant="download"
-              size="md"
-              className="w-full"
-            >
-              ⬇ Process & Download (WAV)
-            </Button>
-          ) : isProcessing ? (
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span>Processing...</span>
-                <span className="text-accent font-semibold">{processProgress.toFixed(0)}%</span>
-              </div>
-              <div className="w-full bg-gray-700 rounded-full h-3">
-                <div
-                  className="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full transition-all"
-                  style={{ width: `${processProgress}%` }}
-                />
-              </div>
+          {processError && (
+            <div className="mb-4 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-300">
+              {processError}
             </div>
-          ) : processedBlob ? (
-            <div className="space-y-4">
-              <div className="text-center">
-                <div className="text-4xl mb-2">✅</div>
-                <h3 className="text-xl font-bold text-green-400">Ready to Download!</h3>
+          )}
+          {!isProcessing && !processedBlob ? (
+            <>
+              <div className="flex justify-center">
+                <Button
+                  onClick={handleStartProcessing}
+                  disabled={!audioBufferRef.current || !isReady || (pitchValue === 0 && speedValue === 1.0) || isPrivateMode}
+                  variant="download"
+                  size="md"
+                  className="px-12"
+                >
+                  ⬇ Process Audio (WAV)
+                </Button>
               </div>
-              <Button
-                onClick={handleDownload}
-                variant="download"
-                size="md"
-                className="w-full"
-              >
-                ⬇ Download Your Audio
-              </Button>
+              {isPrivateMode && (
+                <p className="text-xs text-red-300 text-center font-semibold mt-2">
+                  ⚠️ Processing may not work in private browsing mode
+                </p>
+              )}
+            </>
+          ) : isProcessing ? (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-white font-medium">Processing your audio...</span>
+                  <span className="text-accent font-semibold">{processProgress.toFixed(0)}%</span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-3">
+                  <div
+                    className="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full transition-all duration-300"
+                    style={{ width: `${processProgress}%` }}
+                  />
+                </div>
+              </div>
+
+              {processProgress < 100 ? (
+                <div className="text-center space-y-3 py-4">
+                  <p className="text-2xl font-bold text-white">⏳ While you wait...</p>
+                  <p className="text-lg text-gray-300">Check out these ads below.</p>
+                  <div className="text-4xl animate-bounce">⬇️</div>
+                  <p className="text-sm text-gray-400">The ads keep this tool free for you</p>
+                  <p className="text-xs text-red-300 font-semibold">⚠️ Processing may not work in private browsing. Use a regular window.</p>
+                </div>
+              ) : (
+                <div className="text-center space-y-3 py-4">
+                  <div className="text-5xl">✅</div>
+                  <p className="text-3xl font-bold text-green-400">
+                    SUCCESS!
+                  </p>
+                  <p className="text-xl font-semibold text-white">
+                    YOUR FILE IS READY!
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Scroll down to download
+                  </p>
+                  <div className="text-3xl animate-bounce">
+                    ⬇️
+                  </div>
+                </div>
+              )}
             </div>
           ) : null}
+
+          {(pitchValue === 0 && speedValue === 1.0) && !isProcessing && (
+            <p className="text-xs text-white text-center mt-2">Adjust pitch or speed to enable processing</p>
+          )}
         </div>
       </div>
+
+      {/* Ad Space 1 - Production Flow */}
+      {isProcessing && (
+        <>
+          <div className="bg-bg-card border border-divider rounded-lg p-8">
+            <div className="h-[250px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
+              <p className="text-gray-500">Ad Space - Sponsor 1 (728x250)</p>
+            </div>
+          </div>
+
+          {/* Ad Space 2 */}
+          <div className="bg-bg-card border border-divider rounded-lg p-8">
+            <div className="h-[250px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
+              <p className="text-gray-500">Ad Space - Sponsor 2 (728x250)</p>
+            </div>
+          </div>
+
+          {/* Download Ready Section */}
+          {processedBlob && (
+            <div ref={downloadSectionRef} className="bg-green-500/10 border-2 border-green-500/50 rounded-lg p-8 space-y-4">
+              <div className="text-center space-y-3">
+                <div className="text-5xl">✅</div>
+                <h3 className="text-2xl font-bold text-green-400">Your Audio is Ready!</h3>
+                <p className="text-gray-300">
+                  Pitch shifted by <span className="text-accent font-semibold">{pitchValue > 0 ? '+' : ''}{pitchValue} semitones</span>
+                  {speedValue !== 1.0 && <span> • Speed adjusted to <span className="text-green-400 font-semibold">{speedValue.toFixed(2)}x</span></span>}
+                </p>
+              </div>
+              <div className="flex justify-center">
+                <Button
+                  onClick={handleDownload}
+                  variant="download"
+                  size="md"
+                  className="px-12"
+                >
+                  ⬇ Download Your Processed Audio
+                </Button>
+              </div>
+              <p className="text-center text-sm font-semibold text-pink-400 drop-shadow-[0_0_12px_rgba(236,72,153,0.8)] animate-[pulse_0.4s_ease-in-out_infinite]">
+                Made with ❤️ by PitchChanger.io
+              </p>
+            </div>
+          )}
+        </>
+      )}
     </div>
   )
 }
