@@ -775,12 +775,10 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
         </>
       )}
 
-      {/* Upload Another File - After Download Section */}
-      {processedBlob && (
-        <Button onClick={onBack} variant="ghost" size="sm">
-          ← Upload Different File
-        </Button>
-      )}
+      {/* Upload Another File - Always Visible at Bottom */}
+      <Button onClick={onBack} variant="ghost" size="sm">
+        ← Upload Different File
+      </Button>
     </div>
   )
 }
