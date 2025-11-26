@@ -764,7 +764,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
                   size="md"
                   className="px-12"
                 >
-                  ⬇ Download Your Processed Audio
+                  Download
                 </Button>
               </div>
               <p className="text-center text-sm font-semibold text-pink-400 drop-shadow-[0_0_12px_rgba(236,72,153,0.8)] animate-[pulse_0.4s_ease-in-out_infinite]">
