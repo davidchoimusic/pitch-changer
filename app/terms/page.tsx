@@ -3,6 +3,9 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Terms of Service - PitchChanger.io',
   description: 'Terms of Service for PitchChanger.io',
+  alternates: {
+    canonical: 'https://pitchchanger.io/terms',
+  },
 }
 
 export default function TermsPage() {

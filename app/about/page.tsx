@@ -3,6 +3,9 @@ import Link from 'next/link'
 export const metadata = {
   title: 'About - PitchChanger.io',
   description: 'About PitchChanger.io',
+  alternates: {
+    canonical: 'https://pitchchanger.io/about',
+  },
 }
 
 export default function AboutPage() {

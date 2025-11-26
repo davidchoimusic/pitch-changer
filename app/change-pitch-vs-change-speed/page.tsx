@@ -4,6 +4,9 @@ export const metadata = {
   title: 'Change Pitch vs Change Speed — What\'s the Difference?',
   description: 'A simple explanation of pitch shifting vs tempo changing. Learn the difference between changing pitch and changing speed for audio files.',
   keywords: ['change pitch vs tempo', 'what is pitch shifting', 'pitch vs speed audio'],
+  alternates: {
+    canonical: 'https://pitchchanger.io/change-pitch-vs-change-speed',
+  },
 }
 
 export default function PitchVsSpeedPage() {

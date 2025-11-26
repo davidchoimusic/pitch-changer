@@ -3,6 +3,9 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Privacy Policy - PitchChanger.io',
   description: 'Privacy Policy for PitchChanger.io',
+  alternates: {
+    canonical: 'https://pitchchanger.io/privacy',
+  },
 }
 
 export default function PrivacyPage() {

@@ -4,6 +4,9 @@ export const metadata = {
   title: 'How to Change the Key of a Song (Free & Easy) | Transpose Music Online',
   description: 'Need a song in a different key? Learn the fastest and easiest way to transpose music online for free. Perfect for singers and musicians.',
   keywords: ['change key of song', 'transpose music online', 'how to change song key', 'transpose song for vocals'],
+  alternates: {
+    canonical: 'https://pitchchanger.io/how-to-change-the-key-of-a-song',
+  },
 }
 
 export default function HowToChangeKeyPage() {

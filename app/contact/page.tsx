@@ -3,6 +3,9 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Contact - PitchChanger.io',
   description: 'Contact PitchChanger.io',
+  alternates: {
+    canonical: 'https://pitchchanger.io/contact',
+  },
 }
 
 export default function ContactPage() {

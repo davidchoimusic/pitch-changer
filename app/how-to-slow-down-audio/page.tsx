@@ -4,6 +4,9 @@ export const metadata = {
   title: 'How to Slow Down Audio (Works on Any File) | Free Guide',
   description: 'Learn how to slow down a song, voice recording, or podcast without losing pitch. Step-by-step guide with examples.',
   keywords: ['how to slow down audio', 'slow down mp3', 'slow down song tutorial'],
+  alternates: {
+    canonical: 'https://pitchchanger.io/how-to-slow-down-audio',
+  },
 }
 
 export default function HowToSlowDownAudioPage() {

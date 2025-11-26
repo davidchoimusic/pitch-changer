@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     'transpose music',
     'audio pitch changer'
   ],
+  alternates: {
+    canonical: 'https://pitchchanger.io',
+  },
   openGraph: {
     title: 'Pitch Changer - Change the Pitch of Any Song (Free Tool)',
     description:

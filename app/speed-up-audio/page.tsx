@@ -4,6 +4,9 @@ export const metadata = {
   title: 'Speed Up Audio Online (Free Tool) | Make Audio Faster Without Pitch Change',
   description: 'Increase the speed of any song or recording without changing pitch. Free online audio speed-up tool for workouts, dance practice, studying, and editing.',
   keywords: ['speed up audio without changing pitch', 'speed up song online', 'make audio faster online'],
+  alternates: {
+    canonical: 'https://pitchchanger.io/speed-up-audio',
+  },
 }
 
 export default function SpeedUpAudioPage() {

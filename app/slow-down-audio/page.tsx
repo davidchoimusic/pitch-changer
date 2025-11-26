@@ -4,6 +4,9 @@ export const metadata = {
   title: 'Slow Down Audio Online (Free Tool) | Slow Down Songs Without Pitch Change',
   description: 'Slow down any song, speech, or recording without changing pitch. Perfect for musicians, transcription, and language study. Free online audio slow-down tool.',
   keywords: ['slow down audio without changing pitch', 'slow down song online', 'slow down music for practice'],
+  alternates: {
+    canonical: 'https://pitchchanger.io/slow-down-audio',
+  },
 }
 
 export default function SlowDownAudioPage() {

@@ -3,6 +3,9 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Resources & Guides | PitchChanger.io',
   description: 'Free guides and tools for pitch shifting, speed changing, and audio editing. Learn how to change pitch, transpose music, and adjust audio speed.',
+  alternates: {
+    canonical: 'https://pitchchanger.io/resources',
+  },
 }
 
 export default function ResourcesPage() {

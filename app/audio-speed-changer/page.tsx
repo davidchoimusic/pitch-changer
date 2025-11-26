@@ -4,6 +4,9 @@ export const metadata = {
   title: 'Free Online Audio Speed Changer | Speed Up or Slow Down Audio',
   description: 'Change audio speed online — slow down or speed up any song or recording without changing pitch. Free, fast, and private. Works with MP3, WAV, FLAC, M4A, AAC.',
   keywords: ['audio speed changer', 'change audio speed online', 'speed up audio online', 'slow down audio online'],
+  alternates: {
+    canonical: 'https://pitchchanger.io/audio-speed-changer',
+  },
 }
 
 export default function AudioSpeedChangerPage() {

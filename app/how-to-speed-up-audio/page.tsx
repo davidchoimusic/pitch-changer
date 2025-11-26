@@ -4,6 +4,9 @@ export const metadata = {
   title: 'How to Speed Up Audio Online | Free Step-by-Step Guide',
   description: 'Learn how to increase playback speed without affecting pitch. Great for studying, editing, or workouts. Simple tutorial with examples.',
   keywords: ['how to speed up audio', 'speed up mp3', 'make audio faster tutorial'],
+  alternates: {
+    canonical: 'https://pitchchanger.io/how-to-speed-up-audio',
+  },
 }
 
 export default function HowToSpeedUpAudioPage() {

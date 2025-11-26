@@ -4,6 +4,9 @@ export const metadata = {
   title: 'Free Online MP3 Pitch Changer | Change MP3 Pitch Without Speed Change',
   description: 'Change the pitch of any MP3 file online without changing speed. Free, browser-based MP3 pitch changer for vocals, instruments, karaoke, and more.',
   keywords: ['mp3 pitch changer', 'change pitch mp3', 'audio pitch changer mp3', 'mp3 pitch shifter'],
+  alternates: {
+    canonical: 'https://pitchchanger.io/mp3-pitch-changer',
+  },
 }
 
 export default function Mp3PitchChangerPage() {
