@@ -427,10 +427,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
       setProcessProgress(100)
       setIsProcessing(false)
 
-      // Scroll to download section
-      setTimeout(() => {
-        downloadSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 300)
+      // Don't auto-scroll - let users manually scroll to see ads
     } catch (error) {
       console.error('Processing error:', error)
       if (processTimeoutRef.current) {
