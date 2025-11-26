@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Script from 'next/script'
 import Link from 'next/link'
+import Image from 'next/image'
 import { FileUpload } from '@/components/FileUpload'
 import { AudioPlayerBeta } from '@/components/AudioPlayerBeta'
 import { Button } from '@/components/ui/Button'
@@ -75,7 +76,14 @@ export default function Home() {
       <div className="container mx-auto px-4 py-8 md:py-12">
         {/* Nav */}
       <header className="w-full mb-8 sticky top-0 z-20 bg-bg-page/90 backdrop-blur border-b border-divider">
-        <div className="flex items-center py-3">
+        <div className="flex items-center gap-3 py-3">
+          <Image
+            src="/pitchchanger.png"
+            alt="Pitch Changer Logo"
+            width={40}
+            height={40}
+            className="rounded-lg"
+          />
           <span
             className="text-xl md:text-2xl font-black bg-clip-text text-transparent"
             style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
