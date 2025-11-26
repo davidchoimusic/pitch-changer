@@ -770,15 +770,16 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
               <p className="text-center text-sm font-semibold text-pink-400 drop-shadow-[0_0_12px_rgba(236,72,153,0.8)] animate-[pulse_0.4s_ease-in-out_infinite]">
                 Made with ❤️ by PitchChanger.io
               </p>
-              {/* Upload Another File Button */}
-              <div className="pt-4 border-t border-divider/50">
-                <Button onClick={onBack} variant="ghost" size="sm" className="w-full">
-                  ← Upload Different File
-                </Button>
-              </div>
             </div>
           )}
         </>
+      )}
+
+      {/* Upload Another File - After Download Section */}
+      {processedBlob && (
+        <Button onClick={onBack} variant="ghost" size="sm">
+          ← Upload Different File
+        </Button>
       )}
     </div>
   )
