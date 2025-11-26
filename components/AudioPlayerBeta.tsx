@@ -734,7 +734,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
       </div>
 
       {/* Ad Space 1 - Production Flow */}
-      {isProcessing && (
+      {(isProcessing || processedBlob) && (
         <>
           <div className="bg-bg-card border border-divider rounded-lg p-8">
             <div className="h-[250px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
