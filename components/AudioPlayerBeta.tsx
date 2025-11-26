@@ -684,7 +684,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
                 </p>
               )}
             </>
-          ) : isProcessing ? (
+          ) : (isProcessing || processedBlob) ? (
             <div className="space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
