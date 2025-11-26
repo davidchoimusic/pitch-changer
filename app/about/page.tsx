@@ -15,8 +15,7 @@ export default function AboutPage() {
 
         <p>
           PitchChanger.io is a free, browser-based pitch changer built for musicians, singers, DJs, teachers, and
-          creators. It runs entirely in your browser using the Web Audio API and Tone.js, so your audio never leaves
-          your device.
+          creators. It runs entirely in your browser, so your audio never leaves your device.
         </p>
 
         <p>
