@@ -105,6 +105,29 @@ export default function RootLayout({
             }),
           }}
         />
+
+        {/* Organization Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Pitch Changer',
+              alternateName: 'PitchChanger.io',
+              url: 'https://pitchchanger.io',
+              logo: 'https://pitchchanger.io/pitchchanger.png',
+              contactPoint: {
+                '@type': 'ContactPoint',
+                email: 'contact@pitchchanger.io',
+                contactType: 'customer support'
+              },
+              sameAs: [
+                'https://twitter.com/PitchChangerIO'
+              ]
+            }),
+          }}
+        />
       </head>
       <body className="font-sans overflow-x-hidden">
         <div className="min-h-screen flex">
