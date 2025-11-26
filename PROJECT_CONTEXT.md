@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR (2025-11-24):** Production is stable on Tone-only (main current e274548). All core flows work on desktop/mobile; legal pages live; AdSense assets in place; OG/Twitter cards configured; Safari dev caching and Safari private-mode limits documented.
+**TL;DR (2025-11-25):** Production stable (main: b759b13); Beta live at /beta with pitch+speed controls, waveform scrubber; AdSense submitted (Getting ready), GA4 tracking active; all browsers/devices working | 2025-11-25 11:30 AM
 
 ---
 
@@ -12,9 +12,10 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** e274548 (Tone-only, SEO/legal pages, AdSense assets, OG/Twitter cards; logo case fix)
+- **Current Commit:** b759b13 (Beta live at /beta, GA4 tracking, AdSense submitted, slider visibility fixes)
 - **Open PRs/Issues:** None critical
 - **Production:** https://pitchchanger.io (Tone-only, stable)
+- **Beta:** https://pitchchanger.io/beta (experimental pitch+speed controls)
 - **Staging:** N/A (staging-tone-only merged)
 
 ---
@@ -90,8 +91,8 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 - `NEXT_DISABLE_TURBOPACK=1` - Forces Webpack builds (set in Vercel)
 
 ### External Services
-- **Google AdSense:** Pending approval ("Getting ready"); auto-ads/auto-optimize enabled; script in layout; ads.txt published (`google.com, pub-2950955479321117, DIRECT, f08c47fec0942fa0`)
-- **Analytics:** Not yet configured
+- **Google AdSense:** Pending approval ("Getting ready"); auto-ads/auto-optimize enabled; script in layout; ads.txt published (`google.com, pub-2950955479321117, DIRECT, f08c47fec0942fa0`); ads.txt status: Authorized
+- **Google Analytics 4:** Configured (G-RB68Q82Z1B); tracking page views, file uploads, processing, downloads, pitch/speed adjustments; Privacy Policy updated
 
 ### DNS/Domain
 - **Domain:** pitchchanger.io (LIVE)
@@ -114,8 +115,20 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 ✅ Pitch changes in real time  
 ✅ WAV export using Tone.js (matches preview)  
 ✅ Client-side only (zero uploads, zero server costs)  
-✅ Legal pages live: /privacy, /contact, /terms, /about  
-✅ AdSense assets in place (script + ads.txt); footer links added  
+✅ Legal pages live: /privacy, /contact, /terms, /about
+✅ AdSense assets in place (script + ads.txt); footer links added
+✅ GA4 tracking: file uploads, processing, downloads, pitch adjustments
+✅ OG/Twitter cards: landscape image for social sharing
+
+### Beta Features (/beta - Experimental)
+✅ Independent pitch slider (-12 to +12 semitones)
+✅ Independent speed slider (0.5x to 1.5x, 1.0x centered)
+✅ Waveform visualization (clickable scrubber)
+✅ CSS overlay playhead (smooth 60fps, no lag)
+✅ Single Tone.js architecture (no dual-mode complexity)
+✅ Inline gradient sliders (visible all browsers)
+✅ Spacebar support, seek, export
+⚠️ Experimental - may have bugs, use at own risk
 
 ### Working Flows
 1. **Upload → Preview → Adjust → Download:**
@@ -126,6 +139,94 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
    - Click "Process Audio (WAV)" → progress + "scroll to sponsors"
    - "SUCCESS! YOUR FILE IS READY!"
    - Scroll past ads → download with branded filename
+
+---
+
+## REGRESSION RISKS
+
+**⚠️ CRITICAL: Read this before making changes to prevent repeating past mistakes**
+
+### Slider Visibility (Tailwind v4 Pseudo-Elements)
+**What went wrong:** Pitch/speed sliders invisible on desktop Safari/Chrome (happened twice)
+**Why:** Tailwind arbitrary variants on pseudo-elements (`[&::-webkit-slider-runnable-track]:bg-gray-700`) don't compile reliably in production builds
+**Solution used:** Inline `style={{ background: '...' }}` gradients
+**AVOID:** Using Tailwind classes for range input tracks or gradients - ALWAYS use inline styles
+**Files:** Production AudioPlayer.tsx pitch slider (line ~400), Beta sliders (line ~501, ~538)
+**Same root cause as:** Gradient text invisibility (Session 2) - Tailwind v4 custom utilities unreliable
+
+### RAF Performance (Canvas Redraws)
+**What went wrong:** Beta waveform was laggy during playback
+**Why:** `useEffect([currentTime])` triggered full canvas redraw 60 times per second
+**Solution used:** Draw canvas ONCE on load, use CSS div with `transform` for playhead animation
+**AVOID:** Drawing/updating canvas in useEffect that runs every frame
+**Pattern:** Static canvas + CSS/HTML overlay for animated elements (GPU accelerated)
+**Files:** components/AudioPlayerBeta.tsx (line ~97-135)
+
+### Spacebar Stale Closures
+**What went wrong:** Spacebar toggle didn't work (happened in both production and beta)
+**Why:** Function used in useEffect deps before being defined (TypeScript hoisting issue); or function captured in closure with stale state
+**Solution used:** handlePlayPauseRef pattern - ref updated every render, useEffect with empty deps calls ref
+**AVOID:** Putting functions in useEffect dependency array - use ref pattern instead
+**Pattern:**
+```javascript
+const fnRef = useRef(null)
+useEffect(() => { fnRef.current = actualFunction })
+useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
+```
+**Files:** Production AudioPlayer.tsx (line ~108-145), Beta AudioPlayerBeta.tsx (line ~262-291)
+
+### Dual-Mode Architecture Failure (NEVER REPEAT)
+**What went wrong:** Original dual-mode (Tone.js + native Web Audio) caused 8+ hours of cascading bugs over 2 days
+**Why:** Two audio systems (Tone.context + audioContextRef) shared refs, had different lifecycles, 20 interdependent state variables, complex mode switching
+**What we learned:** Tone.js CAN do both modes by itself! (`player.playbackRate` for speed, `PitchShift` for pitch)
+**Solution:** Beta uses ONLY Tone.js for both pitch and speed controls
+**AVOID:** Mixing audio technologies (Tone.js + native Web Audio, or any dual system)
+**AVOID:** "Preserve duration" toggle - confusing UX, use independent pitch/speed sliders instead
+**Pattern:** One player, one context, direct parameter control
+**Files:** components/AudioPlayerBeta.tsx (single Tone.js player for everything)
+**Why this matters:** vocalremover.org works because they picked ONE approach - we over-engineered
+
+---
+
+## EDGE CASES & GOTCHAS
+
+### Vercel Rate Limiting
+- **Discovery:** Deployed 50+ times in one day → hit rate limit (~100 deploys/day on free tier)
+- **Symptom:** GitHub shows red X "Deployment rate limited — retry in 9 minutes", but NO deployment entry in Vercel logs
+- **Why confusing:** Failed rate-limited builds don't create Vercel entries (nothing to check in dashboard)
+- **Fix:** Wait for limit to clear (can take hours or until next day), then redeploy
+- **Check GitHub first:** Red X message shows actual error - don't waste time looking in Vercel
+- **Prevention:** Use staging branch for testing, only deploy to main when ready
+
+### Safari Aggressive Caching (Development Only)
+- **Discovery:** Hard refresh (Cmd+Shift+R) insufficient, Cmd+Q (quit Safari) required to see new code
+- **Happens:** During rapid development (10+ deploys in one session)
+- **Doesn't happen:** For end users visiting stable production
+- **Mitigation:** Added Cache-Control: no-store headers (helps but not 100%)
+- **Dev workaround:** Quit Safari between major changes, or test in private mode
+- **Why:** Safari caches JavaScript chunks very aggressively during active sessions
+
+### Speed Slider UX Expectations
+- **Discovery:** 1.0x wasn't centered on 0.5-2.0 range (mathematical center is 1.25x)
+- **User expectation:** 1.0x = "normal" = should be visually centered
+- **Math reality:** (0.5+2.0)/2 = 1.25x is actual center
+- **Solution:** Changed to 0.5-1.5 range so 1.0x IS centered
+- **Lesson:** User perception > mathematical accuracy for UX
+
+### Safari Private Mode Processing
+- **Discovery:** Safari private mode doesn't just fail - it FREEZES browser during offline rendering
+- **Why:** OfflineAudioContext hits storage quota limits, browser locks up
+- **Chrome private:** Works fine (no strict quotas)
+- **Can't detect:** Browser hides private mode status (heuristic: check storage quota < 120MB)
+- **Fix:** Show warning during processing, block processing in detected private mode
+- **User workaround:** Use regular Safari or disable "Reduce Cross-Site Tracking"
+
+### Tone.Player.immediate() vs Tone.now()
+- **Discovery:** Using `player.immediate()` for timing caused slider position mismatches
+- **Why:** `immediate()` behavior unclear, especially after seek/restart
+- **Better approach:** Calculate time as `Tone.now() - playStartTime + playStartOffset`
+- **Result:** Reliable, predictable timing for slider position
+- **Files:** Both production and beta use Tone.now() approach now
 
 ---
 
@@ -209,18 +310,54 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
    - Glowing gradient line divider (192px, blue glow)
    - File: app/page.tsx:28,35,47
 
+7. **Beta: Single Tone.js for Dual Controls** (2025-11-25)
+   - Decision: Use ONLY Tone.js for both pitch and speed (no native Web Audio)
+   - Why: Previous dual-mode (Tone.js + native) caused 8+ hours of cascading bugs
+   - Implementation: One Tone.Player connected to PitchShift effect; pitch via effect.pitch, speed via player.playbackRate
+   - Result: Clean, simple, no race conditions, ~300 lines vs 450 in production
+   - Lesson learned: Tone.js could do both all along - we over-engineered with dual systems
+   - File: components/AudioPlayerBeta.tsx
+
+8. **Independent Pitch/Speed Sliders** (2025-11-25)
+   - Decision: Remove "preserve duration" toggle, add two independent sliders instead
+   - Why: Simpler UX (users directly control pitch AND speed), matches competitor tools (vocalremover.org)
+   - User benefit: No confusing mode toggle, clear intent, more flexible
+   - Range: Pitch ±12 semitones, Speed 0.5x-1.5x (1.0x centered for UX)
+   - File: components/AudioPlayerBeta.tsx
+
+9. **Waveform as Interactive Scrubber** (2025-11-25)
+   - Decision: Make waveform canvas clickable for seeking (no separate slider)
+   - Why: Professional UX (like DAWs), space-efficient, visually intuitive
+   - Implementation: Static canvas for waveform (drawn once), CSS overlay div for playhead (GPU animated)
+   - Performance: Canvas drawn once on load, CSS transform moves playhead at 60fps with zero lag
+   - File: components/AudioPlayerBeta.tsx (line ~97-182)
+
 ---
 
 ## TODO
 
+### Critical
+- [ ] Monitor AdSense approval (status: Getting ready; awaiting Google review 1-7 days)
+- [ ] Set up CMP (Consent Management Platform) when AdSense approves
+- [ ] Decide: Replace production with Beta OR keep both versions
+
 ### Next
-- [ ] Monitor AdSense approval (status: Getting ready; auto-ads/auto-optimize enabled)
-- [ ] Enable Vercel analytics
-- [ ] Add FAQ/SEO content and run Lighthouse audit
-- [ ] Broaden device testing (iPad, Android tablets)
+- [ ] Test Beta with real users (gather feedback on pitch+speed controls)
+- [ ] Enable Vercel Analytics (1-click in dashboard)
+- [ ] Run Lighthouse audit (SEO/performance check)
+- [ ] Test on iPad and Android tablets
+
+### Completed This Session
+- ✅ Apply for Google AdSense (submitted, "Getting ready")
+- ✅ Install GA4 tracking (G-RB68Q82Z1B with custom events)
+- ✅ Add legal pages (/privacy, /contact, /terms, /about)
+- ✅ Build Beta version (/beta route live)
+- ✅ Fix OG/Twitter cards (landscape 1200x600 image)
 
 ### Later
-- [ ] Monitor first-week traffic and gather feedback
+- [ ] Monitor first-week traffic via GA4
+- [ ] Gather user feedback on Beta vs Production
+- [ ] Consider migrating Beta improvements to Production if successful
 
 ---
 
@@ -256,6 +393,19 @@ Notes:
 - Mobile soft cap: 120MB (blocks larger files on mobile to avoid crashes)
 - Device memory guard: warns on <4GB devices for large files
 
+### Beta Slider Invisible on Desktop (Resolved)
+- **Issue:** Pitch/speed sliders invisible on Safari/Chrome desktop (visible on mobile)
+- **Cause:** Tailwind arbitrary variants on pseudo-elements don't compile in production
+- **Fix:** Use inline `style={{ background: '...' }}` gradients instead of Tailwind classes
+- **File:** components/AudioPlayerBeta.tsx
+
+### Beta Waveform Performance Lag (Resolved)
+- **Issue:** Waveform playback was choppy/laggy
+- **Cause:** useEffect([currentTime]) redrew entire canvas 60 times per second
+- **Fix:** Draw canvas once on load, use CSS div overlay for playhead (GPU accelerated)
+- **Result:** Smooth 60fps with zero canvas redraws
+- **File:** components/AudioPlayerBeta.tsx
+
 ### Common Errors
 - "Please upload MP3, WAV, FLAC, M4A, or AAC file" → Unsupported format (components/FileUpload.tsx)
 - "Large file on low-memory device" → >100MB on <4GB device; try smaller file or desktop (components/FileUpload.tsx)
@@ -284,6 +434,22 @@ Notes:
 - ✅ Fixed case sensitivity: Aligned filename and metadata to lowercase (pitchchanger.png)
 - ⚠️ Rate-limit incident: commits c48ecea/f7672f7/42b9897 were rate-limited and didn't deploy; later commit cb5c096 succeeded once limit cleared
 
+### Session 4 (2025-11-25) - Beta Development & Analytics
+- ✅ **Built Beta version** at /beta with clean architecture (app/beta/page.tsx, components/AudioPlayerBeta.tsx)
+- ✅ **Independent pitch+speed controls** - removed confusing "preserve duration" toggle
+- ✅ **Waveform visualization** with clickable scrubber (canvas + CSS overlay playhead)
+- ✅ **Performance optimized** - CSS overlay for 60fps smooth playhead (no canvas redraws)
+- ✅ **Fixed slider visibility** - inline gradients (Tailwind pseudo-elements unreliable in production)
+- ✅ **Speed slider UX** - Changed range 0.5-1.5x so 1.0x is centered (was 0.5-2.0x with 1.25x center)
+- ✅ **Spacebar support** in Beta (handlePlayPauseRef pattern)
+- ✅ **GA4 tracking installed** (G-RB68Q82Z1B) with custom events (file_uploaded, processing_started, download_completed, pitch_adjusted, speed_adjusted)
+- ✅ **Privacy Policy updated** for GA4 analytics with opt-out link
+- ✅ **Twitter/X card fixed** - added landscape 1200x600 image (was square 1024x1024)
+- ✅ **AdSense application submitted** - ads.txt Authorized, awaiting approval
+- 📚 **Learned:** Tone.js can do both pitch AND speed (player.playbackRate) - dual-mode was unnecessary
+- 📚 **Learned:** Independent sliders > mode toggle for UX clarity
+- 📚 **Learned:** Always check GitHub status checks first when deployments fail
+
 ### Earlier Sessions (2025-11-22)
 - Safari unlock pattern, memory leak fixes, AudioContext cleanup, AbortController for decode, error banners, inline gradients, branding/spacing improvements, additional format support (FLAC/M4A/AAC), Webpack build fix via env var.
 
@@ -304,14 +470,15 @@ Notes:
 
 ## Next Steps
 
-1. **Monitor AdSense approval** (application submitted, status: "Getting ready")
-2. **Set up CMP** (Consent Management Platform for GDPR - pending from AdSense dashboard)
-3. **Enable Vercel Analytics**
-4. **Run Lighthouse audit** (SEO/performance optimization)
-5. **Broaden device testing** (iPad, Android tablets)
-6. **Monitor first-week traffic and gather feedback**
-7. **Replace ad placeholders** with real AdSense units once approved
+1. **Monitor AdSense approval** (application submitted 2025-11-24, status: "Getting ready")
+2. **Set up CMP** (Consent Management Platform) when AdSense approves
+3. **Test Beta with users** - gather feedback on pitch+speed controls vs production
+4. **Decide Beta strategy** - replace production OR keep both versions
+5. **Enable Vercel Analytics** (1-click in dashboard)
+6. **Run Lighthouse audit** (performance/SEO/accessibility)
+7. **Test on tablets** (iPad, Android)
+8. **Monitor GA4 data** (starts flowing in 24-48 hours)
 
 ---
 
-**Last Updated:** 2025-11-24 (Production stable; Tone-only; legal pages live; AdSense assets ready)
+**Last Updated:** 2025-11-25 11:30 AM (Beta live at /beta; GA4 tracking active; AdSense submitted; production + beta both stable)
