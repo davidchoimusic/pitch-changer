@@ -168,6 +168,8 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
 
   // Calculate playhead position percentage for CSS
   const playheadPercent = duration > 0 ? (currentTime / duration) * 100 : 0
+  const pitchFillPercent = ((pitchValue + 12) / 24) * 100
+  const speedFillPercent = ((speedValue - 0.5) / 1.0) * 100
 
   // Stop playback
   const stopPlayback = () => {
@@ -376,6 +378,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
       const blob = encodeToWav(processed)
       setProcessedBlob(blob)
       setProcessProgress(100)
+      setIsProcessing(false) // FIX: Allow UI to show download button
     } catch (error) {
       console.error('Processing error:', error)
       setIsProcessing(false)
@@ -498,25 +501,38 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
             step="1"
             value={pitchValue}
             onChange={handlePitchChange}
-            className="w-full h-3 rounded-lg appearance-none cursor-pointer
-                       [&::-webkit-slider-runnable-track]:bg-gray-700
-                       [&::-webkit-slider-runnable-track]:rounded-lg
-                       [&::-webkit-slider-runnable-track]:h-3
+            style={{
+              background: `linear-gradient(to right,
+                rgb(59 130 246) 0%,
+                rgb(59 130 246) ${pitchFillPercent}%,
+                rgb(55 65 81) ${pitchFillPercent}%,
+                rgb(55 65 81) 100%)`
+            }}
+            className="w-full h-4 rounded-lg appearance-none cursor-pointer bg-gray-700
                        [&::-webkit-slider-thumb]:appearance-none
-                       [&::-webkit-slider-thumb]:w-6
-                       [&::-webkit-slider-thumb]:h-6
+                       [&::-webkit-slider-thumb]:w-5
+                       [&::-webkit-slider-thumb]:h-5
                        [&::-webkit-slider-thumb]:rounded-full
-                       [&::-webkit-slider-thumb]:bg-accent
+                       [&::-webkit-slider-thumb]:bg-white
+                       [&::-webkit-slider-thumb]:border-4
+                       [&::-webkit-slider-thumb]:border-accent
                        [&::-webkit-slider-thumb]:cursor-grab
                        [&::-webkit-slider-thumb]:shadow-lg
-                       [&::-moz-range-track]:bg-gray-700
-                       [&::-moz-range-track]:rounded-lg
-                       [&::-moz-range-track]:h-3
-                       [&::-moz-range-thumb]:w-6
-                       [&::-moz-range-thumb]:h-6
+                       [&::-webkit-slider-thumb]:active:cursor-grabbing
+                       [&::-webkit-slider-thumb]:hover:scale-110
+                       [&::-webkit-slider-thumb]:transition-transform
+                       [&::-moz-range-thumb]:w-5
+                       [&::-moz-range-thumb]:h-5
                        [&::-moz-range-thumb]:rounded-full
-                       [&::-moz-range-thumb]:bg-accent
-                       [&::-moz-range-thumb]:border-0"
+                       [&::-moz-range-thumb]:bg-white
+                       [&::-moz-range-thumb]:border-4
+                       [&::-moz-range-thumb]:border-accent
+                       [&::-moz-range-thumb]:cursor-grab
+                       [&::-moz-range-thumb]:shadow-lg
+                       [&::-moz-range-thumb]:active:cursor-grabbing
+                       [&::-moz-range-thumb]:hover:scale-110
+                       [&::-moz-range-thumb]:transition-transform
+                       focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
           />
         </div>
 
@@ -531,34 +547,47 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
           <input
             type="range"
             min="0.5"
-            max="2.0"
+            max="1.5"
             step="0.05"
             value={speedValue}
             onChange={handleSpeedChange}
-            className="w-full h-3 rounded-lg appearance-none cursor-pointer
-                       [&::-webkit-slider-runnable-track]:bg-gray-700
-                       [&::-webkit-slider-runnable-track]:rounded-lg
-                       [&::-webkit-slider-runnable-track]:h-3
+            style={{
+              background: `linear-gradient(to right,
+                rgb(74 222 128) 0%,
+                rgb(74 222 128) ${speedFillPercent}%,
+                rgb(55 65 81) ${speedFillPercent}%,
+                rgb(55 65 81) 100%)`
+            }}
+            className="w-full h-4 rounded-lg appearance-none cursor-pointer bg-gray-700
                        [&::-webkit-slider-thumb]:appearance-none
-                       [&::-webkit-slider-thumb]:w-6
-                       [&::-webkit-slider-thumb]:h-6
+                       [&::-webkit-slider-thumb]:w-5
+                       [&::-webkit-slider-thumb]:h-5
                        [&::-webkit-slider-thumb]:rounded-full
-                       [&::-webkit-slider-thumb]:bg-green-400
+                       [&::-webkit-slider-thumb]:bg-white
+                       [&::-webkit-slider-thumb]:border-4
+                       [&::-webkit-slider-thumb]:border-green-400
                        [&::-webkit-slider-thumb]:cursor-grab
                        [&::-webkit-slider-thumb]:shadow-lg
-                       [&::-moz-range-track]:bg-gray-700
-                       [&::-moz-range-track]:rounded-lg
-                       [&::-moz-range-track]:h-3
-                       [&::-moz-range-thumb]:w-6
-                       [&::-moz-range-thumb]:h-6
+                       [&::-webkit-slider-thumb]:active:cursor-grabbing
+                       [&::-webkit-slider-thumb]:hover:scale-110
+                       [&::-webkit-slider-thumb]:transition-transform
+                       [&::-moz-range-thumb]:w-5
+                       [&::-moz-range-thumb]:h-5
                        [&::-moz-range-thumb]:rounded-full
-                       [&::-moz-range-thumb]:bg-green-400
-                       [&::-moz-range-thumb]:border-0"
+                       [&::-moz-range-thumb]:bg-white
+                       [&::-moz-range-thumb]:border-4
+                       [&::-moz-range-thumb]:border-green-400
+                       [&::-moz-range-thumb]:cursor-grab
+                       [&::-moz-range-thumb]:shadow-lg
+                       [&::-moz-range-thumb]:active:cursor-grabbing
+                       [&::-moz-range-thumb]:hover:scale-110
+                       [&::-moz-range-thumb]:transition-transform
+                       focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
           />
           <div className="flex justify-between text-xs text-gray-500">
             <span>0.5x (slower)</span>
             <span>1.0x (normal)</span>
-            <span>2.0x (faster)</span>
+            <span>1.5x (faster)</span>
           </div>
         </div>
 
