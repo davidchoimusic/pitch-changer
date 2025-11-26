@@ -22,6 +22,12 @@ export const metadata = {
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'How to Change the Key of a Song (Free & Easy)',
+    description: 'Learn the fastest way to transpose music online for free. Perfect for singers and musicians.',
+    images: ['https://pitchchanger.io/1200x600-pitchchanger-x.png'],
+  },
 }
 
 export default function HowToChangeKeyPage() {

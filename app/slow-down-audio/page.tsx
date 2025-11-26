@@ -22,6 +22,12 @@ export const metadata = {
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Slow Down Audio Online (Free Tool)',
+    description: 'Slow down any song, speech, or recording without changing pitch. Perfect for musicians, transcription, and language study.',
+    images: ['https://pitchchanger.io/1200x600-pitchchanger-x.png'],
+  },
 }
 
 export default function SlowDownAudioPage() {

@@ -22,6 +22,12 @@ export const metadata = {
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Speed Up Audio Online (Free Tool)',
+    description: 'Increase the speed of any song or recording without changing pitch. Free online audio speed-up tool.',
+    images: ['https://pitchchanger.io/1200x600-pitchchanger-x.png'],
+  },
 }
 
 export default function SpeedUpAudioPage() {

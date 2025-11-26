@@ -22,6 +22,12 @@ export const metadata = {
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'How to Slow Down Audio (Works on Any File)',
+    description: 'Learn how to slow down a song, voice recording, or podcast without losing pitch. Step-by-step guide.',
+    images: ['https://pitchchanger.io/1200x600-pitchchanger-x.png'],
+  },
 }
 
 export default function HowToSlowDownAudioPage() {

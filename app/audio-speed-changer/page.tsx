@@ -22,6 +22,12 @@ export const metadata = {
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Online Audio Speed Changer',
+    description: 'Change audio speed online — slow down or speed up any song without changing pitch. Free, fast, and private.',
+    images: ['https://pitchchanger.io/1200x600-pitchchanger-x.png'],
+  },
 }
 
 export default function AudioSpeedChangerPage() {

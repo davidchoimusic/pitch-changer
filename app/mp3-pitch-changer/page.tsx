@@ -22,6 +22,12 @@ export const metadata = {
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Online MP3 Pitch Changer',
+    description: 'Change the pitch of any MP3 file online without changing speed. Free, browser-based MP3 pitch changer.',
+    images: ['https://pitchchanger.io/1200x600-pitchchanger-x.png'],
+  },
 }
 
 export default function Mp3PitchChangerPage() {

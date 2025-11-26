@@ -22,6 +22,12 @@ export const metadata = {
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Change Pitch vs Change Speed — What\'s the Difference?',
+    description: 'A simple explanation of pitch shifting vs tempo changing. Learn the difference between pitch and speed for audio.',
+    images: ['https://pitchchanger.io/1200x600-pitchchanger-x.png'],
+  },
 }
 
 export default function PitchVsSpeedPage() {

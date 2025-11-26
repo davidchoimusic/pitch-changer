@@ -22,6 +22,12 @@ export const metadata = {
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'How to Speed Up Audio Online',
+    description: 'Learn how to increase playback speed without affecting pitch. Great for studying, editing, or workouts.',
+    images: ['https://pitchchanger.io/1200x600-pitchchanger-x.png'],
+  },
 }
 
 export default function HowToSpeedUpAudioPage() {
