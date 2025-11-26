@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Script from 'next/script'
 
 export const metadata = {
   title: 'How to Speed Up Audio Online | Free Step-by-Step Guide',
@@ -32,7 +33,44 @@ export const metadata = {
 
 export default function HowToSpeedUpAudioPage() {
   return (
-    <div className="container mx-auto px-4 py-12">
+    <>
+      {/* HowTo Schema */}
+      <Script
+        id="howto-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'HowTo',
+            name: 'How to Speed Up Audio Online',
+            description: 'Learn how to increase playback speed without affecting pitch.',
+            step: [
+              {
+                '@type': 'HowToStep',
+                name: 'Visit PitchChanger.io',
+                text: 'Go to PitchChanger.io in your browser',
+                url: 'https://pitchchanger.io'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Upload your audio',
+                text: 'Upload the audio file you want to speed up'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Slide speed above 1×',
+                text: 'Move the speed slider above 1× (e.g., 1.25×, 1.5×)'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Download the faster version',
+                text: 'Download your sped-up audio file'
+              }
+            ]
+          })
+        }}
+      />
+      <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto space-y-8 text-gray-300">
         <h1 className="text-4xl font-bold text-white">How to Speed Up Audio Online</h1>
 
@@ -82,5 +120,6 @@ export default function HowToSpeedUpAudioPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

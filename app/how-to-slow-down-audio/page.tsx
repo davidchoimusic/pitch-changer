@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Script from 'next/script'
 
 export const metadata = {
   title: 'How to Slow Down Audio (Works on Any File) | Free Guide',
@@ -32,7 +33,44 @@ export const metadata = {
 
 export default function HowToSlowDownAudioPage() {
   return (
-    <div className="container mx-auto px-4 py-12">
+    <>
+      {/* HowTo Schema */}
+      <Script
+        id="howto-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'HowTo',
+            name: 'How to Slow Down Audio',
+            description: 'Learn how to slow down a song, voice recording, or podcast without losing pitch.',
+            step: [
+              {
+                '@type': 'HowToStep',
+                name: 'Go to PitchChanger.io',
+                text: 'Visit PitchChanger.io',
+                url: 'https://pitchchanger.io'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Upload your file',
+                text: 'Upload your audio file to the tool'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Move the speed slider down',
+                text: 'Drag the speed slider below 1.0× to slow down the audio'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Download the slower version',
+                text: 'Download your slowed-down audio file'
+              }
+            ]
+          })
+        }}
+      />
+      <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto space-y-8 text-gray-300">
         <h1 className="text-4xl font-bold text-white">How to Slow Down Audio (Works on Any File)</h1>
 
@@ -82,5 +120,6 @@ export default function HowToSlowDownAudioPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

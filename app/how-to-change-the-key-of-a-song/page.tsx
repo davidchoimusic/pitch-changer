@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Script from 'next/script'
 
 export const metadata = {
   title: 'How to Change the Key of a Song (Free & Easy) | Transpose Music Online',
@@ -32,7 +33,44 @@ export const metadata = {
 
 export default function HowToChangeKeyPage() {
   return (
-    <div className="container mx-auto px-4 py-12">
+    <>
+      {/* HowTo Schema for Google Rich Results */}
+      <Script
+        id="howto-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'HowTo',
+            name: 'How to Change the Key of a Song',
+            description: 'Learn the fastest and easiest way to transpose music online for free.',
+            step: [
+              {
+                '@type': 'HowToStep',
+                name: 'Go to PitchChanger.io',
+                text: 'Visit PitchChanger.io in your web browser',
+                url: 'https://pitchchanger.io'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Upload your audio file',
+                text: 'Upload the song or audio file you want to transpose'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Adjust pitch',
+                text: 'Use the pitch slider to adjust semitones (e.g., +2 semitones = a whole step up)'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Download the new key',
+                text: 'Download your transposed audio file in the new key'
+              }
+            ]
+          })
+        }}
+      />
+      <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto space-y-8 text-gray-300">
         <h1 className="text-4xl font-bold text-white">How to Change the Key of a Song (Free & Easy)</h1>
 
@@ -93,5 +131,6 @@ export default function HowToChangeKeyPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
