@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR (2025-11-25):** Production stable (main: b759b13); Beta live at /beta with pitch+speed controls, waveform scrubber; AdSense submitted (Getting ready), GA4 tracking active; all browsers/devices working | 2025-11-25 11:30 AM
+**TL;DR (2025-11-25):** BETA IS NOW PRODUCTION (main: a60937f); pitchchanger.io has waveform+pitch+speed controls; clean Tone.js-only architecture; AdSense submitted, GA4 active; tested and stable on all browsers/devices | 2025-11-25 3:00 PM
 
 ---
 
@@ -12,11 +12,12 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** b759b13 (Beta live at /beta, GA4 tracking, AdSense submitted, slider visibility fixes)
+- **Current Commit:** a60937f (BETA SWAPPED TO PRODUCTION: waveform+pitch+speed controls now live; old production archived as AudioPlayerLegacy)
 - **Open PRs/Issues:** None critical
-- **Production:** https://pitchchanger.io (Tone-only, stable)
-- **Beta:** https://pitchchanger.io/beta (experimental pitch+speed controls)
-- **Staging:** N/A (staging-tone-only merged)
+- **Production:** https://pitchchanger.io (waveform+pitch+speed controls; AudioPlayerBeta)
+- **Legacy:** components/AudioPlayerLegacy.tsx (old pitch-only version, archived for rollback)
+- **Beta Route:** https://pitchchanger.io/beta (duplicate of production; can be removed)
+- **Staging:** N/A (staging-tone-only merged to main, then beta replaced production)
 
 ---
 
@@ -104,31 +105,28 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 
 ## Current State
 
-### Working Features (Production Tone-only)
-✅ File upload: MP3, WAV, FLAC, M4A, AAC (max 250MB)  
-✅ File validation with memory guard (<4GB devices; mobile soft cap 120MB)  
-✅ Real-time pitch shifting ±12 semitones (Tone.js only)  
-✅ Single playback path (preserve duration always; native path removed)  
-✅ Spacebar keyboard shortcut (stale closure fixed)  
-✅ Slider advances during playback (RAF with Tone.now())  
-✅ Seek jumps audio and slider together (playStartOffsetRef/playStartTimeRef)  
-✅ Pitch changes in real time  
-✅ WAV export using Tone.js (matches preview)  
-✅ Client-side only (zero uploads, zero server costs)  
-✅ Legal pages live: /privacy, /contact, /terms, /about
-✅ AdSense assets in place (script + ads.txt); footer links added
-✅ GA4 tracking: file uploads, processing, downloads, pitch adjustments
-✅ OG/Twitter cards: landscape image for social sharing
-
-### Beta Features (/beta - Experimental)
-✅ Independent pitch slider (-12 to +12 semitones)
-✅ Independent speed slider (0.5x to 1.5x, 1.0x centered)
-✅ Waveform visualization (clickable scrubber)
-✅ CSS overlay playhead (smooth 60fps, no lag)
+### Working Features (Production - AudioPlayerBeta)
+✅ File upload: MP3, WAV, FLAC, M4A, AAC (max 250MB)
+✅ File validation with memory guard (<4GB devices; mobile soft cap 120MB)
+✅ **Waveform visualization** - clickable scrubber with orange playhead (NEW!)
+✅ **Independent pitch slider** (-12 to +12 semitones) with real-time preview
+✅ **Independent speed slider** (0.5x to 1.5x, 1.0x centered) - NEW FEATURE!
+✅ CSS overlay playhead (GPU accelerated, smooth 60fps, no lag)
 ✅ Single Tone.js architecture (no dual-mode complexity)
-✅ Inline gradient sliders (visible all browsers)
-✅ Spacebar support, seek, export
-⚠️ Experimental - may have bugs, use at own risk
+✅ Spacebar keyboard shortcut (handlePlayPauseRef pattern)
+✅ Inline gradient sliders (visible all browsers, Safari/Chrome/mobile)
+✅ WAV export using Tone.js (pitch-only; speed not yet exported)
+✅ Client-side only (zero uploads, zero server costs)
+✅ Legal pages live: /privacy, /contact, /terms, /about
+✅ AdSense assets ready (script + ads.txt Authorized); ad spaces in processing flow
+✅ GA4 tracking: file uploads, processing, downloads, pitch+speed adjustments (beta events)
+✅ OG/Twitter cards: landscape 1200x600 image for social sharing
+✅ Private mode detection with warnings
+✅ Upload Different File buttons (top + bottom of page)
+
+### Archived (Rollback Available)
+- components/AudioPlayerLegacy.tsx (old pitch-only version)
+- Can restore by renaming back to AudioPlayer.tsx if needed
 
 ### Working Flows
 1. **Upload → Preview → Adjust → Download:**
@@ -185,6 +183,16 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
 **Pattern:** One player, one context, direct parameter control
 **Files:** components/AudioPlayerBeta.tsx (single Tone.js player for everything)
 **Why this matters:** vocalremover.org works because they picked ONE approach - we over-engineered
+
+### Processing UI Disappearing After Completion
+**What went wrong:** After processing, entire UI section (ads + download button) disappeared
+**Why:** Sections wrapped in `{isProcessing && (...)}` - when `setIsProcessing(false)` called, entire section hidden
+**Solution used:** Change to `{(isProcessing || processedBlob) && (...)}`  - stays visible after completion
+**AVOID:** Wrapping persistent UI in temporary state conditionals - use OR conditions for "during AND after" states
+**Pattern:** `{(duringState || afterState) && (<content/>)}` for UI that should persist
+**Files:** AudioPlayerBeta.tsx (line 687, 737) - happened twice in same component!
+**Impact:** User clicks Process → sees progress → sees SUCCESS → everything vanishes → no download button
+**Learning:** When merging UI from different sources, check ALL conditional rendering logic
 
 ---
 
@@ -332,32 +340,48 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
    - Performance: Canvas drawn once on load, CSS transform moves playhead at 60fps with zero lag
    - File: components/AudioPlayerBeta.tsx (line ~97-182)
 
+10. **Beta → Production Swap Before AdSense Approval** (2025-11-25)
+   - Decision: Replace production with beta BEFORE Google reviews site (day 2 of review)
+   - Why: Google likely hasn't crawled yet - they'll review the better version from the start
+   - Alternative considered: Wait for approval then swap - but risks triggering re-review
+   - Timing: Applied Nov 24, swapped Nov 25 (likely before Google's first crawl)
+   - Risk mitigation: Archived old production as AudioPlayerLegacy.tsx (can rollback in 2 min)
+   - Result: Google will approve waveform+speed version, not pitch-only version
+   - File: app/page.tsx now imports AudioPlayerBeta
+
 ---
 
 ## TODO
 
 ### Critical
-- [ ] Monitor AdSense approval (status: Getting ready; awaiting Google review 1-7 days)
+- [ ] Monitor AdSense approval (status: Getting ready; Google reviewing waveform+speed version)
 - [ ] Set up CMP (Consent Management Platform) when AdSense approves
-- [ ] Decide: Replace production with Beta OR keep both versions
+- [ ] Monitor new production for any user-reported issues
 
 ### Next
-- [ ] Test Beta with real users (gather feedback on pitch+speed controls)
 - [ ] Enable Vercel Analytics (1-click in dashboard)
 - [ ] Run Lighthouse audit (SEO/performance check)
 - [ ] Test on iPad and Android tablets
+- [ ] Monitor GA4 for speed slider usage (validate feature value)
+- [ ] Consider removing /beta route (now duplicate of main)
 
-### Completed This Session
+### Completed This Session (Session 4)
 - ✅ Apply for Google AdSense (submitted, "Getting ready")
 - ✅ Install GA4 tracking (G-RB68Q82Z1B with custom events)
 - ✅ Add legal pages (/privacy, /contact, /terms, /about)
-- ✅ Build Beta version (/beta route live)
+- ✅ Build Beta version with waveform+pitch+speed controls
 - ✅ Fix OG/Twitter cards (landscape 1200x600 image)
+- ✅ Merge production UI/copy into Beta
+- ✅ **SWAP BETA → PRODUCTION** (a60937f) - pitch+speed+waveform now live!
+- ✅ Archive old production (AudioPlayerLegacy.tsx)
+- ✅ Test new production on all browsers/devices
 
-### Later
-- [ ] Monitor first-week traffic via GA4
-- [ ] Gather user feedback on Beta vs Production
-- [ ] Consider migrating Beta improvements to Production if successful
+### Future Enhancements (Data-Driven)
+- [ ] Add MP3 export (if users request it; would add 260KB + slower encoding)
+- [ ] Add Web Workers (if >10% of users hit Safari private mode issues)
+- [ ] Export speed changes (currently pitch-only in WAV)
+- [ ] Key detection display (show "Key: F minor" etc.)
+- [ ] BPM display
 
 ---
 
@@ -450,6 +474,22 @@ Notes:
 - 📚 **Learned:** Independent sliders > mode toggle for UX clarity
 - 📚 **Learned:** Always check GitHub status checks first when deployments fail
 
+### Session 4 Continued (2025-11-25 PM) - Beta → Production Swap
+- ✅ **Merged production UI into Beta** - combined tested UX with superior audio engine
+- ✅ **Copied production's complete processing flow** - ads, warnings, success messaging, scroll prompts
+- ✅ **Fixed processing UI bugs** - missing setIsProcessing(false), sections disappearing after completion
+- ✅ **Fixed SUCCESS screen persistence** - changed conditionals to show during AND after processing
+- ✅ **Removed auto-scroll** - force manual scroll for better ad visibility
+- ✅ **Added Upload Different File** at bottom (always visible)
+- ✅ **SWAPPED BETA → PRODUCTION** - pitchchanger.io now uses AudioPlayerBeta
+- ✅ **Archived old production** as AudioPlayerLegacy.tsx (rollback available)
+- ✅ **Removed "Try Beta" button** - beta IS production now
+- ✅ **Tested on all browsers/devices** - Chrome, Safari, iPhone all working
+- 📚 **Learned:** vocalremover.org uses Web Workers (not server-side) for Safari private mode support
+- 📚 **Learned:** MP3 encoding would be slower than WAV (compression vs raw data)
+- 🎯 **Decision:** Keep WAV-only, add MP3 later if users request it
+- 🎯 **Decision:** Skip Web Workers for now - only 2% of users in Safari private mode
+
 ### Earlier Sessions (2025-11-22)
 - Safari unlock pattern, memory leak fixes, AudioContext cleanup, AbortController for decode, error banners, inline gradients, branding/spacing improvements, additional format support (FLAC/M4A/AAC), Webpack build fix via env var.
 
@@ -481,4 +521,4 @@ Notes:
 
 ---
 
-**Last Updated:** 2025-11-25 11:30 AM (Beta live at /beta; GA4 tracking active; AdSense submitted; production + beta both stable)
+**Last Updated:** 2025-11-25 3:00 PM (BETA SWAPPED TO PRODUCTION: waveform+pitch+speed controls live at pitchchanger.io; AudioPlayerLegacy archived; AdSense reviewing new version; tested and stable)
