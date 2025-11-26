@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { FileUpload } from '@/components/FileUpload'
-import { AudioPlayer } from '@/components/AudioPlayer'
+import { AudioPlayerBeta } from '@/components/AudioPlayerBeta'
 import { Button } from '@/components/ui/Button'
 
 // Deterministic spectrum analyzer values (no Math.random for hydration)
@@ -35,19 +35,13 @@ export default function Home() {
     <div className="container mx-auto px-4 py-8 md:py-12">
       {/* Nav */}
       <header className="w-full mb-8 sticky top-0 z-20 bg-bg-page/90 backdrop-blur border-b border-divider">
-        <div className="flex items-center justify-between py-3">
+        <div className="flex items-center py-3">
           <span
             className="text-xl md:text-2xl font-black bg-clip-text text-transparent"
             style={{ backgroundImage: 'linear-gradient(to bottom, rgb(255 255 255), rgb(191 219 254))' }}
           >
             PitchChanger.io
           </span>
-          <Link
-            href="/beta"
-            className="text-sm px-4 py-2 bg-yellow-500/20 border border-yellow-500/50 rounded-full text-yellow-400 font-semibold hover:bg-yellow-500/30 transition-colors"
-          >
-            Try Beta
-          </Link>
         </div>
       </header>
 
@@ -223,17 +217,9 @@ export default function Home() {
             </div>
           </div>
 
-          <AudioPlayer
+          <AudioPlayerBeta
             file={selectedFile}
-            onProcessComplete={(blob) => {
-              // Handle download
-              const url = URL.createObjectURL(blob)
-              const a = document.createElement('a')
-              a.href = url
-              a.download = `pitch-shifted-${selectedFile.name}`
-              a.click()
-              URL.revokeObjectURL(url)
-            }}
+            onBack={() => setSelectedFile(null)}
           />
         </div>
       )}
