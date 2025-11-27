@@ -36,13 +36,10 @@ export async function exportWithTone(
     player = new Tone.Player(audioBuffer)
     player.playbackRate = speed
 
-    // Create pitch shift effect
+    // Create pitch shift effect (match preview config exactly)
     pitchShift = new Tone.PitchShift({
       pitch: semitones,
-      windowSize: 0.2, // Higher quality, balanced with offline render time
-      delayTime: 0,
-      feedback: 0,
-      wet: 1 // 100% wet signal only - prevents dry/wet mix causing doubled audio
+      windowSize: 0.1,
     }).toDestination()
 
     // Connect chain
