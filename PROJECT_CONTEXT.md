@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR (2025-11-26):** Production stable; waveform+pitch+speed controls live; 8-page SEO strategy deployed; complete Schema.org markup; Search Console configured; ✅ Export bug FIXED - speed changes now included in WAV export | 2025-11-26
+**TL;DR (2025-11-27):** Production stable; waveform+pitch+speed controls live; export with pitch+speed working; 8-page SEO strategy deployed; ✅ Export delay bug FIXED - PitchShift config must match preview exactly | 2025-11-27
 
 ---
 
@@ -12,7 +12,7 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** f05c8f6 (Export bug fixed: speed changes now included in WAV export)
+- **Current Commit:** d71f9f6 (Export delay bug fixed: PitchShift config now matches preview)
 - **Open PRs/Issues:** None critical
 - **Production:** https://pitchchanger.io (waveform+pitch+speed controls; AudioPlayerBeta)
 - **Legacy:** components/AudioPlayerLegacy.tsx (old pitch-only version, archived for rollback)
@@ -214,6 +214,21 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
 **Files:** `utils/audio/toneExport.ts`, `components/AudioPlayerLegacy.tsx`
 **TypeScript caught it:** Error TS2345 - callback not assignable to number. Always run `tsc --noEmit` before pushing!
 
+### 🔴 CRITICAL: Export PitchShift Config Must Match Preview (2025-11-27)
+**What went wrong:** Exported WAV had delay/doubled sound - sounded like two layers offset on top of each other
+**Why:** Export `PitchShift` config was DIFFERENT from preview config:
+- **Export (BROKEN):** `windowSize: 0.2, delayTime: 0, feedback: 0, wet: 1`
+- **Preview (CORRECT):** `windowSize: 0.1` (no other params)
+**Root cause:** The explicit `delayTime: 0, feedback: 0` params in Tone.js PitchShift cause artifacts. PitchShift uses a granular delay-based algorithm internally - setting these to 0 breaks it.
+**Solution used:** Match export config EXACTLY to preview config - only set `pitch` and `windowSize: 0.1`
+**AVOID:**
+- NEVER add `delayTime`, `feedback`, or `wet` params to PitchShift
+- NEVER use different windowSize for export vs preview
+- NEVER "optimize" export config separately from preview
+**Pattern:** Export PitchShift config should be IDENTICAL to preview config. If preview sounds good, copy that config exactly.
+**Files:** `utils/audio/toneExport.ts` (line 39-43), `components/AudioPlayerBeta.tsx` (line 261-264)
+**How to verify:** Export at pitch +5 or -5, compare to preview - should sound IDENTICAL
+
 ---
 
 ## EDGE CASES & GOTCHAS
@@ -339,11 +354,12 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
    - Result: Clean re-init if Tone.js errors occur
    - File: components/AudioPlayer.tsx:96-128
 
-5. **Tone.js windowSize: 0.1**
+5. **Tone.js windowSize: 0.1** (CRITICAL - must be same for preview AND export)
    - Why: Good balance of quality + responsiveness
    - Note: Original Safari delay was bugs, not windowSize
+   - ⚠️ **CRITICAL:** Export MUST use same windowSize as preview (0.1) - using 0.2 caused delay/doubled sound
    - Result: Works smoothly on both Chrome and Safari
-   - File: components/AudioPlayer.tsx:193, utils/audio/toneExport.ts:35 (export now uses 0.2 for higher quality)
+   - File: components/AudioPlayerBeta.tsx:263, utils/audio/toneExport.ts:42
 
 6. **Symmetrical Visual Design**
    - Why: Professional, balanced layout
@@ -484,6 +500,14 @@ Notes:
 - **Result:** Smooth 60fps with zero canvas redraws
 - **File:** components/AudioPlayerBeta.tsx
 
+### Export Sounds Different from Preview / Has Delay (Resolved 2025-11-27)
+- **Issue:** Exported WAV had delay/doubled sound - like two layers offset
+- **Cause:** Export PitchShift config was different from preview config
+- **Broken config:** `windowSize: 0.2, delayTime: 0, feedback: 0, wet: 1`
+- **Working config:** `windowSize: 0.1` (no other params - MUST match preview)
+- **Fix:** In `utils/audio/toneExport.ts`, use EXACT same PitchShift config as preview in `AudioPlayerBeta.tsx`
+- **Rule:** NEVER add extra params to export PitchShift. If preview sounds good, copy that config exactly.
+
 ### Common Errors
 - "Please upload MP3, WAV, FLAC, M4A, or AAC file" → Unsupported format (components/FileUpload.tsx)
 - "Large file on low-memory device" → >100MB on <4GB device; try smaller file or desktop (components/FileUpload.tsx)
@@ -574,16 +598,22 @@ Notes:
 - 📚 **Learned:** vocalremover.org uses Web Workers for client-side processing (not server uploads)
 - 🔴 **Discovered:** Export doesn't include speed changes (CRITICAL BUG for next session)
 
-### Session 6 (2025-11-26) - Export Speed Bug Fix
+### Session 6 (2025-11-26/27) - Export Speed Bug Fix + Delay Bug Fix
 - ✅ **FIXED CRITICAL BUG:** WAV export now includes speed changes (was pitch-only)
 - ✅ Added `speed` parameter to `exportWithTone()` with default `1.0`
 - ✅ Adjusted OfflineContext duration: `(duration / speed) + (0.2 / speed) + 0.1`
 - ✅ Set `player.playbackRate = speed` in offline rendering
 - ✅ Updated AudioPlayerLegacy.tsx for backward compatibility
-- ✅ Updated PROJECT_CONTEXT.md with fix documentation
+- ✅ **FIXED EXPORT DELAY BUG:** Export had delay/doubled sound effect
+  - Root cause: Export PitchShift config differed from preview (`windowSize: 0.2, delayTime: 0, feedback: 0, wet: 1`)
+  - Fix: Match export config exactly to preview (`windowSize: 0.1`, no other params)
+- ✅ Reduced file upload box height by ~50%
+- ✅ Attempted pulsating glow animation (reverted - Tailwind v4 strips @keyframes)
 - 📚 **Learned:** Always run `tsc --noEmit` before pushing - it caught the legacy file break
 - 📚 **Learned:** When adding params to shared functions, grep for ALL usages (including archived files)
-- 🎯 **Commit:** f05c8f6
+- 📚 **Learned:** 🔴 **CRITICAL:** Export PitchShift config MUST match preview EXACTLY - different params cause delay/artifacts
+- 📚 **Learned:** Tailwind v4 strips @keyframes from globals.css - use inline styles or <style> tags for animations
+- 🎯 **Commits:** f05c8f6 (speed export), d71f9f6 (delay fix)
 
 ### Earlier Sessions (2025-11-22)
 - Safari unlock pattern, memory leak fixes, AudioContext cleanup, AbortController for decode, error banners, inline gradients, branding/spacing improvements, additional format support (FLAC/M4A/AAC), Webpack build fix via env var.
@@ -615,4 +645,4 @@ Notes:
 
 ---
 
-**Last Updated:** 2025-11-26 (Session 6: ✅ Export bug FIXED - speed changes now included in WAV export; modified toneExport.ts and AudioPlayerBeta.tsx)
+**Last Updated:** 2025-11-27 (Session 6: ✅ Export speed+pitch working; ✅ Export delay bug FIXED - PitchShift config must match preview exactly; commits f05c8f6, d71f9f6)
