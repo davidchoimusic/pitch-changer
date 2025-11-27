@@ -99,7 +99,7 @@ export function FileUpload({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`
-          relative border-2 border-dashed rounded-xl p-8 md:p-16 text-center cursor-pointer
+          relative border-2 border-dashed rounded-xl p-4 md:p-8 text-center cursor-pointer
           transition-all duration-200
           ${isDragging
             ? 'border-accent bg-accent/10 scale-105'
@@ -115,17 +115,17 @@ export function FileUpload({
           className="hidden"
         />
 
-        <div className="space-y-4 md:space-y-6">
-          <div className="text-4xl md:text-7xl">🎵</div>
-          <div className="space-y-2">
-            <p className="text-2xl md:text-3xl font-semibold leading-snug">
+        <div className="space-y-2 md:space-y-3">
+          <div className="text-3xl md:text-5xl">🎵</div>
+          <div className="space-y-1">
+            <p className="text-xl md:text-2xl font-semibold leading-snug">
               Drop your audio file here
             </p>
-            <p className="text-base md:text-lg text-gray-400">
+            <p className="text-sm md:text-base text-gray-400">
               or click to browse
             </p>
           </div>
-          <div className="text-sm md:text-base text-gray-500">
+          <div className="text-xs md:text-sm text-gray-500">
             MP3, WAV, FLAC, M4A, AAC • Max {maxSizeMB}MB
           </div>
         </div>
