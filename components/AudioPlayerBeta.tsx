@@ -410,10 +410,11 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     }, 45000)
 
     try {
-      // Use Tone.js for export
+      // Use Tone.js for export (pitch + speed)
       const processed = await exportWithTone(
         audioBufferRef.current,
         pitchValue,
+        speedValue,
         (progress) => setProcessProgress(progress)
       )
 

@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR (2025-11-26):** Production stable (main: 3e23ef0); waveform+pitch+speed controls live; 8-page SEO strategy deployed; complete Schema.org markup; Search Console configured; ⚠️ CRITICAL BUG: Export doesn't include speed changes (pitch-only) | 2025-11-26 12:00 AM
+**TL;DR (2025-11-26):** Production stable; waveform+pitch+speed controls live; 8-page SEO strategy deployed; complete Schema.org markup; Search Console configured; ✅ Export bug FIXED - speed changes now included in WAV export | 2025-11-26
 
 ---
 
@@ -115,7 +115,7 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 ✅ Single Tone.js architecture (no dual-mode complexity)
 ✅ Spacebar keyboard shortcut (handlePlayPauseRef pattern)
 ✅ Inline gradient sliders (visible all browsers, Safari/Chrome/mobile)
-✅ WAV export using Tone.js (pitch-only; speed not yet exported)
+✅ WAV export using Tone.js (pitch + speed both exported)
 ✅ Client-side only (zero uploads, zero server costs)
 ✅ Legal pages live: /privacy, /contact, /terms, /about
 ✅ AdSense assets ready (script + ads.txt Authorized); ad spaces in processing flow
@@ -253,12 +253,10 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
 
 ### Known Issues
 
-**🔴 CRITICAL - Must Fix Next Session:**
-- **Export doesn't include speed changes:** Preview works perfectly (pitch + speed both applied), but downloaded WAV file only has pitch changes, speed stays at 1.0x. Export doesn't match preview!
-  - Location: components/AudioPlayerBeta.tsx handleStartProcessing(), utils/audio/toneExport.ts
-  - Impact: Users download wrong file (missing speed adjustments)
-  - Note: CODEX attempted fix but caused regression, reverted
-  - Next session: Need to modify exportWithTone() to accept speed parameter OR use different export approach
+**✅ FIXED (2025-11-26):**
+- **Export now includes speed changes:** Added `speed` parameter to `exportWithTone()`, adjusted OfflineContext duration for speed, set `player.playbackRate`. Preview and export now match!
+  - Files modified: `utils/audio/toneExport.ts`, `components/AudioPlayerBeta.tsx`
+  - Duration formula: `(duration / speed) + (0.2 / speed) + 0.1` (includes PitchShift window + safety buffer)
 
 **Development/Deployment:**
 - Safari aggressive caching during rapid development only: may need Cmd+Q to fetch fresh HTML; end users not impacted. Headers set to `no-store, no-cache, must-revalidate` + `Pragma` + `Expires: 0`.
@@ -374,11 +372,10 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
 ## TODO
 
 ### Critical (Must Do Next Session)
-- [ ] 🔴 **FIX EXPORT BUG:** Downloaded WAV doesn't include speed changes (only pitch)
-  - exportWithTone() currently only accepts pitch parameter
-  - Need to add speed parameter OR use different export approach
-  - CODEX tried and reverted - needs fresh approach
-  - Blocking: Users can't export their speed adjustments
+- [x] ✅ **FIXED EXPORT BUG:** WAV export now includes speed changes (2025-11-26)
+  - Added `speed` parameter to `exportWithTone()`
+  - Adjusted OfflineContext duration for speed
+  - Set `player.playbackRate = speed`
 - [ ] Monitor AdSense approval (submitted Nov 24, status: Getting ready)
 - [ ] Set up CMP (Consent Management Platform) when AdSense approves
 
@@ -412,7 +409,7 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
 ### Future Enhancements (Data-Driven)
 - [ ] Add MP3 export (if users request it; would add 260KB + slower encoding)
 - [ ] Add Web Workers (if >10% of users hit Safari private mode issues)
-- [ ] Export speed changes (currently pitch-only in WAV)
+- [x] ~~Export speed changes~~ ✅ DONE (2025-11-26)
 - [ ] Key detection display (show "Key: F minor" etc.)
 - [ ] BPM display
 
@@ -584,4 +581,4 @@ Notes:
 
 ---
 
-**Last Updated:** 2025-11-26 12:00 AM (Session 5 complete: 8-page SEO strategy deployed, complete Schema markup, Search Console configured; ⚠️ Export bug discovered - doesn't include speed changes; commit 3e23ef0)
+**Last Updated:** 2025-11-26 (Session 6: ✅ Export bug FIXED - speed changes now included in WAV export; modified toneExport.ts and AudioPlayerBeta.tsx)

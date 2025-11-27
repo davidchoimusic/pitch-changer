@@ -7,6 +7,7 @@ import * as Tone from 'tone'
 export async function exportWithTone(
   audioBuffer: AudioBuffer,
   semitones: number,
+  speed: number = 1.0,
   onProgress?: (progress: number) => void
 ): Promise<AudioBuffer> {
   // Save current context to restore later
@@ -16,10 +17,15 @@ export async function exportWithTone(
   let pitchShift: Tone.PitchShift | null = null
 
   try {
-    // Create offline context with same sample rate and duration
+    // Calculate duration adjusted for speed, with safety buffer for PitchShift processing
+    const PITCH_SHIFT_WINDOW = 0.2
+    const SAFETY_MARGIN = 0.1
+    const adjustedDuration = (audioBuffer.duration / speed) + (PITCH_SHIFT_WINDOW / speed) + SAFETY_MARGIN
+
+    // Create offline context with adjusted duration
     const offlineContext = new Tone.OfflineContext(
       audioBuffer.numberOfChannels,
-      audioBuffer.duration,
+      adjustedDuration,
       audioBuffer.sampleRate
     )
 
@@ -28,6 +34,7 @@ export async function exportWithTone(
 
     // Create player from buffer
     player = new Tone.Player(audioBuffer)
+    player.playbackRate = speed
 
     // Create pitch shift effect
     pitchShift = new Tone.PitchShift({

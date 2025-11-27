@@ -512,6 +512,7 @@ export function AudioPlayer({ file, onProcessComplete }: AudioPlayerProps) {
       const processed = await exportWithTone(
         audioBufferRef.current,
         pitchShiftValue,
+        1.0, // Legacy player has no speed control
         (progress) => setProcessProgress(progress)
       )
 
