@@ -41,7 +41,8 @@ export async function exportWithTone(
       pitch: semitones,
       windowSize: 0.2, // Higher quality, balanced with offline render time
       delayTime: 0,
-      feedback: 0
+      feedback: 0,
+      wet: 1 // 100% wet signal only - prevents dry/wet mix causing doubled audio
     }).toDestination()
 
     // Connect chain
