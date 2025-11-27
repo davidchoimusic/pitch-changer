@@ -12,7 +12,7 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** 3e23ef0 (SEO complete: 8 content pages, Schema markup, logo in header; Export bug discovered)
+- **Current Commit:** f05c8f6 (Export bug fixed: speed changes now included in WAV export)
 - **Open PRs/Issues:** None critical
 - **Production:** https://pitchchanger.io (waveform+pitch+speed controls; AudioPlayerBeta)
 - **Legacy:** components/AudioPlayerLegacy.tsx (old pitch-only version, archived for rollback)
@@ -205,6 +205,15 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
 **Impact:** User clicks Process → sees progress → sees SUCCESS → everything vanishes → no download button
 **Learning:** When merging UI from different sources, check ALL conditional rendering logic
 
+### Export Function Parameter Order (2025-11-26)
+**What went wrong:** Adding `speed` parameter to `exportWithTone()` broke `AudioPlayerLegacy.tsx`
+**Why:** Legacy file passed callback as 3rd arg, but new signature has `speed` as 3rd arg
+**Solution used:** Added explicit `1.0` speed parameter to legacy file's call
+**AVOID:** Adding required parameters to shared utility functions without checking ALL call sites
+**Pattern:** When adding params to shared functions: (1) use default values, (2) grep for all usages, (3) update legacy/archived files too
+**Files:** `utils/audio/toneExport.ts`, `components/AudioPlayerLegacy.tsx`
+**TypeScript caught it:** Error TS2345 - callback not assignable to number. Always run `tsc --noEmit` before pushing!
+
 ---
 
 ## EDGE CASES & GOTCHAS
@@ -247,11 +256,17 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
 - **Result:** Reliable, predictable timing for slider position
 - **Files:** Both production and beta use Tone.now() approach now
 
+### OfflineContext Duration Must Account for Speed (2025-11-26)
+- **Discovery:** When exporting with speed changes, OfflineContext duration must be adjusted
+- **Why:** At 0.5x speed, audio takes 2x longer to play; at 1.5x speed, audio is shorter
+- **Formula:** `adjustedDuration = (originalDuration / speed) + safetyBuffer`
+- **Safety buffer:** `(PITCH_SHIFT_WINDOW / speed) + 0.1` to prevent audio cutoff from PitchShift effect
+- **Gotcha:** If you just set `player.playbackRate` without adjusting duration, audio will be cut off (slower) or have silence (faster)
+- **Files:** `utils/audio/toneExport.ts`
+
 ---
 
 ## Known Issues
-
-### Known Issues
 
 **✅ FIXED (2025-11-26):**
 - **Export now includes speed changes:** Added `speed` parameter to `exportWithTone()`, adjusted OfflineContext duration for speed, set `player.playbackRate`. Preview and export now match!
@@ -366,6 +381,15 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
    - Risk mitigation: Archived old production as AudioPlayerLegacy.tsx (can rollback in 2 min)
    - Result: Google will approve waveform+speed version, not pitch-only version
    - File: app/page.tsx now imports AudioPlayerBeta
+
+11. **Export Speed via OfflineContext Duration Adjustment** (2025-11-26)
+   - Decision: Adjust OfflineContext duration based on speed, set `player.playbackRate`
+   - Why: Tone.js offline rendering respects `playbackRate`, but needs correct duration
+   - Formula: `(duration / speed) + (windowSize / speed) + margin`
+   - Alternative considered: Resample the AudioBuffer manually - too complex, Tone.js handles it
+   - Safety buffer: 0.3s total to prevent PitchShift window from cutting off end of audio
+   - Result: Preview and export now sound identical at any pitch/speed combination
+   - Files: `utils/audio/toneExport.ts`, `components/AudioPlayerBeta.tsx`
 
 ---
 
@@ -550,6 +574,17 @@ Notes:
 - 📚 **Learned:** vocalremover.org uses Web Workers for client-side processing (not server uploads)
 - 🔴 **Discovered:** Export doesn't include speed changes (CRITICAL BUG for next session)
 
+### Session 6 (2025-11-26) - Export Speed Bug Fix
+- ✅ **FIXED CRITICAL BUG:** WAV export now includes speed changes (was pitch-only)
+- ✅ Added `speed` parameter to `exportWithTone()` with default `1.0`
+- ✅ Adjusted OfflineContext duration: `(duration / speed) + (0.2 / speed) + 0.1`
+- ✅ Set `player.playbackRate = speed` in offline rendering
+- ✅ Updated AudioPlayerLegacy.tsx for backward compatibility
+- ✅ Updated PROJECT_CONTEXT.md with fix documentation
+- 📚 **Learned:** Always run `tsc --noEmit` before pushing - it caught the legacy file break
+- 📚 **Learned:** When adding params to shared functions, grep for ALL usages (including archived files)
+- 🎯 **Commit:** f05c8f6
+
 ### Earlier Sessions (2025-11-22)
 - Safari unlock pattern, memory leak fixes, AudioContext cleanup, AbortController for decode, error banners, inline gradients, branding/spacing improvements, additional format support (FLAC/M4A/AAC), Webpack build fix via env var.
 
@@ -572,12 +607,11 @@ Notes:
 
 1. **Monitor AdSense approval** (application submitted 2025-11-24, status: "Getting ready")
 2. **Set up CMP** (Consent Management Platform) when AdSense approves
-3. **Test Beta with users** - gather feedback on pitch+speed controls vs production
-4. **Decide Beta strategy** - replace production OR keep both versions
-5. **Enable Vercel Analytics** (1-click in dashboard)
-6. **Run Lighthouse audit** (performance/SEO/accessibility)
-7. **Test on tablets** (iPad, Android)
-8. **Monitor GA4 data** (starts flowing in 24-48 hours)
+3. **Enable Vercel Analytics** (1-click in dashboard)
+4. **Run Lighthouse audit** (performance/SEO/accessibility)
+5. **Test on tablets** (iPad, Android)
+6. **Monitor GA4 data** (should be flowing now)
+7. **Remove /beta route** (now duplicate of main - can be deleted)
 
 ---
 
