@@ -118,8 +118,7 @@ export default function Home() {
                   className="h-1 w-48 rounded-full"
                   style={{
                     backgroundImage: 'linear-gradient(to right, transparent, rgb(59 130 246), transparent)',
-                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)',
-                    animation: 'glow-pulse 3s ease-in-out infinite'
+                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
                   }}
                 />
               </div>
@@ -260,8 +259,7 @@ export default function Home() {
                 className="h-1 w-48 rounded-full"
                 style={{
                   backgroundImage: 'linear-gradient(to right, transparent, rgb(59 130 246), transparent)',
-                  boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)',
-                  animation: 'glow-pulse 3s ease-in-out infinite'
+                  boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
                 }}
               />
             </div>
