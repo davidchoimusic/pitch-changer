@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT.md
 
-**TL;DR (2025-11-25):** BETA IS NOW PRODUCTION (main: a60937f); pitchchanger.io has waveform+pitch+speed controls; clean Tone.js-only architecture; AdSense submitted, GA4 active; tested and stable on all browsers/devices | 2025-11-25 3:00 PM
+**TL;DR (2025-11-26):** Production stable (main: 3e23ef0); waveform+pitch+speed controls live; 8-page SEO strategy deployed; complete Schema.org markup; Search Console configured; ⚠️ CRITICAL BUG: Export doesn't include speed changes (pitch-only) | 2025-11-26 12:00 AM
 
 ---
 
@@ -12,7 +12,7 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** a60937f (BETA SWAPPED TO PRODUCTION: waveform+pitch+speed controls now live; old production archived as AudioPlayerLegacy)
+- **Current Commit:** 3e23ef0 (SEO complete: 8 content pages, Schema markup, logo in header; Export bug discovered)
 - **Open PRs/Issues:** None critical
 - **Production:** https://pitchchanger.io (waveform+pitch+speed controls; AudioPlayerBeta)
 - **Legacy:** components/AudioPlayerLegacy.tsx (old pitch-only version, archived for rollback)
@@ -123,6 +123,17 @@ Free, fast, browser-based pitch-shifting for musicians, audio engineers, and cre
 ✅ OG/Twitter cards: landscape 1200x600 image for social sharing
 ✅ Private mode detection with warnings
 ✅ Upload Different File buttons (top + bottom of page)
+✅ **8 SEO Content Pages** (tool pages + guides for organic traffic)
+✅ Complete Schema.org markup (WebApp, Org, FAQ, HowTo)
+✅ Logo in header navigation
+
+### SEO & Discovery (Session 5)
+✅ **Content Pages:** 8 keyword-targeted pages (tool landing + guides)
+✅ **Technical SEO:** Canonical tags, OpenGraph, Twitter cards (all 14 pages)
+✅ **Schema Markup:** 4 types (WebApplication, Organization, FAQPage, HowTo)
+✅ **Discovery Files:** sitemap.xml, robots.txt, llms.txt
+✅ **Search Console:** Sitemap submitted, 14 pages discovered, 5 priority pages indexed
+✅ **Social Sharing:** All pages have OG + Twitter cards (working previews)
 
 ### Archived (Rollback Available)
 - components/AudioPlayerLegacy.tsx (old pitch-only version)
@@ -241,6 +252,15 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
 ## Known Issues
 
 ### Known Issues
+
+**🔴 CRITICAL - Must Fix Next Session:**
+- **Export doesn't include speed changes:** Preview works perfectly (pitch + speed both applied), but downloaded WAV file only has pitch changes, speed stays at 1.0x. Export doesn't match preview!
+  - Location: components/AudioPlayerBeta.tsx handleStartProcessing(), utils/audio/toneExport.ts
+  - Impact: Users download wrong file (missing speed adjustments)
+  - Note: CODEX attempted fix but caused regression, reverted
+  - Next session: Need to modify exportWithTone() to accept speed parameter OR use different export approach
+
+**Development/Deployment:**
 - Safari aggressive caching during rapid development only: may need Cmd+Q to fetch fresh HTML; end users not impacted. Headers set to `no-store, no-cache, must-revalidate` + `Pragma` + `Expires: 0`.
 - Safari private browsing: processing disabled (button disabled + warning); use regular mode. Chrome private still works.
 - Tailwind v4 custom gradients: using inline gradients as a reliable workaround.
@@ -353,19 +373,32 @@ useEffect(() => { /* call fnRef.current() */ }, []) // empty deps
 
 ## TODO
 
-### Critical
-- [ ] Monitor AdSense approval (status: Getting ready; Google reviewing waveform+speed version)
+### Critical (Must Do Next Session)
+- [ ] 🔴 **FIX EXPORT BUG:** Downloaded WAV doesn't include speed changes (only pitch)
+  - exportWithTone() currently only accepts pitch parameter
+  - Need to add speed parameter OR use different export approach
+  - CODEX tried and reverted - needs fresh approach
+  - Blocking: Users can't export their speed adjustments
+- [ ] Monitor AdSense approval (submitted Nov 24, status: Getting ready)
 - [ ] Set up CMP (Consent Management Platform) when AdSense approves
-- [ ] Monitor new production for any user-reported issues
 
 ### Next
+- [ ] Monitor Google Search Console (pages should index in 1-3 days)
+- [ ] Check GA4 data (should start flowing now)
 - [ ] Enable Vercel Analytics (1-click in dashboard)
+- [ ] Create social media content (TikTok/IG/YouTube Shorts) for backlinks
 - [ ] Run Lighthouse audit (SEO/performance check)
 - [ ] Test on iPad and Android tablets
-- [ ] Monitor GA4 for speed slider usage (validate feature value)
 - [ ] Consider removing /beta route (now duplicate of main)
 
-### Completed This Session (Session 4)
+### Completed Session 5 (2025-11-26)
+- ✅ 8-page SEO content strategy (ChatGPT-designed)
+- ✅ Complete SEO pack (canonical, OG, Twitter, Schema markup)
+- ✅ Search Console setup and sitemap submission
+- ✅ Logo added to header
+- ✅ Metadata optimization (titles, descriptions, site name)
+
+### Completed Session 4 (2025-11-25)
 - ✅ Apply for Google AdSense (submitted, "Getting ready")
 - ✅ Install GA4 tracking (G-RB68Q82Z1B with custom events)
 - ✅ Add legal pages (/privacy, /contact, /terms, /about)
@@ -490,6 +523,36 @@ Notes:
 - 🎯 **Decision:** Keep WAV-only, add MP3 later if users request it
 - 🎯 **Decision:** Skip Web Workers for now - only 2% of users in Safari private mode
 
+### Session 5 (2025-11-26) - Complete SEO Strategy & Search Console
+- ✅ **8-Page Content Strategy** - Built modern SEO strategy (ChatGPT-designed)
+  - 4 tool landing pages: /audio-speed-changer, /mp3-pitch-changer, /slow-down-audio, /speed-up-audio
+  - 4 resource/guide pages: /how-to-change-the-key-of-a-song, /how-to-slow-down-audio, /how-to-speed-up-audio, /change-pitch-vs-change-speed
+  - /resources hub page (links to all 8)
+- ✅ **Complete SEO Pack Implementation:**
+  - Canonical tags (all 14 pages)
+  - OpenGraph tags (8 content pages) - fixes Facebook/LinkedIn sharing
+  - Twitter cards (8 content pages) - fixes X/Twitter sharing
+  - FAQ Schema (homepage) - enables Google FAQ rich results
+  - HowTo Schema (3 tutorial pages) - enables step-by-step rich results
+  - Organization Schema (homepage) - tells Google about the organization
+  - Improved Schema.org site name ("Pitch Changer" vs "pitchchanger.io")
+- ✅ **SEO Files:** sitemap.xml, robots.txt, llms.txt (all deployed)
+- ✅ **Metadata Optimization:**
+  - Updated title: "Pitch Changer - Change the Pitch of Any Song (Free Tool)"
+  - Updated description: mentions both pitch AND speed
+  - Unique titles/descriptions for each of 8 content pages
+- ✅ **Search Console Setup:**
+  - Verified property
+  - Submitted updated sitemap (14 pages discovered)
+  - Requested indexing for 5 priority pages
+  - Google will crawl in 1-3 days
+- ✅ **Branding:** Added logo to header (next to PitchChanger.io text)
+- 📚 **Learned:** Social media helps SEO indirectly (traffic, backlinks, brand awareness)
+- 📚 **Learned:** For tools, short sessions (2-3 min) are GOOD for SEO (task completion matters, not time)
+- 📚 **Learned:** Google Search Console needs full URL for sitemap (/sitemap.xml or https://...)
+- 📚 **Learned:** vocalremover.org uses Web Workers for client-side processing (not server uploads)
+- 🔴 **Discovered:** Export doesn't include speed changes (CRITICAL BUG for next session)
+
 ### Earlier Sessions (2025-11-22)
 - Safari unlock pattern, memory leak fixes, AudioContext cleanup, AbortController for decode, error banners, inline gradients, branding/spacing improvements, additional format support (FLAC/M4A/AAC), Webpack build fix via env var.
 
@@ -521,4 +584,4 @@ Notes:
 
 ---
 
-**Last Updated:** 2025-11-25 3:00 PM (BETA SWAPPED TO PRODUCTION: waveform+pitch+speed controls live at pitchchanger.io; AudioPlayerLegacy archived; AdSense reviewing new version; tested and stable)
+**Last Updated:** 2025-11-26 12:00 AM (Session 5 complete: 8-page SEO strategy deployed, complete Schema markup, Search Console configured; ⚠️ Export bug discovered - doesn't include speed changes; commit 3e23ef0)
