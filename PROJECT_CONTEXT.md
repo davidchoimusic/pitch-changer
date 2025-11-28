@@ -12,7 +12,7 @@
 - **Branding:** PitchChanger.io (capital P and C)
 - **Main Branch:** `main`
 - **Current Branch:** `main`
-- **Current Commit:** d71f9f6 (Export delay bug fixed: PitchShift config now matches preview)
+- **Current Commit:** faea097 (Removed ad placeholder rectangles from processing flow)
 - **Open PRs/Issues:** None critical
 - **Production:** https://pitchchanger.io (waveform+pitch+speed controls; AudioPlayerBeta)
 - **Legacy:** components/AudioPlayerLegacy.tsx (old pitch-only version, archived for rollback)
@@ -609,11 +609,12 @@ Notes:
   - Fix: Match export config exactly to preview (`windowSize: 0.1`, no other params)
 - ✅ Reduced file upload box height by ~50%
 - ✅ Attempted pulsating glow animation (reverted - Tailwind v4 strips @keyframes)
+- ✅ Removed ad placeholder rectangles from processing flow (cleaner UI)
 - 📚 **Learned:** Always run `tsc --noEmit` before pushing - it caught the legacy file break
 - 📚 **Learned:** When adding params to shared functions, grep for ALL usages (including archived files)
 - 📚 **Learned:** 🔴 **CRITICAL:** Export PitchShift config MUST match preview EXACTLY - different params cause delay/artifacts
 - 📚 **Learned:** Tailwind v4 strips @keyframes from globals.css - use inline styles or <style> tags for animations
-- 🎯 **Commits:** f05c8f6 (speed export), d71f9f6 (delay fix)
+- 🎯 **Commits:** f05c8f6 (speed export), d71f9f6 (delay fix), faea097 (remove ad placeholders)
 
 ### Earlier Sessions (2025-11-22)
 - Safari unlock pattern, memory leak fixes, AudioContext cleanup, AbortController for decode, error banners, inline gradients, branding/spacing improvements, additional format support (FLAC/M4A/AAC), Webpack build fix via env var.
@@ -645,4 +646,4 @@ Notes:
 
 ---
 
-**Last Updated:** 2025-11-27 (Session 6: ✅ Export speed+pitch working; ✅ Export delay bug FIXED - PitchShift config must match preview exactly; commits f05c8f6, d71f9f6)
+**Last Updated:** 2025-11-27 (Session 6: ✅ Export speed+pitch working; ✅ Export delay bug FIXED; ✅ Removed ad placeholders; commit faea097)
