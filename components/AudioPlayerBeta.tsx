@@ -731,23 +731,9 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
         </div>
       </div>
 
-      {/* Ad Space 1 - Production Flow */}
+      {/* Download Ready Section */}
       {(isProcessing || processedBlob) && (
         <>
-          <div className="bg-bg-card border border-divider rounded-lg p-8">
-            <div className="h-[250px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
-              <p className="text-gray-500">Ad Space - Sponsor 1 (728x250)</p>
-            </div>
-          </div>
-
-          {/* Ad Space 2 */}
-          <div className="bg-bg-card border border-divider rounded-lg p-8">
-            <div className="h-[250px] bg-gray-800/50 border border-gray-700 rounded flex items-center justify-center">
-              <p className="text-gray-500">Ad Space - Sponsor 2 (728x250)</p>
-            </div>
-          </div>
-
-          {/* Download Ready Section */}
           {processedBlob && (
             <div ref={downloadSectionRef} className="bg-green-500/10 border-2 border-green-500/50 rounded-lg p-8 space-y-4">
               <div className="text-center space-y-3">
