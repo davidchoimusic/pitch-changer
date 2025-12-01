@@ -13,6 +13,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     // Tool Landing Pages (High Priority)
     {
+      url: `${baseUrl}/audio-pitch-changer`,
+      lastModified: '2025-12-01',
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/audio-speed-changer`,
       lastModified: '2025-11-25',
       changeFrequency: 'weekly',
@@ -37,6 +43,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     // Resource Pages (Medium Priority)
+    {
+      url: `${baseUrl}/change-pitch-online`,
+      lastModified: '2025-12-01',
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     {
       url: `${baseUrl}/how-to-change-the-key-of-a-song`,
       lastModified: '2025-11-25',

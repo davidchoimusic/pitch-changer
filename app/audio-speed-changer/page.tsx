@@ -84,8 +84,9 @@ export default function AudioSpeedChangerPage() {
           </Link>
         </div>
 
-        <div className="flex gap-4 text-sm">
+        <div className="flex gap-4 text-sm flex-wrap">
           <Link href="/" className="text-accent hover:underline">← Back to Home</Link>
+          <Link href="/audio-pitch-changer" className="text-accent hover:underline">Audio Pitch Changer</Link>
           <Link href="/how-to-slow-down-audio" className="text-accent hover:underline">How to Slow Down Audio</Link>
           <Link href="/how-to-speed-up-audio" className="text-accent hover:underline">How to Speed Up Audio</Link>
         </div>

@@ -83,10 +83,11 @@ export default function Mp3PitchChangerPage() {
           </Link>
         </div>
 
-        <div className="flex gap-4 text-sm">
+        <div className="flex gap-4 text-sm flex-wrap">
           <Link href="/" className="text-accent hover:underline">← Back to Home</Link>
+          <Link href="/audio-pitch-changer" className="text-accent hover:underline">Audio Pitch Changer</Link>
+          <Link href="/change-pitch-online" className="text-accent hover:underline">How to Change Pitch Online</Link>
           <Link href="/how-to-change-the-key-of-a-song" className="text-accent hover:underline">How to Change Key</Link>
-          <Link href="/change-pitch-vs-change-speed" className="text-accent hover:underline">Pitch vs Speed</Link>
         </div>
       </div>
     </div>

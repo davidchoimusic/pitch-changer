@@ -11,6 +11,11 @@ export const metadata = {
 export default function ResourcesPage() {
   const toolPages = [
     {
+      title: 'Audio Pitch Changer',
+      href: '/audio-pitch-changer',
+      description: 'Change music pitch online without changing speed'
+    },
+    {
       title: 'Audio Speed Changer',
       href: '/audio-speed-changer',
       description: 'Change audio speed without affecting pitch'
@@ -33,6 +38,11 @@ export default function ResourcesPage() {
   ]
 
   const guides = [
+    {
+      title: 'How to Change Pitch Online',
+      href: '/change-pitch-online',
+      description: 'Free step-by-step guide to changing pitch of any song'
+    },
     {
       title: 'How to Change the Key of a Song',
       href: '/how-to-change-the-key-of-a-song',

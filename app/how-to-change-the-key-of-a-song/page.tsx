@@ -126,8 +126,9 @@ export default function HowToChangeKeyPage() {
 
         <div className="flex gap-4 text-sm flex-wrap">
           <Link href="/" className="text-accent hover:underline">← Back to Home</Link>
+          <Link href="/audio-pitch-changer" className="text-accent hover:underline">Audio Pitch Changer</Link>
+          <Link href="/change-pitch-online" className="text-accent hover:underline">Change Pitch Online</Link>
           <Link href="/mp3-pitch-changer" className="text-accent hover:underline">MP3 Pitch Changer</Link>
-          <Link href="/change-pitch-vs-change-speed" className="text-accent hover:underline">Pitch vs Speed</Link>
         </div>
       </div>
     </div>
