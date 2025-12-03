@@ -246,7 +246,7 @@ export default function Home() {
                   a: 'MP3, WAV, FLAC, M4A, and AAC files up to 250MB.'
                 },
                 {
-                  q: 'What's the maximum file size?',
+                  q: "What's the maximum file size?",
                   a: '250MB — plenty for most songs and audio files.'
                 },
                 {
