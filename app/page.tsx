@@ -149,7 +149,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Why Use PitchChanger.io */}
+          {/* Popular Use Cases */}
           <div className="space-y-4">
             <div className="mt-6 md:mt-8 mb-6 md:mb-8 flex justify-center">
               <div
@@ -160,26 +160,34 @@ export default function Home() {
                 }}
               />
             </div>
-            <h2 className="text-3xl font-bold text-center mb-6 md:mb-8">Why Use PitchChanger.io?</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="space-y-2 bg-bg-card border border-divider rounded-lg p-5">
-                <h3 className="text-lg font-semibold">Musicians & Vocalists</h3>
-                <p className="text-sm text-gray-400">
-                  Transpose songs, change pitch for practice, adjust keys for your vocal range, or prepare backing tracks.
-                </p>
-              </div>
-              <div className="space-y-2 bg-bg-card border border-divider rounded-lg p-5">
-                <h3 className="text-lg font-semibold">DJs & Producers</h3>
-                <p className="text-sm text-gray-400">
-                  A fast online pitch changer for remixes, edits, and mixing — shift pitch without changing speed.
-                </p>
-              </div>
-              <div className="space-y-2 bg-bg-card border border-divider rounded-lg p-5">
-                <h3 className="text-lg font-semibold">Teachers & Karaoke Users</h3>
-                <p className="text-sm text-gray-400">
-                  Change pitch of a song instantly for lessons, sing-alongs, and rehearsals with real-time preview.
-                </p>
-              </div>
+            <h2 className="text-3xl font-bold text-center mb-6 md:mb-8">Popular Use Cases</h2>
+            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-4 max-w-3xl mx-auto">
+              <ul className="space-y-3">
+                <li className="flex gap-3 items-start">
+                  <span className="text-accent">•</span>
+                  <span><strong className="text-white">Singers:</strong> Transpose backing tracks to match your vocal range for performances or practice</span>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <span className="text-accent">•</span>
+                  <span><strong className="text-white">Musicians:</strong> Slow down complex solos to learn them note-by-note, then speed up as you improve</span>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <span className="text-accent">•</span>
+                  <span><strong className="text-white">DJs:</strong> Match keys between tracks for harmonic mixing or create slowed/nightcore versions</span>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <span className="text-accent">•</span>
+                  <span><strong className="text-white">Teachers:</strong> Create practice materials at appropriate difficulty levels for students</span>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <span className="text-accent">•</span>
+                  <span><strong className="text-white">Karaoke:</strong> Adjust any song to fit your voice perfectly</span>
+                </li>
+                <li className="flex gap-3 items-start">
+                  <span className="text-accent">•</span>
+                  <span><strong className="text-white">Transcription:</strong> Slow down audio to catch every word or note</span>
+                </li>
+              </ul>
             </div>
           </div>
 
