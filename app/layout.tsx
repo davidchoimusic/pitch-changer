@@ -3,7 +3,7 @@ import Link from 'next/link'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Change the Pitch of Your Song or Audio Online',
+  title: 'Change the Pitch of Any Song or Audio (Free Tool)',
   description:
     'Free online pitch and speed changer. Change the pitch or tempo of any song or audio file without changing speed or quality. Works with MP3, WAV, FLAC, M4A, AAC — fast, easy, and secure.',
   keywords: [
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     canonical: 'https://pitchchanger.io',
   },
   openGraph: {
-    title: 'Change the Pitch of Your Song or Audio Online',
+    title: 'Change the Pitch of Any Song or Audio (Free Tool)',
     description:
       'Free online pitch and speed changer. Change the pitch or tempo of any song or audio file without changing speed or quality. Works with MP3, WAV, FLAC, M4A, AAC — fast, easy, and secure.',
     url: 'https://pitchchanger.io',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@PitchChangerIO',
     creator: '@PitchChangerIO',
-    title: 'Change the Pitch of Your Song or Audio Online',
+    title: 'Change the Pitch of Any Song or Audio (Free Tool)',
     description:
       'Free online pitch and speed changer. Change the pitch or tempo of any song or audio file without changing speed or quality. Works with MP3, WAV, FLAC, M4A, AAC — fast, easy, and secure.',
     images: ['https://pitchchanger.io/1200x600-pitchchanger-x.png'],
