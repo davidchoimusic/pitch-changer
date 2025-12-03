@@ -34,27 +34,6 @@ export const metadata = {
 export default function HowToChangeKeyPage() {
   return (
     <>
-      {/* Floating music notes animation styles */}
-      <style jsx>{`
-        @keyframes float-note {
-          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-          50% { transform: translateY(-20px) rotate(10deg); opacity: 1; }
-        }
-        @keyframes float-note-2 {
-          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
-          50% { transform: translateY(-15px) rotate(-8deg); opacity: 0.9; }
-        }
-        @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-          50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
-        }
-        .float-note-1 { animation: float-note 3s ease-in-out infinite; }
-        .float-note-2 { animation: float-note-2 4s ease-in-out infinite 0.5s; }
-        .float-note-3 { animation: float-note 3.5s ease-in-out infinite 1s; }
-        .float-note-4 { animation: float-note-2 4.5s ease-in-out infinite 1.5s; }
-        .pulse-cta { animation: pulse-glow 2s ease-in-out infinite; }
-      `}</style>
-
       {/* HowTo Schema for Google Rich Results */}
       <Script
         id="howto-schema"
@@ -105,11 +84,11 @@ export default function HowToChangeKeyPage() {
         <article className="max-w-3xl mx-auto space-y-10 text-gray-300">
           {/* Hero with floating music notes */}
           <header className="relative space-y-4 text-center py-6">
-            {/* Floating music notes */}
-            <span className="float-note-1 absolute text-4xl text-purple-400 top-0 left-[10%] select-none">♪</span>
-            <span className="float-note-2 absolute text-3xl text-pink-400 top-4 right-[15%] select-none">♫</span>
-            <span className="float-note-3 absolute text-2xl text-cyan-400 bottom-0 left-[20%] select-none">♬</span>
-            <span className="float-note-4 absolute text-3xl text-yellow-400 bottom-4 right-[25%] select-none">♪</span>
+            {/* Floating music notes with Tailwind animations */}
+            <span className="absolute text-4xl text-purple-400 top-0 left-[10%] select-none animate-bounce" style={{ animationDuration: '3s' }}>♪</span>
+            <span className="absolute text-3xl text-pink-400 top-4 right-[15%] select-none animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}>♫</span>
+            <span className="absolute text-2xl text-cyan-400 bottom-0 left-[20%] select-none animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '1s' }}>♬</span>
+            <span className="absolute text-3xl text-yellow-400 bottom-4 right-[25%] select-none animate-bounce" style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}>♪</span>
 
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
               🎵 How to Change the Key of a Song
@@ -435,7 +414,7 @@ export default function HowToChangeKeyPage() {
               <p className="text-2xl text-white font-bold">Ready to try it? 🚀</p>
               <p className="text-gray-400">Upload your song and start transposing in seconds</p>
             </div>
-            <Link href="/" className="pulse-cta inline-block px-10 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all text-lg">
+            <Link href="/" className="inline-block px-10 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all text-lg hover:scale-105 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40">
               Try PitchChanger.io Free →
             </Link>
           </div>
