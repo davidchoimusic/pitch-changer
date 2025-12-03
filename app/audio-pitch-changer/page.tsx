@@ -266,29 +266,6 @@ export default function AudioPitchChangerPage() {
           </div>
         </section>
 
-        {/* Quick How-To */}
-        <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-white">⚡ Quick Start</h2>
-          <div className="grid gap-3">
-            <div className="flex gap-4 items-center bg-bg-card border border-divider rounded-lg p-4">
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-accent text-white font-bold">1</span>
-              <p><strong className="text-white">Upload</strong> — drag & drop any audio file (MP3, WAV, FLAC, M4A, AAC)</p>
-            </div>
-            <div className="flex gap-4 items-center bg-bg-card border border-divider rounded-lg p-4">
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-accent text-white font-bold">2</span>
-              <p><strong className="text-white">Adjust</strong> — move the pitch slider (±12 semitones)</p>
-            </div>
-            <div className="flex gap-4 items-center bg-bg-card border border-divider rounded-lg p-4">
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-accent text-white font-bold">3</span>
-              <p><strong className="text-white">Preview</strong> — hit play to hear changes in real-time</p>
-            </div>
-            <div className="flex gap-4 items-center bg-bg-card border border-divider rounded-lg p-4">
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500 text-white font-bold">4</span>
-              <p><strong className="text-white">Download</strong> — process and save your pitch-shifted file</p>
-            </div>
-          </div>
-        </section>
-
         {/* CTA */}
         <section className="bg-gradient-to-r from-purple-500/20 via-accent/20 to-cyan-500/20 border border-accent/30 rounded-2xl p-8 text-center space-y-4">
           <div className="text-4xl">🎹✨</div>
