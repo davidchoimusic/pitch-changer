@@ -58,6 +58,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Favicon */}
+        <link rel="icon" href="/pitchchanger.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/pitchchanger.png" />
+
         {/* Google AdSense */}
         <script
           async
