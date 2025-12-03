@@ -29,22 +29,24 @@ export default function AboutPage() {
         {/* About the Creator */}
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold text-white">Why I Built This</h2>
-          <p>
-            Hi 👋, I'm <a href="https://en.wikipedia.org/wiki/David_Choi" target="_blank" rel="noopener noreferrer" className="text-accent underline font-semibold hover:text-white">David Choi</a> — singer, songwriter, and founder of <a href="https://choismusic.com" target="_blank" rel="noopener noreferrer" className="text-accent underline font-semibold hover:text-white">CHOISMUSIC</a>.
-          </p>
-          <p>
-            As a musician, I've spent countless hours needing to transpose songs for different vocal ranges, slow down
-            tricky passages to learn them, or match keys for collaborations.
-          </p>
-          <p>
-            So I built PitchChanger.io — a tool I actually wanted to use myself. It's fast, it's free, and most
-            importantly, your files never leave your device. Everything processes right in your browser. No uploads,
-            no waiting, no privacy concerns.
-          </p>
-          <p>
-            Whether you're a singer adjusting a backing track, a guitarist learning a solo, or a teacher preparing
-            materials for students, I hope this tool helps you the way I wished something like it existed years ago.
-          </p>
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-6 space-y-3">
+            <p>
+              Hi 👋, I'm <a href="https://en.wikipedia.org/wiki/David_Choi" target="_blank" rel="noopener noreferrer" className="text-blue-300 underline font-semibold hover:text-white">David Choi</a> — singer, songwriter, and founder of <a href="https://choismusic.com" target="_blank" rel="noopener noreferrer" className="text-blue-300 underline font-semibold hover:text-white">CHOISMUSIC</a>.
+            </p>
+            <p>
+              As a musician, I've spent countless hours needing to transpose songs for different vocal ranges, slow down
+              tricky passages to learn them, or match keys for collaborations.
+            </p>
+            <p>
+              So I built PitchChanger.io — a tool I actually wanted to use myself. It's fast, it's free, and most
+              importantly, your files never leave your device. Everything processes right in your browser. No uploads,
+              no waiting, no privacy concerns.
+            </p>
+            <p>
+              Whether you're a singer adjusting a backing track, a guitarist learning a solo, or a teacher preparing
+              materials for students, I hope this tool helps you the way I wished something like it existed years ago.
+            </p>
+          </div>
         </section>
 
         {/* Supported Formats */}
