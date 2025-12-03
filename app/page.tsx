@@ -67,6 +67,30 @@ export default function Home() {
                   '@type': 'Answer',
                   text: '100%. This audio pitch changer processes everything locally — nothing is uploaded.'
                 }
+              },
+              {
+                '@type': 'Question',
+                name: 'What audio formats are supported?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'MP3, WAV, FLAC, M4A, and AAC files up to 250MB.'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: "What's the maximum file size?",
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '250MB — plenty for most songs and audio files.'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: 'What format is the output?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'High-quality WAV file, which you can convert to other formats if needed.'
+                }
               }
             ]
           })
@@ -211,11 +235,23 @@ export default function Home() {
                 },
                 {
                   q: 'Is it really online and free?',
-                  a: 'Yes. It’s a free online pitch changer that works directly in your browser with real-time preview.'
+                  a: 'Yes. It's a free online pitch changer that works directly in your browser with real-time preview.'
                 },
                 {
                   q: 'Are my files private?',
                   a: '100%. This audio pitch changer processes everything locally — nothing is uploaded.'
+                },
+                {
+                  q: 'What audio formats are supported?',
+                  a: 'MP3, WAV, FLAC, M4A, and AAC files up to 250MB.'
+                },
+                {
+                  q: 'What's the maximum file size?',
+                  a: '250MB — plenty for most songs and audio files.'
+                },
+                {
+                  q: 'What format is the output?',
+                  a: 'High-quality WAV file, which you can convert to other formats if needed.'
                 }
               ].map((item, idx) => {
                 const isOpen = openFaq === idx
