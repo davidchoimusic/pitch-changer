@@ -42,66 +42,6 @@ export default function AboutPage() {
           </p>
         </section>
 
-        {/* How It Works */}
-        <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-white">How It Works</h2>
-          <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
-            <p>
-              PitchChanger.io uses advanced Web Audio API technology and the Tone.js library to perform
-              professional-grade pitch shifting directly in your browser. Here's what makes it special:
-            </p>
-            <ul className="space-y-3">
-              <li className="flex gap-3">
-                <span className="text-accent font-bold">1.</span>
-                <span><strong className="text-white">Client-Side Processing:</strong> All audio processing happens on your computer, not on our servers. This means faster results and complete privacy.</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-accent font-bold">2.</span>
-                <span><strong className="text-white">Real-Time Preview:</strong> Hear your changes instantly as you adjust the pitch slider. No waiting for processing—just drag and listen.</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-accent font-bold">3.</span>
-                <span><strong className="text-white">Tempo Preservation:</strong> Our pitch-shifting algorithm changes the key without affecting the speed. A 3-minute song stays 3 minutes, just in a different key.</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-accent font-bold">4.</span>
-                <span><strong className="text-white">Speed Control:</strong> Independently adjust playback speed from 0.5x to 1.5x without affecting pitch—perfect for practice and transcription.</span>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* Who It's For */}
-        <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-white">Who Uses PitchChanger.io?</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-              <h3 className="font-semibold text-white">Singers & Vocalists</h3>
-              <p className="text-sm">Transpose backing tracks to match your vocal range. Whether you need a song higher for soprano or lower for bass, adjust it in seconds.</p>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-              <h3 className="font-semibold text-white">Musicians & Bands</h3>
-              <p className="text-sm">Practice along with songs in any key. Match the tuning of different instruments or prepare tracks for live performances.</p>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-              <h3 className="font-semibold text-white">DJs & Producers</h3>
-              <p className="text-sm">Quickly test remix ideas, match keys for mashups, or create slowed/sped-up versions of tracks for your sets.</p>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-              <h3 className="font-semibold text-white">Music Teachers</h3>
-              <p className="text-sm">Slow down complex passages for students to learn. Transpose songs to appropriate keys for different skill levels.</p>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-              <h3 className="font-semibold text-white">Karaoke Enthusiasts</h3>
-              <p className="text-sm">Adjust any karaoke track to perfectly match your voice. No more straining for high notes or mumbling through low ones.</p>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-              <h3 className="font-semibold text-white">Content Creators</h3>
-              <p className="text-sm">Create unique audio effects, adjust background music for videos, or experiment with creative pitch effects.</p>
-            </div>
-          </div>
-        </section>
-
         {/* Supported Formats */}
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold text-white">Supported Audio Formats</h2>
