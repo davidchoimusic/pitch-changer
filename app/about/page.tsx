@@ -26,19 +26,26 @@ export default function AboutPage() {
           <p className="text-lg text-gray-400">Free, private, browser-based audio pitch and speed shifting</p>
         </div>
 
-        {/* Mission */}
+        {/* About the Creator */}
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-white">Our Mission</h2>
+          <h2 className="text-2xl font-semibold text-white">Why I Built This</h2>
           <p>
-            PitchChanger.io was created with a simple goal: to provide musicians, singers, DJs, teachers, and creators
-            with a fast, free, and completely private way to change the pitch and speed of audio files. We believe
-            that essential audio tools should be accessible to everyone, without requiring expensive software,
-            complicated installations, or uploading sensitive files to remote servers.
+            Hi, I'm <a href="https://en.wikipedia.org/wiki/David_Choi" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">David Choi</a> — singer, songwriter, and founder of <a href="https://choismusic.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">CHOISMUSIC</a>.
           </p>
           <p>
-            Unlike traditional pitch-shifting software that can cost hundreds of dollars or online services that
-            upload your files to their servers, PitchChanger.io processes everything directly in your web browser.
-            Your audio files never leave your device, ensuring complete privacy and instant results.
+            As a musician, I've spent countless hours needing to transpose songs for different vocal ranges, slow down
+            tricky passages to learn them, or match keys for collaborations. The existing tools were either expensive
+            software requiring installation, or online services that made me upload my unreleased tracks to someone
+            else's server — something I was never comfortable with.
+          </p>
+          <p>
+            So I built PitchChanger.io — a tool I actually wanted to use myself. It's fast, it's free, and most
+            importantly, your files never leave your device. Everything processes right in your browser. No uploads,
+            no waiting, no privacy concerns.
+          </p>
+          <p>
+            Whether you're a singer adjusting a backing track, a guitarist learning a solo, or a teacher preparing
+            materials for students, I hope this tool helps you the way I wished something like it existed years ago.
           </p>
         </section>
 
