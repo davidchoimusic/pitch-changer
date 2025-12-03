@@ -30,7 +30,7 @@ export default function AboutPage() {
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold text-white">Why I Built This</h2>
           <p>
-            Hi, I'm <a href="https://en.wikipedia.org/wiki/David_Choi" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">David Choi</a> — singer, songwriter, and founder of <a href="https://choismusic.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">CHOISMUSIC</a>.
+            Hi 👋, I'm <a href="https://en.wikipedia.org/wiki/David_Choi" target="_blank" rel="noopener noreferrer" className="text-accent underline font-semibold hover:text-white">David Choi</a> — singer, songwriter, and founder of <a href="https://choismusic.com" target="_blank" rel="noopener noreferrer" className="text-accent underline font-semibold hover:text-white">CHOISMUSIC</a>.
           </p>
           <p>
             As a musician, I've spent countless hours needing to transpose songs for different vocal ranges, slow down
