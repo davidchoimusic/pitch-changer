@@ -44,64 +44,6 @@ export default function AudioPitchChangerPage() {
           </p>
         </header>
 
-        {/* Quick Feature Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl p-4 text-center">
-            <div className="text-2xl mb-1">🎵</div>
-            <p className="text-sm text-purple-300">±12 semitones</p>
-          </div>
-          <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-xl p-4 text-center">
-            <div className="text-2xl mb-1">⏱️</div>
-            <p className="text-sm text-cyan-300">Tempo locked</p>
-          </div>
-          <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-4 text-center">
-            <div className="text-2xl mb-1">🔒</div>
-            <p className="text-sm text-green-300">100% private</p>
-          </div>
-          <div className="bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 rounded-xl p-4 text-center">
-            <div className="text-2xl mb-1">💸</div>
-            <p className="text-sm text-orange-300">Totally free</p>
-          </div>
-        </div>
-
-        {/* What This Tool Does */}
-        <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-white">🎯 What This Tool Does</h2>
-          <p>
-            PitchChanger.io is a <Link href="/" className="text-accent hover:underline">free audio pitch changer</Link> that runs entirely in your browser. Upload any audio file (MP3, WAV, FLAC, M4A, AAC), drag the pitch slider, and hear the change in real-time. When you're ready, export the result — no account needed, no files uploaded to servers.
-          </p>
-          <div className="grid md:grid-cols-2 gap-3">
-            <div className="bg-bg-card border border-divider rounded-lg p-4 flex gap-3">
-              <span className="text-xl">🎤</span>
-              <div>
-                <p className="text-white font-medium">Vocalists</p>
-                <p className="text-sm text-gray-400">Match any song to your vocal range</p>
-              </div>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-4 flex gap-3">
-              <span className="text-xl">🎸</span>
-              <div>
-                <p className="text-white font-medium">Musicians</p>
-                <p className="text-sm text-gray-400">Transpose without retuning</p>
-              </div>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-4 flex gap-3">
-              <span className="text-xl">🎧</span>
-              <div>
-                <p className="text-white font-medium">DJs & Producers</p>
-                <p className="text-sm text-gray-400">Key-match tracks for mixing</p>
-              </div>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-4 flex gap-3">
-              <span className="text-xl">📚</span>
-              <div>
-                <p className="text-white font-medium">Teachers</p>
-                <p className="text-sm text-gray-400">Adapt songs for any student</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* The Science Section */}
         <section className="space-y-6">
           <h2 className="text-2xl font-semibold text-white">🔬 The Science: How Pitch Shifting Works</h2>
@@ -230,47 +172,97 @@ export default function AudioPitchChangerPage() {
           </div>
         </section>
 
-        {/* Semitones Explained */}
-        <section className="space-y-4">
-          <h2 className="text-2xl font-semibold text-white">🎼 What's a Semitone?</h2>
+        {/* History Section */}
+        <section className="space-y-6">
+          <h2 className="text-2xl font-semibold text-white">📜 A Brief History of Pitch Shifting</h2>
           <p>
-            A <strong className="text-white">semitone</strong> is the smallest interval in Western music — the distance between two adjacent piano keys (including black keys).
+            The quest to change pitch independently from speed has driven audio innovation for over a century. Here's how we got from spinning records to real-time browser-based processing:
           </p>
-          <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-600/30 rounded-xl p-6">
-            <svg viewBox="0 0 300 80" className="w-full" aria-label="Piano keyboard showing semitones">
-              {/* White keys */}
-              <rect x="20" y="20" width="35" height="50" fill="#fff" stroke="#333" rx="2"/>
-              <rect x="57" y="20" width="35" height="50" fill="#fff" stroke="#333" rx="2"/>
-              <rect x="94" y="20" width="35" height="50" fill="#fff" stroke="#333" rx="2"/>
-              <rect x="131" y="20" width="35" height="50" fill="#fff" stroke="#333" rx="2"/>
-              <rect x="168" y="20" width="35" height="50" fill="#fff" stroke="#333" rx="2"/>
-              <rect x="205" y="20" width="35" height="50" fill="#fff" stroke="#333" rx="2"/>
-              <rect x="242" y="20" width="35" height="50" fill="#fff" stroke="#333" rx="2"/>
-              {/* Black keys */}
-              <rect x="45" y="20" width="22" height="32" fill="#1a1a2e" rx="2"/>
-              <rect x="82" y="20" width="22" height="32" fill="#1a1a2e" rx="2"/>
-              <rect x="156" y="20" width="22" height="32" fill="#1a1a2e" rx="2"/>
-              <rect x="193" y="20" width="22" height="32" fill="#1a1a2e" rx="2"/>
-              <rect x="230" y="20" width="22" height="32" fill="#1a1a2e" rx="2"/>
-              {/* Labels */}
-              <text x="37" y="78" fill="#64748b" style={{fontSize: '8px'}} textAnchor="middle">C</text>
-              <text x="74" y="78" fill="#64748b" style={{fontSize: '8px'}} textAnchor="middle">D</text>
-              <text x="111" y="78" fill="#64748b" style={{fontSize: '8px'}} textAnchor="middle">E</text>
-              <text x="148" y="78" fill="#64748b" style={{fontSize: '8px'}} textAnchor="middle">F</text>
-              {/* Semitone markers */}
-              <path d="M 37 15 L 56 15" stroke="#a855f7" strokeWidth="2"/>
-              <text x="46" y="12" fill="#a855f7" style={{fontSize: '7px'}} textAnchor="middle">1 semi</text>
-            </svg>
-            <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-gray-400"><strong className="text-white">+12 semitones</strong> = 1 octave up</p>
-                <p className="text-gray-400"><strong className="text-white">+7 semitones</strong> = perfect 5th up</p>
+
+          {/* Timeline */}
+          <div className="space-y-4">
+            {/* 1920s-1940s */}
+            <div className="bg-gradient-to-br from-amber-900/30 to-orange-900/30 border border-amber-500/30 rounded-xl p-5 space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">📻</span>
+                <h3 className="text-lg font-semibold text-amber-300">1920s–1940s: The Rotating Head Era</h3>
               </div>
-              <div>
-                <p className="text-gray-400"><strong className="text-white">-12 semitones</strong> = 1 octave down</p>
-                <p className="text-gray-400"><strong className="text-white">-2 semitones</strong> = whole step down</p>
-              </div>
+              <p className="text-sm">
+                The earliest pitch-changing patents date back to the <strong className="text-white">1920s</strong>. The basic idea: record audio onto tape or film, then use a <strong className="text-white">rotating playback head</strong> moving at a different rate than the recording head. By the 1940s, this technique appeared in Disney's <em>Cinderella</em> (1950), where many characters had pitched voices created this way.
+              </p>
             </div>
+
+            {/* 1950s-1960s */}
+            <div className="bg-gradient-to-br from-yellow-900/30 to-amber-900/30 border border-yellow-500/30 rounded-xl p-5 space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🎞️</span>
+                <h3 className="text-lg font-semibold text-yellow-300">1950s–1960s: Varispeed & The Beatles</h3>
+              </div>
+              <p className="text-sm">
+                Studio engineers discovered they could tweak reel-to-reel tape recorder <strong className="text-white">varispeed</strong> for crude pitch control. The technique became popular in the '60s — many <strong className="text-white">Beatles tracks</strong> used analog pitch-shifting effects. The Eltro "Information Rate Changer" (a rotary tape head device) was famously used for <strong className="text-white">HAL 9000's voice</strong> in <em>2001: A Space Odyssey</em>.
+              </p>
+            </div>
+
+            {/* 1966 */}
+            <div className="bg-gradient-to-br from-lime-900/30 to-green-900/30 border border-lime-500/30 rounded-xl p-5 space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🔬</span>
+                <h3 className="text-lg font-semibold text-lime-300">1966: The Phase Vocoder is Born</h3>
+              </div>
+              <p className="text-sm">
+                <strong className="text-white">J.L. Flanagan and R.M. Golden</strong> at Bell Laboratories developed the <strong className="text-white">phase vocoder</strong> — originally for speech analysis. This mathematical technique (using FFT to analyze and resynthesize audio) would eventually become the foundation for all modern pitch shifters.
+              </p>
+            </div>
+
+            {/* 1975 */}
+            <div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/30 border border-emerald-500/30 rounded-xl p-5 space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🎛️</span>
+                <h3 className="text-lg font-semibold text-emerald-300">1975: The Digital Revolution Begins</h3>
+              </div>
+              <p className="text-sm">
+                Eventide released the <strong className="text-white">H910 Harmonizer</strong> — the world's first commercially available digital pitch shifter. This groundbreaking hardware could shift pitch in real-time and became a staple in professional studios. It was used on countless hit records throughout the late '70s and '80s.
+              </p>
+            </div>
+
+            {/* 1980s */}
+            <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border border-cyan-500/30 rounded-xl p-5 space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🎹</span>
+                <h3 className="text-lg font-semibold text-cyan-300">1980s: Samplers Take Over</h3>
+              </div>
+              <p className="text-sm">
+                The <strong className="text-white">Fairlight CMI</strong> (1979) and other digital samplers gave musicians real-time pitch control over any recorded sound. Artists like <strong className="text-white">Peter Gabriel, Kate Bush, and Trevor Horn</strong> pioneered creative uses. The Publison Infernal Machine 90 could change pitch without affecting duration — a breakthrough for the era.
+              </p>
+            </div>
+
+            {/* 1997-2000s */}
+            <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-xl p-5 space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🎤</span>
+                <h3 className="text-lg font-semibold text-purple-300">1997: Auto-Tune Changes Everything</h3>
+              </div>
+              <p className="text-sm">
+                Dr. Andy Hildebrand (an ex-Exxon engineer who used similar algorithms for seismic data!) created <strong className="text-white">Auto-Tune</strong>. Originally designed for subtle pitch correction, Cher's 1998 hit "<strong className="text-white">Believe</strong>" deliberately pushed the effect to its extreme — creating the iconic robotic vocal sound that defined a generation of pop music.
+              </p>
+            </div>
+
+            {/* 2000s-2020s */}
+            <div className="bg-gradient-to-br from-rose-900/30 to-red-900/30 border border-rose-500/30 rounded-xl p-5 space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">💻</span>
+                <h3 className="text-lg font-semibold text-rose-300">2000s–Today: Software & AI</h3>
+              </div>
+              <p className="text-sm">
+                DAWs like <strong className="text-white">Ableton Live</strong> (2001) and <strong className="text-white">Logic Pro</strong> integrated pitch shifting as standard features. The 2020s brought <strong className="text-white">AI-powered tools</strong> using neural networks for natural-sounding corrections. And now? Browser-based tools like PitchChanger.io let anyone shift pitch instantly — no downloads, no expensive software, no expertise required.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-r from-accent/10 to-purple-500/10 border border-accent/30 rounded-xl p-4">
+            <p className="text-sm text-center">
+              <span className="text-lg">✨</span> From rotating tape heads to real-time browser processing — <strong className="text-white">100 years of innovation</strong> in your hands, for free.
+            </p>
           </div>
         </section>
 
