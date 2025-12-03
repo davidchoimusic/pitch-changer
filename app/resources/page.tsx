@@ -129,48 +129,6 @@ export default function ResourcesPage() {
           </div>
         </section>
 
-        {/* Key Concepts Section */}
-        <section className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Key Concepts</h2>
-            <p className="text-gray-400">Understanding the fundamentals</p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-3">
-              <h3 className="text-lg font-semibold text-white">What is Pitch?</h3>
-              <p className="text-sm text-gray-400">
-                Pitch is how high or low a sound is. In music, pitch is measured in semitones (half-steps).
-                Raising the pitch by 12 semitones brings a note up one full octave. Our pitch changer lets
-                you adjust pitch from -12 to +12 semitones without changing the tempo.
-              </p>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-3">
-              <h3 className="text-lg font-semibold text-white">What is Tempo?</h3>
-              <p className="text-sm text-gray-400">
-                Tempo is the speed of the music, typically measured in beats per minute (BPM). Our speed
-                changer lets you adjust playback speed from 0.5x to 1.5x without affecting the pitch.
-                This is called time-stretching.
-              </p>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-3">
-              <h3 className="text-lg font-semibold text-white">What is Transposition?</h3>
-              <p className="text-sm text-gray-400">
-                Transposition means moving all the notes in a piece of music up or down by the same interval.
-                When you "change the key" of a song, you're transposing it. This preserves all the musical
-                relationships while shifting everything higher or lower.
-              </p>
-            </div>
-            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-3">
-              <h3 className="text-lg font-semibold text-white">Pitch vs Speed</h3>
-              <p className="text-sm text-gray-400">
-                Traditional methods (like vinyl speed) change pitch and speed together. Modern digital
-                processing separates these—you can change one without affecting the other. This is what
-                makes PitchChanger.io so useful for musicians and creators.
-              </p>
-            </div>
-          </div>
-        </section>
-
         {/* Use Cases */}
         <section className="space-y-6">
           <div>
