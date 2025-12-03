@@ -129,42 +129,6 @@ export default function ResourcesPage() {
           </div>
         </section>
 
-        {/* Use Cases */}
-        <section className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Popular Use Cases</h2>
-            <p className="text-gray-400">How people use PitchChanger.io</p>
-          </div>
-          <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
-            <ul className="space-y-3">
-              <li className="flex gap-3 items-start">
-                <span className="text-accent">•</span>
-                <span><strong className="text-white">Singers:</strong> Transpose backing tracks to match your vocal range for performances or practice</span>
-              </li>
-              <li className="flex gap-3 items-start">
-                <span className="text-accent">•</span>
-                <span><strong className="text-white">Musicians:</strong> Slow down complex solos to learn them note-by-note, then speed up as you improve</span>
-              </li>
-              <li className="flex gap-3 items-start">
-                <span className="text-accent">•</span>
-                <span><strong className="text-white">DJs:</strong> Match keys between tracks for harmonic mixing or create slowed/nightcore versions</span>
-              </li>
-              <li className="flex gap-3 items-start">
-                <span className="text-accent">•</span>
-                <span><strong className="text-white">Teachers:</strong> Create practice materials at appropriate difficulty levels for students</span>
-              </li>
-              <li className="flex gap-3 items-start">
-                <span className="text-accent">•</span>
-                <span><strong className="text-white">Karaoke:</strong> Adjust any song to fit your voice perfectly</span>
-              </li>
-              <li className="flex gap-3 items-start">
-                <span className="text-accent">•</span>
-                <span><strong className="text-white">Transcription:</strong> Slow down audio to catch every word or note</span>
-              </li>
-            </ul>
-          </div>
-        </section>
-
         {/* CTA */}
         <div className="text-center pt-8 border-t border-divider space-y-4">
           <p className="text-lg text-white">Ready to get started?</p>
