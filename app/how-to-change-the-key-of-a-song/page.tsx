@@ -107,9 +107,7 @@ export default function HowToChangeKeyPage() {
             <p className="font-semibold text-white mb-3">In This Guide:</p>
             <ul className="space-y-2 text-sm">
               <li><a href="#what-is-key" className="text-accent hover:underline">What is a Musical Key?</a></li>
-              <li><a href="#why-change" className="text-accent hover:underline">Why Would You Need to Change Keys?</a></li>
               <li><a href="#semitones" className="text-accent hover:underline">Understanding Semitones</a></li>
-              <li><a href="#step-by-step" className="text-accent hover:underline">Step-by-Step Guide</a></li>
               <li><a href="#common-transpositions" className="text-accent hover:underline">Common Transposition Examples</a></li>
             </ul>
           </nav>
@@ -132,58 +130,6 @@ export default function HowToChangeKeyPage() {
                 When a group of people sing it together without instruments, they naturally find a key that's comfortable for
                 most voices. Changing the key of a recorded song works the same way — you're finding a version that fits better.
               </p>
-            </div>
-          </section>
-
-          {/* Why Change the Key */}
-          <section id="why-change" className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Why Would You Need to Change Keys?</h2>
-            <p>
-              There are many practical reasons why singers, musicians, and music professionals need to transpose songs:
-            </p>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Vocal Range Matching</h3>
-                <p className="text-sm">
-                  Every singer has a unique vocal range. A song written for a tenor might be too high for a baritone.
-                  Lowering the key by 2-4 semitones can make it comfortable to sing without straining.
-                </p>
-              </div>
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Karaoke Preparation</h3>
-                <p className="text-sm">
-                  Karaoke tracks are often recorded in the original key, which may not suit your voice.
-                  Adjusting the key lets you sing any song comfortably.
-                </p>
-              </div>
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Instrument Compatibility</h3>
-                <p className="text-sm">
-                  Some instruments have limited ranges or are tuned differently. Guitarists often use capos to change keys;
-                  digital transposition achieves the same result for backing tracks.
-                </p>
-              </div>
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Music Education</h3>
-                <p className="text-sm">
-                  Teachers often transpose songs to keys that are easier for students to play.
-                  A song in B major with 5 sharps becomes much easier in C major with no sharps or flats.
-                </p>
-              </div>
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Live Performance</h3>
-                <p className="text-sm">
-                  Performers may need backing tracks in different keys for different venues, times of day
-                  (morning voice vs. evening voice), or when collaborating with other musicians.
-                </p>
-              </div>
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Creative Remixing</h3>
-                <p className="text-sm">
-                  DJs and producers transpose songs to match keys when creating mashups or mixing tracks together.
-                  Songs in the same or related keys blend more harmoniously.
-                </p>
-              </div>
             </div>
           </section>
 
@@ -313,77 +259,6 @@ export default function HowToChangeKeyPage() {
               <p className="text-sm text-gray-400">
                 Use negative numbers (-1, -2, etc.) to lower the key instead of raising it.
               </p>
-            </div>
-          </section>
-
-          {/* Step by Step Guide */}
-          <section id="step-by-step" className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Step-by-Step Guide: How to Change Key Online</h2>
-            <p>
-              Follow these steps to transpose any song using PitchChanger.io. The entire process takes less than 2 minutes.
-            </p>
-
-            <div className="space-y-4">
-              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
-                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">1</div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-white">Go to PitchChanger.io</h3>
-                  <p className="text-sm">
-                    Open <Link href="/" className="text-accent hover:underline">PitchChanger.io</Link> in any modern web browser.
-                    No account needed, no software to download. Works on desktop, tablet, and mobile devices.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
-                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">2</div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-white">Upload Your Audio File</h3>
-                  <p className="text-sm">
-                    Drag and drop your file onto the upload area, or click to browse. Supported formats include MP3, WAV, FLAC,
-                    M4A, AAC, and OGG. Files up to 250MB are supported.
-                  </p>
-                  <p className="text-sm text-gray-400">
-                    <strong>Privacy note:</strong> Your file is processed entirely in your browser. Nothing is uploaded to any server.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
-                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">3</div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-white">Adjust the Pitch Slider</h3>
-                  <p className="text-sm">
-                    Use the pitch slider to transpose your song. Each increment represents one semitone (half-step).
-                    Move right (+) to raise the key, left (-) to lower it. The range is -12 to +12 semitones (one full octave in either direction).
-                  </p>
-                  <p className="text-sm text-gray-400">
-                    <strong>Tip:</strong> Not sure how many semitones? Start with +2 or -2 and adjust from there.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
-                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">4</div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-white">Preview Your Changes</h3>
-                  <p className="text-sm">
-                    Click the Play button to hear how your song sounds in the new key. The preview updates in real-time as
-                    you adjust the slider. Keep adjusting until you find the perfect key for your needs.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
-                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">5</div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-white">Download Your Transposed Song</h3>
-                  <p className="text-sm">
-                    Happy with the result? Click "Process Audio" to render the final file, then download your transposed song
-                    as a high-quality WAV file. The original tempo and timing are perfectly preserved.
-                  </p>
-                </div>
-              </div>
             </div>
           </section>
 
