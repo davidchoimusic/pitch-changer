@@ -108,6 +108,7 @@ export default function HowToChangeKeyPage() {
             <ul className="space-y-2 text-sm">
               <li><a href="#what-is-key" className="text-accent hover:underline">What is a Musical Key?</a></li>
               <li><a href="#semitones" className="text-accent hover:underline">Understanding Semitones</a></li>
+              <li><a href="#circle-of-fifths" className="text-accent hover:underline">The Circle of Fifths</a></li>
               <li><a href="#common-transpositions" className="text-accent hover:underline">Common Transposition Examples</a></li>
             </ul>
           </nav>
@@ -258,6 +259,99 @@ export default function HowToChangeKeyPage() {
               </div>
               <p className="text-sm text-gray-400">
                 Use negative numbers (-1, -2, etc.) to lower the key instead of raising it.
+              </p>
+            </div>
+
+            {/* Circle of Fifths SVG */}
+            <div id="circle-of-fifths" className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
+              <p className="font-semibold text-white">The Circle of Fifths</p>
+              <p className="text-sm text-gray-400">
+                The Circle of Fifths shows how all 12 musical keys relate to each other. Adjacent keys differ by 5 semitones (a "fifth").
+                Use this to find how many semitones to transpose between any two keys.
+              </p>
+              <div className="flex justify-center py-4">
+                <svg viewBox="0 0 300 300" className="w-full max-w-sm" aria-label="Circle of Fifths showing all 12 musical keys">
+                  {/* Outer circle background */}
+                  <circle cx="150" cy="150" r="130" fill="none" stroke="#334155" strokeWidth="2" />
+                  <circle cx="150" cy="150" r="95" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="4 4" />
+
+                  {/* Key labels arranged in circle - clockwise from top: C, G, D, A, E, B, F#/Gb, Db, Ab, Eb, Bb, F */}
+                  {[
+                    { key: 'C', semi: 0, angle: -90 },
+                    { key: 'G', semi: 7, angle: -60 },
+                    { key: 'D', semi: 2, angle: -30 },
+                    { key: 'A', semi: 9, angle: 0 },
+                    { key: 'E', semi: 4, angle: 30 },
+                    { key: 'B', semi: 11, angle: 60 },
+                    { key: 'F♯', semi: 6, angle: 90 },
+                    { key: 'D♭', semi: 1, angle: 120 },
+                    { key: 'A♭', semi: 8, angle: 150 },
+                    { key: 'E♭', semi: 3, angle: 180 },
+                    { key: 'B♭', semi: 10, angle: 210 },
+                    { key: 'F', semi: 5, angle: 240 },
+                  ].map(({ key, semi, angle }) => {
+                    const radians = (angle * Math.PI) / 180
+                    const x = 150 + 110 * Math.cos(radians)
+                    const y = 150 + 110 * Math.sin(radians)
+                    const innerX = 150 + 75 * Math.cos(radians)
+                    const innerY = 150 + 75 * Math.sin(radians)
+                    return (
+                      <g key={key}>
+                        {/* Key circle */}
+                        <circle
+                          cx={x}
+                          cy={y}
+                          r="22"
+                          fill={key === 'C' ? '#3b82f6' : '#1e293b'}
+                          stroke={key === 'C' ? '#60a5fa' : '#475569'}
+                          strokeWidth="2"
+                        />
+                        {/* Key letter */}
+                        <text
+                          x={x}
+                          y={y + 1}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          fill={key === 'C' ? '#ffffff' : '#e2e8f0'}
+                          className="text-sm font-bold"
+                          style={{ fontSize: '14px', fontWeight: 'bold' }}
+                        >
+                          {key}
+                        </text>
+                        {/* Semitone number */}
+                        <text
+                          x={innerX}
+                          y={innerY}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          fill="#64748b"
+                          style={{ fontSize: '10px' }}
+                        >
+                          {semi === 0 ? '0' : `+${semi}`}
+                        </text>
+                      </g>
+                    )
+                  })}
+
+                  {/* Center label */}
+                  <text x="150" y="145" textAnchor="middle" fill="#94a3b8" style={{ fontSize: '10px' }}>
+                    semitones
+                  </text>
+                  <text x="150" y="158" textAnchor="middle" fill="#94a3b8" style={{ fontSize: '10px' }}>
+                    from C
+                  </text>
+
+                  {/* Arrows showing direction */}
+                  <text x="150" y="40" textAnchor="middle" fill="#22c55e" style={{ fontSize: '9px' }}>
+                    ↻ +7 (up a fifth)
+                  </text>
+                  <text x="150" y="268" textAnchor="middle" fill="#f97316" style={{ fontSize: '9px' }}>
+                    ↺ -5 (down a fifth)
+                  </text>
+                </svg>
+              </div>
+              <p className="text-sm text-gray-400 text-center">
+                <strong className="text-white">Example:</strong> To go from C to A, count clockwise: C → G → D → A = three fifths = +9 semitones (or just read the inner number).
               </p>
             </div>
           </section>
