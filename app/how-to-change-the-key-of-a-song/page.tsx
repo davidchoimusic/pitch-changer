@@ -82,14 +82,8 @@ export default function HowToChangeKeyPage() {
       />
       <div className="container mx-auto px-4 py-12">
         <article className="max-w-3xl mx-auto space-y-10 text-gray-300">
-          {/* Hero with floating music notes */}
-          <header className="relative space-y-4 text-center py-6">
-            {/* Floating music notes with Tailwind animations */}
-            <span className="absolute text-4xl text-purple-400 top-0 left-[10%] select-none animate-bounce" style={{ animationDuration: '3s' }}>♪</span>
-            <span className="absolute text-3xl text-pink-400 top-4 right-[15%] select-none animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}>♫</span>
-            <span className="absolute text-2xl text-cyan-400 bottom-0 left-[20%] select-none animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '1s' }}>♬</span>
-            <span className="absolute text-3xl text-yellow-400 bottom-4 right-[25%] select-none animate-bounce" style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}>♪</span>
-
+          {/* Hero */}
+          <header className="space-y-4 text-center py-6">
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
               🎵 How to Change the Key of a Song
             </h1>
