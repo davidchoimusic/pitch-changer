@@ -83,13 +83,10 @@ export default function HowToChangeKeyPage() {
       <div className="container mx-auto px-4 py-12">
         <article className="max-w-3xl mx-auto space-y-10 text-gray-300">
           {/* Hero */}
-          <header className="space-y-4 text-center py-6">
+          <header className="text-center py-6">
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
               🎵 How to Change the Key of a Song
             </h1>
-            <p className="text-xl text-gray-400 max-w-xl mx-auto">
-              Your go-to guide for transposing music online. Free, fast, and super easy!
-            </p>
           </header>
 
           {/* What is a Musical Key */}
