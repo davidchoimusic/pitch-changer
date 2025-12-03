@@ -34,9 +34,7 @@ export default function AboutPage() {
           </p>
           <p>
             As a musician, I've spent countless hours needing to transpose songs for different vocal ranges, slow down
-            tricky passages to learn them, or match keys for collaborations. The existing tools were either expensive
-            software requiring installation, or online services that made me upload my unreleased tracks to someone
-            else's server — something I was never comfortable with.
+            tricky passages to learn them, or match keys for collaborations.
           </p>
           <p>
             So I built PitchChanger.io — a tool I actually wanted to use myself. It's fast, it's free, and most
