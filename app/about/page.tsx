@@ -149,10 +149,6 @@ export default function AboutPage() {
             advertising support. The ads you see help cover our hosting and development costs, allowing us to
             keep this tool accessible to musicians and creators around the world.
           </p>
-          <p>
-            We're committed to keeping the ad experience non-intrusive. You'll never encounter pop-ups,
-            auto-playing video ads, or anything that interrupts your workflow.
-          </p>
         </section>
 
         {/* CTA */}
