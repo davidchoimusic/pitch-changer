@@ -111,7 +111,6 @@ export default function HowToChangeKeyPage() {
               <li><a href="#semitones" className="text-accent hover:underline">Understanding Semitones</a></li>
               <li><a href="#step-by-step" className="text-accent hover:underline">Step-by-Step Guide</a></li>
               <li><a href="#common-transpositions" className="text-accent hover:underline">Common Transposition Examples</a></li>
-              <li><a href="#faq" className="text-accent hover:underline">Frequently Asked Questions</a></li>
             </ul>
           </nav>
 
@@ -420,63 +419,6 @@ export default function HowToChangeKeyPage() {
                   <span>Down a perfect fourth (e.g., G to D)</span>
                   <span className="text-accent font-mono font-bold">-5</span>
                 </div>
-              </div>
-            </div>
-          </section>
-
-          {/* FAQ */}
-          <section id="faq" className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Frequently Asked Questions</h2>
-            <div className="space-y-4">
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Does changing the key affect the tempo/speed?</h3>
-                <p className="text-sm">
-                  No. PitchChanger.io uses professional-grade pitch-shifting that preserves the original tempo. A 3-minute
-                  song will still be exactly 3 minutes after transposition. This is different from simply speeding up or
-                  slowing down a record, which would change both pitch and tempo together.
-                </p>
-              </div>
-
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Is there any quality loss when transposing?</h3>
-                <p className="text-sm">
-                  Modern pitch-shifting algorithms produce excellent results. For shifts of 1-4 semitones, most listeners
-                  won't notice any quality difference. Larger shifts (8+ semitones) may introduce subtle artifacts, but
-                  the results are still very usable for practice, karaoke, and most applications.
-                </p>
-              </div>
-
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Is PitchChanger.io really free?</h3>
-                <p className="text-sm">
-                  Yes, completely free. There's no premium tier, no feature limits, and no account required.
-                  The service is supported by advertising, which helps keep it free for everyone.
-                </p>
-              </div>
-
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Are my files private?</h3>
-                <p className="text-sm">
-                  100% private. All processing happens locally in your web browser using JavaScript. Your audio files
-                  are never uploaded to any server. When you close the page, the audio data is gone.
-                </p>
-              </div>
-
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">What if I don't know what key my song is in?</h3>
-                <p className="text-sm">
-                  You don't need to know the original key. Just experiment with the pitch slider until the song sits
-                  comfortably in your vocal range or matches your instrument. Start by trying small adjustments (+2 or -2)
-                  and listen to the preview.
-                </p>
-              </div>
-
-              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-white">Can I change pitch and speed independently?</h3>
-                <p className="text-sm">
-                  Yes! PitchChanger.io has separate controls for pitch and speed. You can transpose a song to a new key
-                  AND slow it down for practice (or speed it up) — all independently.
-                </p>
               </div>
             </div>
           </section>
