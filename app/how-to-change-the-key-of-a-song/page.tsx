@@ -92,27 +92,6 @@ export default function HowToChangeKeyPage() {
             </p>
           </header>
 
-          {/* Quick Answer Box */}
-          <div className="bg-accent/10 border border-accent/30 rounded-lg p-6 space-y-3">
-            <p className="font-semibold text-accent">Quick Answer:</p>
-            <p>
-              To change the key of a song, upload your audio file to <Link href="/" className="text-accent hover:underline font-medium">PitchChanger.io</Link>,
-              adjust the pitch slider (each number = 1 semitone = 1 half-step), preview the result, and download.
-              The entire process takes less than 2 minutes and is completely free.
-            </p>
-          </div>
-
-          {/* Table of Contents */}
-          <nav className="bg-bg-card border border-divider rounded-lg p-6">
-            <p className="font-semibold text-white mb-3">In This Guide:</p>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#what-is-key" className="text-accent hover:underline">What is a Musical Key?</a></li>
-              <li><a href="#semitones" className="text-accent hover:underline">Understanding Semitones</a></li>
-              <li><a href="#circle-of-fifths" className="text-accent hover:underline">The Circle of Fifths</a></li>
-              <li><a href="#common-transpositions" className="text-accent hover:underline">Common Transposition Examples</a></li>
-            </ul>
-          </nav>
-
           {/* What is a Musical Key */}
           <section id="what-is-key" className="space-y-4">
             <h2 className="text-2xl font-semibold text-white">What is a Musical Key?</h2>
