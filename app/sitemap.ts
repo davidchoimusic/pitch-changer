@@ -46,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Resources Hub
     {
       url: `${baseUrl}/resources`,
-      lastModified: '2025-11-25',
+      lastModified: '2025-12-03',
       changeFrequency: 'weekly',
       priority: 0.7,
     },
@@ -71,7 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/about`,
-      lastModified: '2025-11-24',
+      lastModified: '2025-12-03',
       changeFrequency: 'monthly',
       priority: 0.5,
     },
