@@ -235,7 +235,7 @@ export default function Home() {
                 },
                 {
                   q: 'Is it really online and free?',
-                  a: 'Yes. It's a free online pitch changer that works directly in your browser with real-time preview.'
+                  a: "Yes. It's a free online pitch changer that works directly in your browser with real-time preview."
                 },
                 {
                   q: 'Are my files private?',
