@@ -34,6 +34,27 @@ export const metadata = {
 export default function HowToChangeKeyPage() {
   return (
     <>
+      {/* Floating music notes animation styles */}
+      <style jsx>{`
+        @keyframes float-note {
+          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+          50% { transform: translateY(-20px) rotate(10deg); opacity: 1; }
+        }
+        @keyframes float-note-2 {
+          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
+          50% { transform: translateY(-15px) rotate(-8deg); opacity: 0.9; }
+        }
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+          50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+        }
+        .float-note-1 { animation: float-note 3s ease-in-out infinite; }
+        .float-note-2 { animation: float-note-2 4s ease-in-out infinite 0.5s; }
+        .float-note-3 { animation: float-note 3.5s ease-in-out infinite 1s; }
+        .float-note-4 { animation: float-note-2 4.5s ease-in-out infinite 1.5s; }
+        .pulse-cta { animation: pulse-glow 2s ease-in-out infinite; }
+      `}</style>
+
       {/* HowTo Schema for Google Rich Results */}
       <Script
         id="howto-schema"
@@ -81,53 +102,95 @@ export default function HowToChangeKeyPage() {
         }}
       />
       <div className="container mx-auto px-4 py-12">
-        <article className="max-w-3xl mx-auto space-y-8 text-gray-300">
-          {/* Hero */}
-          <header className="space-y-4">
+        <article className="max-w-3xl mx-auto space-y-10 text-gray-300">
+          {/* Hero with floating music notes */}
+          <header className="relative space-y-4 text-center py-6">
+            {/* Floating music notes */}
+            <span className="float-note-1 absolute text-4xl text-purple-400 top-0 left-[10%] select-none">♪</span>
+            <span className="float-note-2 absolute text-3xl text-pink-400 top-4 right-[15%] select-none">♫</span>
+            <span className="float-note-3 absolute text-2xl text-cyan-400 bottom-0 left-[20%] select-none">♬</span>
+            <span className="float-note-4 absolute text-3xl text-yellow-400 bottom-4 right-[25%] select-none">♪</span>
+
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-              How to Change the Key of a Song (Free & Easy)
+              🎵 How to Change the Key of a Song
             </h1>
-            <p className="text-xl text-gray-400">
-              The complete guide to transposing music online — perfect for singers, musicians, and music teachers.
+            <p className="text-xl text-gray-400 max-w-xl mx-auto">
+              Your go-to guide for transposing music online. Free, fast, and super easy!
             </p>
           </header>
 
+          {/* Who uses this? Use case cards */}
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold text-white text-center">✨ Who Changes Keys?</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
+                <span className="text-4xl">🎤</span>
+                <p className="font-semibold text-white mt-2">Singers</p>
+                <p className="text-xs text-gray-400 mt-1">Match your vocal range</p>
+              </div>
+              <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
+                <span className="text-4xl">🎧</span>
+                <p className="font-semibold text-white mt-2">DJs</p>
+                <p className="text-xs text-gray-400 mt-1">Mix tracks in harmony</p>
+              </div>
+              <div className="bg-gradient-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
+                <span className="text-4xl">🎸</span>
+                <p className="font-semibold text-white mt-2">Guitarists</p>
+                <p className="text-xs text-gray-400 mt-1">Match capo positions</p>
+              </div>
+              <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
+                <span className="text-4xl">📚</span>
+                <p className="font-semibold text-white mt-2">Teachers</p>
+                <p className="text-xs text-gray-400 mt-1">Adapt songs for students</p>
+              </div>
+            </div>
+          </section>
+
           {/* What is a Musical Key */}
           <section id="what-is-key" className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">What is a Musical Key?</h2>
+            <h2 className="text-2xl font-semibold text-white">🎹 What's a Musical Key?</h2>
             <p>
-              A musical key is the group of notes that form the foundation of a song. When a song is "in the key of C major,"
-              it primarily uses notes from the C major scale. The key determines how high or low the overall pitch of the song sits.
+              Think of a musical key as the "home base" for a song. When someone says a song is "in the key of C major,"
+              they mean it's built around those notes. The key decides whether a song sounds higher or lower overall.
             </p>
             <p>
-              Think of keys like floors in a building. Moving to a higher key is like going up a floor — all the musical
-              relationships stay the same, but everything is shifted higher. This is why changing keys is also called
-              "transposing" — you're moving the entire song up or down the musical ladder.
+              Imagine keys like floors in a building — going up a key is like taking the elevator up a floor.
+              Everything stays the same, just... higher! That's basically what "transposing" means.
             </p>
-            <div className="bg-bg-card border border-divider rounded-lg p-5">
-              <p className="text-sm text-gray-400">
-                <strong className="text-white">Real-world example:</strong> The song "Happy Birthday" can be sung in any key.
-                When a group of people sing it together without instruments, they naturally find a key that's comfortable for
-                most voices. Changing the key of a recorded song works the same way — you're finding a version that fits better.
+            <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl p-5">
+              <p className="text-sm">
+                <span className="text-lg">💡</span> <strong className="text-white">Real talk:</strong> Ever sing "Happy Birthday" with friends?
+                Notice how everyone just kinda finds a comfortable pitch to sing together? That's you naturally finding a key!
+                Transposing a recorded song is the same idea — finding the version that fits YOUR voice.
               </p>
             </div>
           </section>
 
           {/* Understanding Semitones */}
           <section id="semitones" className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Understanding Semitones (The Secret to Transposition)</h2>
+            <h2 className="text-2xl font-semibold text-white">🔑 Semitones: Your Secret Weapon</h2>
             <p>
-              A <strong className="text-white">semitone</strong> (also called a half-step) is the smallest interval in Western music.
-              On a piano, it's the distance from one key to the very next key, including black keys. When you change pitch by
-              +1 or -1 semitone, you're moving the entire song up or down by one half-step.
+              A <strong className="text-pink-400">semitone</strong> (or half-step) is the smallest step you can take in music.
+              On a piano, it's moving from one key to the very next — including black keys. When you shift by +1 or -1 semitone,
+              you're nudging the whole song up or down by one tiny step!
             </p>
 
-            {/* Piano Keyboard SVG Diagram */}
-            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
-              <p className="font-semibold text-white">Visual: One Octave on a Piano (12 Semitones)</p>
+            {/* Piano Keyboard SVG Diagram - Colorful version */}
+            <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-600/30 rounded-xl p-6 space-y-4">
+              <p className="font-semibold text-white text-center">🎹 One Octave = 12 Semitones</p>
               <div className="flex justify-center overflow-x-auto py-4">
                 <svg viewBox="0 0 350 120" className="w-full max-w-md" aria-label="Piano keyboard showing one octave with semitone numbers">
-                  {/* White keys */}
+                  <defs>
+                    <linearGradient id="whiteKeyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#ffffff" />
+                      <stop offset="100%" stopColor="#e2e8f0" />
+                    </linearGradient>
+                    <linearGradient id="blackKeyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#334155" />
+                      <stop offset="100%" stopColor="#0f172a" />
+                    </linearGradient>
+                  </defs>
+                  {/* White keys with gradient */}
                   {[0, 1, 2, 3, 4, 5, 6].map((i) => (
                     <g key={`white-${i}`}>
                       <rect
@@ -135,10 +198,10 @@ export default function HowToChangeKeyPage() {
                         y="0"
                         width="48"
                         height="100"
-                        fill="#f8fafc"
-                        stroke="#334155"
-                        strokeWidth="2"
-                        rx="2"
+                        fill="url(#whiteKeyGrad)"
+                        stroke="#94a3b8"
+                        strokeWidth="1"
+                        rx="4"
                       />
                       <text
                         x={i * 50 + 24}
@@ -151,7 +214,7 @@ export default function HowToChangeKeyPage() {
                       </text>
                     </g>
                   ))}
-                  {/* Black keys */}
+                  {/* Black keys with gradient */}
                   {[0, 1, 3, 4, 5].map((i, idx) => (
                     <rect
                       key={`black-${idx}`}
@@ -159,130 +222,113 @@ export default function HowToChangeKeyPage() {
                       y="0"
                       width="30"
                       height="60"
-                      fill="#1e293b"
-                      stroke="#334155"
-                      strokeWidth="2"
-                      rx="2"
+                      fill="url(#blackKeyGrad)"
+                      stroke="#475569"
+                      strokeWidth="1"
+                      rx="3"
                     />
                   ))}
-                  {/* Semitone numbers */}
-                  <text x="24" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">0</text>
-                  <text x="48" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">1</text>
-                  <text x="74" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">2</text>
-                  <text x="98" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">3</text>
-                  <text x="124" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">4</text>
-                  <text x="174" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">5</text>
-                  <text x="198" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">6</text>
-                  <text x="224" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">7</text>
-                  <text x="248" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">8</text>
-                  <text x="274" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">9</text>
-                  <text x="298" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">10</text>
-                  <text x="324" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">11</text>
+                  {/* Colorful semitone numbers */}
+                  <text x="24" y="85" textAnchor="middle" fill="#f472b6" style={{ fontSize: '12px', fontWeight: 'bold' }}>0</text>
+                  <text x="48" y="50" textAnchor="middle" fill="#fb7185" style={{ fontSize: '11px', fontWeight: 'bold' }}>1</text>
+                  <text x="74" y="85" textAnchor="middle" fill="#f97316" style={{ fontSize: '12px', fontWeight: 'bold' }}>2</text>
+                  <text x="98" y="50" textAnchor="middle" fill="#fbbf24" style={{ fontSize: '11px', fontWeight: 'bold' }}>3</text>
+                  <text x="124" y="85" textAnchor="middle" fill="#a3e635" style={{ fontSize: '12px', fontWeight: 'bold' }}>4</text>
+                  <text x="174" y="85" textAnchor="middle" fill="#34d399" style={{ fontSize: '12px', fontWeight: 'bold' }}>5</text>
+                  <text x="198" y="50" textAnchor="middle" fill="#2dd4bf" style={{ fontSize: '11px', fontWeight: 'bold' }}>6</text>
+                  <text x="224" y="85" textAnchor="middle" fill="#22d3ee" style={{ fontSize: '12px', fontWeight: 'bold' }}>7</text>
+                  <text x="248" y="50" textAnchor="middle" fill="#60a5fa" style={{ fontSize: '11px', fontWeight: 'bold' }}>8</text>
+                  <text x="274" y="85" textAnchor="middle" fill="#818cf8" style={{ fontSize: '12px', fontWeight: 'bold' }}>9</text>
+                  <text x="298" y="50" textAnchor="middle" fill="#a78bfa" style={{ fontSize: '11px', fontWeight: 'bold' }}>10</text>
+                  <text x="324" y="85" textAnchor="middle" fill="#c084fc" style={{ fontSize: '12px', fontWeight: 'bold' }}>11</text>
                 </svg>
               </div>
               <p className="text-sm text-gray-400 text-center">
-                Numbers show semitones from C. Moving from C to D (+2) skips one black key.
+                Each number = semitones from C. <span className="text-orange-400">C to D = +2</span> (skips C#!)
               </p>
             </div>
 
-            {/* Visual Semitone Reference */}
-            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
-              <p className="font-semibold text-white">Semitone Reference Chart:</p>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-divider">
-                      <th className="text-left py-2 pr-4 text-gray-400">Semitones</th>
-                      <th className="text-left py-2 pr-4 text-gray-400">Musical Interval</th>
-                      <th className="text-left py-2 text-gray-400">Example (from C)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-gray-300">
-                    <tr className="border-b border-divider/50">
-                      <td className="py-2 pr-4 text-accent font-mono">+1</td>
-                      <td className="py-2 pr-4">Half step (minor 2nd)</td>
-                      <td className="py-2">C → C#/Db</td>
-                    </tr>
-                    <tr className="border-b border-divider/50">
-                      <td className="py-2 pr-4 text-accent font-mono">+2</td>
-                      <td className="py-2 pr-4">Whole step (major 2nd)</td>
-                      <td className="py-2">C → D</td>
-                    </tr>
-                    <tr className="border-b border-divider/50">
-                      <td className="py-2 pr-4 text-accent font-mono">+3</td>
-                      <td className="py-2 pr-4">Minor 3rd</td>
-                      <td className="py-2">C → Eb</td>
-                    </tr>
-                    <tr className="border-b border-divider/50">
-                      <td className="py-2 pr-4 text-accent font-mono">+4</td>
-                      <td className="py-2 pr-4">Major 3rd</td>
-                      <td className="py-2">C → E</td>
-                    </tr>
-                    <tr className="border-b border-divider/50">
-                      <td className="py-2 pr-4 text-accent font-mono">+5</td>
-                      <td className="py-2 pr-4">Perfect 4th</td>
-                      <td className="py-2">C → F</td>
-                    </tr>
-                    <tr className="border-b border-divider/50">
-                      <td className="py-2 pr-4 text-accent font-mono">+7</td>
-                      <td className="py-2 pr-4">Perfect 5th</td>
-                      <td className="py-2">C → G</td>
-                    </tr>
-                    <tr>
-                      <td className="py-2 pr-4 text-accent font-mono">+12</td>
-                      <td className="py-2 pr-4">Octave</td>
-                      <td className="py-2">C → C (one octave higher)</td>
-                    </tr>
-                  </tbody>
-                </table>
+            {/* Visual Semitone Reference - More colorful */}
+            <div className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 border border-slate-600/20 rounded-xl p-6 space-y-4">
+              <p className="font-semibold text-white text-center">📊 Cheat Sheet: Common Semitone Jumps</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="bg-pink-500/10 border border-pink-500/30 rounded-lg p-3 text-center">
+                  <span className="text-2xl font-bold text-pink-400">+1</span>
+                  <p className="text-xs text-gray-400 mt-1">Half step</p>
+                  <p className="text-xs text-gray-500">C → C#</p>
+                </div>
+                <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3 text-center">
+                  <span className="text-2xl font-bold text-orange-400">+2</span>
+                  <p className="text-xs text-gray-400 mt-1">Whole step</p>
+                  <p className="text-xs text-gray-500">C → D</p>
+                </div>
+                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-center">
+                  <span className="text-2xl font-bold text-yellow-400">+5</span>
+                  <p className="text-xs text-gray-400 mt-1">Perfect 4th</p>
+                  <p className="text-xs text-gray-500">C → F</p>
+                </div>
+                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-center">
+                  <span className="text-2xl font-bold text-green-400">+7</span>
+                  <p className="text-xs text-gray-400 mt-1">Perfect 5th</p>
+                  <p className="text-xs text-gray-500">C → G</p>
+                </div>
               </div>
-              <p className="text-sm text-gray-400">
-                Use negative numbers (-1, -2, etc.) to lower the key instead of raising it.
+              <p className="text-sm text-gray-400 text-center">
+                ⬇️ Use <span className="text-cyan-400">negative numbers</span> (-1, -2, etc.) to go lower!
               </p>
             </div>
 
-            {/* Circle of Fifths SVG */}
-            <div id="circle-of-fifths" className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
-              <p className="font-semibold text-white">The Circle of Fifths</p>
-              <p className="text-sm text-gray-400">
-                The Circle of Fifths shows how all 12 musical keys relate to each other. Adjacent keys differ by 5 semitones (a "fifth").
-                Use this to find how many semitones to transpose between any two keys.
+            {/* Circle of Fifths SVG - Rainbow Edition */}
+            <div id="circle-of-fifths" className="bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-slate-600/20 rounded-xl p-6 space-y-4">
+              <p className="font-semibold text-white text-center">🌈 The Circle of Fifths</p>
+              <p className="text-sm text-gray-400 text-center">
+                All 12 keys in a circle! Find your key, then count to the target key.
               </p>
               <div className="flex justify-center py-4">
                 <svg viewBox="0 0 300 300" className="w-full max-w-sm" aria-label="Circle of Fifths showing all 12 musical keys">
-                  {/* Outer circle background */}
-                  <circle cx="150" cy="150" r="130" fill="none" stroke="#334155" strokeWidth="2" />
-                  <circle cx="150" cy="150" r="95" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="4 4" />
+                  {/* Rainbow gradient for outer ring */}
+                  <defs>
+                    <linearGradient id="rainbowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#f472b6" />
+                      <stop offset="25%" stopColor="#fb923c" />
+                      <stop offset="50%" stopColor="#4ade80" />
+                      <stop offset="75%" stopColor="#60a5fa" />
+                      <stop offset="100%" stopColor="#a78bfa" />
+                    </linearGradient>
+                  </defs>
+                  {/* Outer circle with gradient */}
+                  <circle cx="150" cy="150" r="130" fill="none" stroke="url(#rainbowGrad)" strokeWidth="3" opacity="0.3" />
+                  <circle cx="150" cy="150" r="95" fill="none" stroke="#475569" strokeWidth="1" strokeDasharray="4 4" />
 
-                  {/* Key labels arranged in circle - clockwise from top: C, G, D, A, E, B, F#/Gb, Db, Ab, Eb, Bb, F */}
+                  {/* Key labels with rainbow colors */}
                   {[
-                    { key: 'C', semi: 0, angle: -90 },
-                    { key: 'G', semi: 7, angle: -60 },
-                    { key: 'D', semi: 2, angle: -30 },
-                    { key: 'A', semi: 9, angle: 0 },
-                    { key: 'E', semi: 4, angle: 30 },
-                    { key: 'B', semi: 11, angle: 60 },
-                    { key: 'F♯', semi: 6, angle: 90 },
-                    { key: 'D♭', semi: 1, angle: 120 },
-                    { key: 'A♭', semi: 8, angle: 150 },
-                    { key: 'E♭', semi: 3, angle: 180 },
-                    { key: 'B♭', semi: 10, angle: 210 },
-                    { key: 'F', semi: 5, angle: 240 },
-                  ].map(({ key, semi, angle }) => {
+                    { key: 'C', semi: 0, angle: -90, color: '#f472b6' },
+                    { key: 'G', semi: 7, angle: -60, color: '#fb7185' },
+                    { key: 'D', semi: 2, angle: -30, color: '#f97316' },
+                    { key: 'A', semi: 9, angle: 0, color: '#fbbf24' },
+                    { key: 'E', semi: 4, angle: 30, color: '#a3e635' },
+                    { key: 'B', semi: 11, angle: 60, color: '#4ade80' },
+                    { key: 'F♯', semi: 6, angle: 90, color: '#2dd4bf' },
+                    { key: 'D♭', semi: 1, angle: 120, color: '#22d3ee' },
+                    { key: 'A♭', semi: 8, angle: 150, color: '#60a5fa' },
+                    { key: 'E♭', semi: 3, angle: 180, color: '#818cf8' },
+                    { key: 'B♭', semi: 10, angle: 210, color: '#a78bfa' },
+                    { key: 'F', semi: 5, angle: 240, color: '#c084fc' },
+                  ].map(({ key, semi, angle, color }) => {
                     const radians = (angle * Math.PI) / 180
                     const x = 150 + 110 * Math.cos(radians)
                     const y = 150 + 110 * Math.sin(radians)
-                    const innerX = 150 + 75 * Math.cos(radians)
-                    const innerY = 150 + 75 * Math.sin(radians)
+                    const innerX = 150 + 70 * Math.cos(radians)
+                    const innerY = 150 + 70 * Math.sin(radians)
                     return (
                       <g key={key}>
-                        {/* Key circle */}
+                        {/* Key circle with color */}
                         <circle
                           cx={x}
                           cy={y}
                           r="22"
-                          fill={key === 'C' ? '#3b82f6' : '#1e293b'}
-                          stroke={key === 'C' ? '#60a5fa' : '#475569'}
+                          fill={`${color}20`}
+                          stroke={color}
                           strokeWidth="2"
                         />
                         {/* Key letter */}
@@ -291,8 +337,7 @@ export default function HowToChangeKeyPage() {
                           y={y + 1}
                           textAnchor="middle"
                           dominantBaseline="middle"
-                          fill={key === 'C' ? '#ffffff' : '#e2e8f0'}
-                          className="text-sm font-bold"
+                          fill={color}
                           style={{ fontSize: '14px', fontWeight: 'bold' }}
                         >
                           {key}
@@ -303,7 +348,7 @@ export default function HowToChangeKeyPage() {
                           y={innerY}
                           textAnchor="middle"
                           dominantBaseline="middle"
-                          fill="#64748b"
+                          fill="#94a3b8"
                           style={{ fontSize: '10px' }}
                         >
                           {semi === 0 ? '0' : `+${semi}`}
@@ -313,79 +358,95 @@ export default function HowToChangeKeyPage() {
                   })}
 
                   {/* Center label */}
-                  <text x="150" y="145" textAnchor="middle" fill="#94a3b8" style={{ fontSize: '10px' }}>
+                  <text x="150" y="145" textAnchor="middle" fill="#64748b" style={{ fontSize: '10px' }}>
                     semitones
                   </text>
-                  <text x="150" y="158" textAnchor="middle" fill="#94a3b8" style={{ fontSize: '10px' }}>
+                  <text x="150" y="158" textAnchor="middle" fill="#64748b" style={{ fontSize: '10px' }}>
                     from C
                   </text>
 
                   {/* Arrows showing direction */}
-                  <text x="150" y="40" textAnchor="middle" fill="#22c55e" style={{ fontSize: '9px' }}>
-                    ↻ +7 (up a fifth)
+                  <text x="150" y="35" textAnchor="middle" fill="#4ade80" style={{ fontSize: '9px' }}>
+                    ↻ clockwise = +7
                   </text>
-                  <text x="150" y="268" textAnchor="middle" fill="#f97316" style={{ fontSize: '9px' }}>
-                    ↺ -5 (down a fifth)
+                  <text x="150" y="270" textAnchor="middle" fill="#fb923c" style={{ fontSize: '9px' }}>
+                    ↺ counter = -5
                   </text>
                 </svg>
               </div>
-              <p className="text-sm text-gray-400 text-center">
-                <strong className="text-white">Example:</strong> To go from C to A, count clockwise: C → G → D → A = three fifths = +9 semitones (or just read the inner number).
-              </p>
+              <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-3 text-center">
+                <p className="text-sm">
+                  <span className="text-lg">🎯</span> <strong className="text-cyan-400">Quick trick:</strong> Going from C to A?
+                  Just read the inner number: <span className="text-cyan-300 font-mono">+9</span> semitones!
+                </p>
+              </div>
             </div>
           </section>
 
           {/* Common Transpositions */}
           <section id="common-transpositions" className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white">Common Transposition Examples</h2>
+            <h2 className="text-2xl font-semibold text-white">🔥 Common Scenarios (Copy These!)</h2>
             <p>
-              Here are some typical scenarios and the recommended semitone adjustments:
+              Here's what most people need — just copy these numbers!
             </p>
-            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
-              <div className="grid gap-4">
-                <div className="flex justify-between items-center py-2 border-b border-divider/50">
-                  <span>Lower for male vocals (baritone/bass)</span>
-                  <span className="text-accent font-mono font-bold">-2 to -4</span>
+            <div className="grid gap-3">
+              <div className="bg-gradient-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/30 rounded-xl p-4 flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🎤</span>
+                  <span>Song too high? Lower it for deeper voice</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-divider/50">
-                  <span>Raise for female vocals (soprano)</span>
-                  <span className="text-accent font-mono font-bold">+2 to +4</span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-divider/50">
-                  <span>Match guitar capo on 2nd fret</span>
-                  <span className="text-accent font-mono font-bold">+2</span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-divider/50">
-                  <span>Transpose from Eb to C (for easier playing)</span>
-                  <span className="text-accent font-mono font-bold">-3</span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-divider/50">
-                  <span>Up one whole step (e.g., C to D)</span>
-                  <span className="text-accent font-mono font-bold">+2</span>
-                </div>
-                <div className="flex justify-between items-center py-2">
-                  <span>Down a perfect fourth (e.g., G to D)</span>
-                  <span className="text-accent font-mono font-bold">-5</span>
-                </div>
+                <span className="bg-pink-500/20 text-pink-300 px-3 py-1 rounded-full font-mono font-bold text-sm">-2 to -4</span>
               </div>
+              <div className="bg-gradient-to-r from-purple-500/10 to-violet-500/10 border border-purple-500/30 rounded-xl p-4 flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">✨</span>
+                  <span>Song too low? Raise it for higher voice</span>
+                </div>
+                <span className="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full font-mono font-bold text-sm">+2 to +4</span>
+              </div>
+              <div className="bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-500/30 rounded-xl p-4 flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🎸</span>
+                  <span>Match capo on 2nd fret</span>
+                </div>
+                <span className="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full font-mono font-bold text-sm">+2</span>
+              </div>
+              <div className="bg-gradient-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/30 rounded-xl p-4 flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🎹</span>
+                  <span>Make it easier to play (Eb → C)</span>
+                </div>
+                <span className="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full font-mono font-bold text-sm">-3</span>
+              </div>
+            </div>
+
+            {/* Pro tip */}
+            <div className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/30 rounded-xl p-4">
+              <p className="text-sm">
+                <span className="text-lg">💡</span> <strong className="text-yellow-400">Pro tip:</strong> Start with <span className="text-yellow-300">+2 or -2</span> and adjust from there.
+                Most vocal adjustments are between -4 and +4. Going beyond ±6 might sound weird!
+              </p>
             </div>
           </section>
 
-          {/* CTA */}
-          <div className="text-center py-8 border-t border-divider space-y-4">
-            <p className="text-xl text-white font-medium">Ready to transpose your song?</p>
-            <Link href="/" className="inline-block px-8 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors">
+          {/* CTA - with pulse animation */}
+          <div className="text-center py-10 space-y-6">
+            <div className="space-y-2">
+              <p className="text-2xl text-white font-bold">Ready to try it? 🚀</p>
+              <p className="text-gray-400">Upload your song and start transposing in seconds</p>
+            </div>
+            <Link href="/" className="pulse-cta inline-block px-10 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all text-lg">
               Try PitchChanger.io Free →
             </Link>
           </div>
 
           {/* Related Links */}
-          <div className="flex gap-4 text-sm flex-wrap">
-            <Link href="/" className="text-accent hover:underline">← Back to Home</Link>
-            <Link href="/audio-pitch-changer" className="text-accent hover:underline">Audio Pitch Changer</Link>
-            <Link href="/change-pitch-online" className="text-accent hover:underline">Change Pitch Online</Link>
-            <Link href="/mp3-pitch-changer" className="text-accent hover:underline">MP3 Pitch Changer</Link>
-            <Link href="/resources" className="text-accent hover:underline">All Resources</Link>
+          <div className="flex gap-4 text-sm flex-wrap justify-center pt-4 border-t border-slate-700/50">
+            <Link href="/" className="text-gray-400 hover:text-white transition-colors">← Home</Link>
+            <Link href="/audio-pitch-changer" className="text-gray-400 hover:text-white transition-colors">Audio Pitch Changer</Link>
+            <Link href="/change-pitch-online" className="text-gray-400 hover:text-white transition-colors">Change Pitch Online</Link>
+            <Link href="/mp3-pitch-changer" className="text-gray-400 hover:text-white transition-colors">MP3 Pitch Changer</Link>
+            <Link href="/resources" className="text-gray-400 hover:text-white transition-colors">Resources</Link>
           </div>
         </article>
       </div>
