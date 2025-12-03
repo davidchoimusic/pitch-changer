@@ -83,6 +83,20 @@ export default function RootLayout({
           }}
         />
 
+        {/* WebSite Schema - Controls site name in Google Search */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Pitch Changer',
+              alternateName: 'PitchChanger.io',
+              url: 'https://pitchchanger.io',
+            }),
+          }}
+        />
+
         {/* Schema.org Structured Data for Google Search */}
         <script
           type="application/ld+json"
