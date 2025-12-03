@@ -35,7 +35,7 @@ export default function AudioPitchChangerPage() {
     <div className="container mx-auto px-4 py-12">
       <article className="max-w-3xl mx-auto space-y-10 text-gray-300">
         {/* Hero */}
-        <header className="text-center mb-8">
+        <header className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-white">
             🎹 Free Online Audio Pitch Changer
           </h1>
