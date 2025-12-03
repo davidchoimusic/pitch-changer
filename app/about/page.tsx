@@ -54,7 +54,7 @@ export default function AboutPage() {
             PitchChanger.io supports all common audio formats that modern web browsers can decode:
           </p>
           <div className="flex flex-wrap gap-3">
-            {['MP3', 'WAV', 'FLAC', 'M4A', 'AAC', 'OGG', 'WEBM'].map((format) => (
+            {['MP3', 'WAV', 'FLAC', 'M4A', 'AAC', 'OGG'].map((format) => (
               <span key={format} className="px-4 py-2 bg-accent/20 text-accent rounded-full text-sm font-medium">
                 {format}
               </span>
