@@ -136,13 +136,8 @@ export default function ResourcesPage() {
             href="/"
             className="inline-block px-8 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors"
           >
-            Try PitchChanger.io Free →
+            ← Try PitchChanger.io Free
           </Link>
-          <div className="pt-4">
-            <Link href="/" className="text-accent hover:underline text-sm">
-              ← Back to Home
-            </Link>
-          </div>
         </div>
       </div>
     </div>
