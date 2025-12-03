@@ -73,7 +73,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
 
         // Track upload
         if (typeof window !== 'undefined' && window.gtag) {
-          window.gtag('event', 'file_uploaded_beta', {
+          window.gtag('event', 'file_uploaded', {
             file_size_mb: (file.size / 1024 / 1024).toFixed(2),
             file_type: file.type,
           })
@@ -343,7 +343,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     }
 
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'pitch_adjusted_beta', {
+      window.gtag('event', 'pitch_adjusted', {
         pitch_value: newPitch,
       })
     }
@@ -370,7 +370,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     }
 
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'speed_adjusted_beta', {
+      window.gtag('event', 'speed_adjusted', {
         speed_value: newSpeed,
       })
     }
@@ -394,7 +394,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     setProcessError(null)
 
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'processing_started_beta', {
+      window.gtag('event', 'processing_started', {
         pitch_value: pitchValue,
         speed_value: speedValue,
       })
@@ -463,7 +463,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     URL.revokeObjectURL(url)
 
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'download_completed_beta', {
+      window.gtag('event', 'download_completed', {
         pitch_value: pitchValue,
         speed_value: speedValue,
       })

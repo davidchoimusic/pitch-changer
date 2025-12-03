@@ -44,94 +44,461 @@ export default function HowToChangeKeyPage() {
             '@type': 'HowTo',
             name: 'How to Change the Key of a Song',
             description: 'Learn the fastest and easiest way to transpose music online for free.',
+            totalTime: 'PT2M',
+            tool: {
+              '@type': 'HowToTool',
+              name: 'PitchChanger.io'
+            },
             step: [
               {
                 '@type': 'HowToStep',
                 name: 'Go to PitchChanger.io',
-                text: 'Visit PitchChanger.io in your web browser',
+                text: 'Visit PitchChanger.io in your web browser. No account or download required.',
                 url: 'https://pitchchanger.io'
               },
               {
                 '@type': 'HowToStep',
                 name: 'Upload your audio file',
-                text: 'Upload the song or audio file you want to transpose'
+                text: 'Drag and drop or click to upload your MP3, WAV, FLAC, or M4A file (up to 250MB).'
               },
               {
                 '@type': 'HowToStep',
-                name: 'Adjust pitch',
-                text: 'Use the pitch slider to adjust semitones (e.g., +2 semitones = a whole step up)'
+                name: 'Adjust the pitch slider',
+                text: 'Use the pitch slider to adjust by semitones. Each semitone is one half-step on a piano. +2 semitones raises the key by a whole step (e.g., C to D).'
               },
               {
                 '@type': 'HowToStep',
-                name: 'Download the new key',
-                text: 'Download your transposed audio file in the new key'
+                name: 'Preview your changes',
+                text: 'Click play to hear how the song sounds in the new key. Adjust until it matches your needs.'
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Download the transposed file',
+                text: 'Click Process Audio, then download your transposed song as a high-quality WAV file.'
               }
             ]
           })
         }}
       />
       <div className="container mx-auto px-4 py-12">
-      <div className="max-w-3xl mx-auto space-y-8 text-gray-300">
-        <h1 className="text-4xl font-bold text-white">How to Change the Key of a Song (Free & Easy)</h1>
+        <article className="max-w-3xl mx-auto space-y-8 text-gray-300">
+          {/* Hero */}
+          <header className="space-y-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+              How to Change the Key of a Song (Free & Easy)
+            </h1>
+            <p className="text-xl text-gray-400">
+              The complete guide to transposing music online — perfect for singers, musicians, and music teachers.
+            </p>
+          </header>
 
-        <p className="text-lg">
-          Need a song in a different key? Here's the fastest and easiest way to transpose music online.
-        </p>
-
-        <section>
-          <h2 className="text-2xl font-semibold text-white mb-4">Why Change the Key?</h2>
-          <p>
-            Singers, musicians, and teachers often need tracks higher or lower to match vocal range or performance needs.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold text-white mb-4">How to Change Key Online</h2>
-          <ol className="list-decimal list-inside space-y-2">
-            <li>Go to <Link href="/" className="text-accent hover:underline">PitchChanger.io</Link></li>
-            <li>Upload your audio file</li>
-            <li>Adjust pitch (e.g., +2 semitones = a whole step up)</li>
-            <li>Download the new key</li>
-          </ol>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold text-white mb-4">Examples</h2>
-          <ul className="list-disc list-inside space-y-2">
-            <li>+3 semitones = higher key for soprano range</li>
-            <li>–2 semitones = lower key for male vocalists</li>
-            <li>+5 semitones = up a fourth for guitar capo simulation</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold text-white mb-4">FAQ</h2>
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-semibold text-white">Does changing pitch affect speed?</h3>
-              <p className="text-sm mt-1">No — the tempo stays the same.</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-white">Is it free?</h3>
-              <p className="text-sm mt-1">Yes — completely free with no sign-up.</p>
-            </div>
+          {/* Quick Answer Box */}
+          <div className="bg-accent/10 border border-accent/30 rounded-lg p-6 space-y-3">
+            <p className="font-semibold text-accent">Quick Answer:</p>
+            <p>
+              To change the key of a song, upload your audio file to <Link href="/" className="text-accent hover:underline font-medium">PitchChanger.io</Link>,
+              adjust the pitch slider (each number = 1 semitone = 1 half-step), preview the result, and download.
+              The entire process takes less than 2 minutes and is completely free.
+            </p>
           </div>
-        </section>
 
-        <div className="pt-8 border-t border-divider">
-          <Link href="/" className="inline-block px-8 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors">
-            Try PitchChanger.io →
-          </Link>
-        </div>
+          {/* Table of Contents */}
+          <nav className="bg-bg-card border border-divider rounded-lg p-6">
+            <p className="font-semibold text-white mb-3">In This Guide:</p>
+            <ul className="space-y-2 text-sm">
+              <li><a href="#what-is-key" className="text-accent hover:underline">What is a Musical Key?</a></li>
+              <li><a href="#why-change" className="text-accent hover:underline">Why Would You Need to Change Keys?</a></li>
+              <li><a href="#semitones" className="text-accent hover:underline">Understanding Semitones</a></li>
+              <li><a href="#step-by-step" className="text-accent hover:underline">Step-by-Step Guide</a></li>
+              <li><a href="#common-transpositions" className="text-accent hover:underline">Common Transposition Examples</a></li>
+              <li><a href="#faq" className="text-accent hover:underline">Frequently Asked Questions</a></li>
+            </ul>
+          </nav>
 
-        <div className="flex gap-4 text-sm flex-wrap">
-          <Link href="/" className="text-accent hover:underline">← Back to Home</Link>
-          <Link href="/audio-pitch-changer" className="text-accent hover:underline">Audio Pitch Changer</Link>
-          <Link href="/change-pitch-online" className="text-accent hover:underline">Change Pitch Online</Link>
-          <Link href="/mp3-pitch-changer" className="text-accent hover:underline">MP3 Pitch Changer</Link>
-        </div>
+          {/* What is a Musical Key */}
+          <section id="what-is-key" className="space-y-4">
+            <h2 className="text-2xl font-semibold text-white">What is a Musical Key?</h2>
+            <p>
+              A musical key is the group of notes that form the foundation of a song. When a song is "in the key of C major,"
+              it primarily uses notes from the C major scale. The key determines how high or low the overall pitch of the song sits.
+            </p>
+            <p>
+              Think of keys like floors in a building. Moving to a higher key is like going up a floor — all the musical
+              relationships stay the same, but everything is shifted higher. This is why changing keys is also called
+              "transposing" — you're moving the entire song up or down the musical ladder.
+            </p>
+            <div className="bg-bg-card border border-divider rounded-lg p-5">
+              <p className="text-sm text-gray-400">
+                <strong className="text-white">Real-world example:</strong> The song "Happy Birthday" can be sung in any key.
+                When a group of people sing it together without instruments, they naturally find a key that's comfortable for
+                most voices. Changing the key of a recorded song works the same way — you're finding a version that fits better.
+              </p>
+            </div>
+          </section>
+
+          {/* Why Change the Key */}
+          <section id="why-change" className="space-y-4">
+            <h2 className="text-2xl font-semibold text-white">Why Would You Need to Change Keys?</h2>
+            <p>
+              There are many practical reasons why singers, musicians, and music professionals need to transpose songs:
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Vocal Range Matching</h3>
+                <p className="text-sm">
+                  Every singer has a unique vocal range. A song written for a tenor might be too high for a baritone.
+                  Lowering the key by 2-4 semitones can make it comfortable to sing without straining.
+                </p>
+              </div>
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Karaoke Preparation</h3>
+                <p className="text-sm">
+                  Karaoke tracks are often recorded in the original key, which may not suit your voice.
+                  Adjusting the key lets you sing any song comfortably.
+                </p>
+              </div>
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Instrument Compatibility</h3>
+                <p className="text-sm">
+                  Some instruments have limited ranges or are tuned differently. Guitarists often use capos to change keys;
+                  digital transposition achieves the same result for backing tracks.
+                </p>
+              </div>
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Music Education</h3>
+                <p className="text-sm">
+                  Teachers often transpose songs to keys that are easier for students to play.
+                  A song in B major with 5 sharps becomes much easier in C major with no sharps or flats.
+                </p>
+              </div>
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Live Performance</h3>
+                <p className="text-sm">
+                  Performers may need backing tracks in different keys for different venues, times of day
+                  (morning voice vs. evening voice), or when collaborating with other musicians.
+                </p>
+              </div>
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Creative Remixing</h3>
+                <p className="text-sm">
+                  DJs and producers transpose songs to match keys when creating mashups or mixing tracks together.
+                  Songs in the same or related keys blend more harmoniously.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Understanding Semitones */}
+          <section id="semitones" className="space-y-4">
+            <h2 className="text-2xl font-semibold text-white">Understanding Semitones (The Secret to Transposition)</h2>
+            <p>
+              A <strong className="text-white">semitone</strong> (also called a half-step) is the smallest interval in Western music.
+              On a piano, it's the distance from one key to the very next key, including black keys. When you change pitch by
+              +1 or -1 semitone, you're moving the entire song up or down by one half-step.
+            </p>
+
+            {/* Piano Keyboard SVG Diagram */}
+            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
+              <p className="font-semibold text-white">Visual: One Octave on a Piano (12 Semitones)</p>
+              <div className="flex justify-center overflow-x-auto py-4">
+                <svg viewBox="0 0 350 120" className="w-full max-w-md" aria-label="Piano keyboard showing one octave with semitone numbers">
+                  {/* White keys */}
+                  {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+                    <g key={`white-${i}`}>
+                      <rect
+                        x={i * 50}
+                        y="0"
+                        width="48"
+                        height="100"
+                        fill="#f8fafc"
+                        stroke="#334155"
+                        strokeWidth="2"
+                        rx="2"
+                      />
+                      <text
+                        x={i * 50 + 24}
+                        y="115"
+                        textAnchor="middle"
+                        className="text-xs"
+                        fill="#94a3b8"
+                      >
+                        {['C', 'D', 'E', 'F', 'G', 'A', 'B'][i]}
+                      </text>
+                    </g>
+                  ))}
+                  {/* Black keys */}
+                  {[0, 1, 3, 4, 5].map((i, idx) => (
+                    <rect
+                      key={`black-${idx}`}
+                      x={i * 50 + 33}
+                      y="0"
+                      width="30"
+                      height="60"
+                      fill="#1e293b"
+                      stroke="#334155"
+                      strokeWidth="2"
+                      rx="2"
+                    />
+                  ))}
+                  {/* Semitone numbers */}
+                  <text x="24" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">0</text>
+                  <text x="48" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">1</text>
+                  <text x="74" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">2</text>
+                  <text x="98" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">3</text>
+                  <text x="124" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">4</text>
+                  <text x="174" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">5</text>
+                  <text x="198" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">6</text>
+                  <text x="224" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">7</text>
+                  <text x="248" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">8</text>
+                  <text x="274" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">9</text>
+                  <text x="298" y="50" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">10</text>
+                  <text x="324" y="85" textAnchor="middle" fill="#3b82f6" className="text-xs font-bold">11</text>
+                </svg>
+              </div>
+              <p className="text-sm text-gray-400 text-center">
+                Numbers show semitones from C. Moving from C to D (+2) skips one black key.
+              </p>
+            </div>
+
+            {/* Visual Semitone Reference */}
+            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
+              <p className="font-semibold text-white">Semitone Reference Chart:</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-divider">
+                      <th className="text-left py-2 pr-4 text-gray-400">Semitones</th>
+                      <th className="text-left py-2 pr-4 text-gray-400">Musical Interval</th>
+                      <th className="text-left py-2 text-gray-400">Example (from C)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-gray-300">
+                    <tr className="border-b border-divider/50">
+                      <td className="py-2 pr-4 text-accent font-mono">+1</td>
+                      <td className="py-2 pr-4">Half step (minor 2nd)</td>
+                      <td className="py-2">C → C#/Db</td>
+                    </tr>
+                    <tr className="border-b border-divider/50">
+                      <td className="py-2 pr-4 text-accent font-mono">+2</td>
+                      <td className="py-2 pr-4">Whole step (major 2nd)</td>
+                      <td className="py-2">C → D</td>
+                    </tr>
+                    <tr className="border-b border-divider/50">
+                      <td className="py-2 pr-4 text-accent font-mono">+3</td>
+                      <td className="py-2 pr-4">Minor 3rd</td>
+                      <td className="py-2">C → Eb</td>
+                    </tr>
+                    <tr className="border-b border-divider/50">
+                      <td className="py-2 pr-4 text-accent font-mono">+4</td>
+                      <td className="py-2 pr-4">Major 3rd</td>
+                      <td className="py-2">C → E</td>
+                    </tr>
+                    <tr className="border-b border-divider/50">
+                      <td className="py-2 pr-4 text-accent font-mono">+5</td>
+                      <td className="py-2 pr-4">Perfect 4th</td>
+                      <td className="py-2">C → F</td>
+                    </tr>
+                    <tr className="border-b border-divider/50">
+                      <td className="py-2 pr-4 text-accent font-mono">+7</td>
+                      <td className="py-2 pr-4">Perfect 5th</td>
+                      <td className="py-2">C → G</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 pr-4 text-accent font-mono">+12</td>
+                      <td className="py-2 pr-4">Octave</td>
+                      <td className="py-2">C → C (one octave higher)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-sm text-gray-400">
+                Use negative numbers (-1, -2, etc.) to lower the key instead of raising it.
+              </p>
+            </div>
+          </section>
+
+          {/* Step by Step Guide */}
+          <section id="step-by-step" className="space-y-4">
+            <h2 className="text-2xl font-semibold text-white">Step-by-Step Guide: How to Change Key Online</h2>
+            <p>
+              Follow these steps to transpose any song using PitchChanger.io. The entire process takes less than 2 minutes.
+            </p>
+
+            <div className="space-y-4">
+              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
+                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">1</div>
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-white">Go to PitchChanger.io</h3>
+                  <p className="text-sm">
+                    Open <Link href="/" className="text-accent hover:underline">PitchChanger.io</Link> in any modern web browser.
+                    No account needed, no software to download. Works on desktop, tablet, and mobile devices.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
+                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">2</div>
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-white">Upload Your Audio File</h3>
+                  <p className="text-sm">
+                    Drag and drop your file onto the upload area, or click to browse. Supported formats include MP3, WAV, FLAC,
+                    M4A, AAC, and OGG. Files up to 250MB are supported.
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    <strong>Privacy note:</strong> Your file is processed entirely in your browser. Nothing is uploaded to any server.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
+                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">3</div>
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-white">Adjust the Pitch Slider</h3>
+                  <p className="text-sm">
+                    Use the pitch slider to transpose your song. Each increment represents one semitone (half-step).
+                    Move right (+) to raise the key, left (-) to lower it. The range is -12 to +12 semitones (one full octave in either direction).
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    <strong>Tip:</strong> Not sure how many semitones? Start with +2 or -2 and adjust from there.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
+                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">4</div>
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-white">Preview Your Changes</h3>
+                  <p className="text-sm">
+                    Click the Play button to hear how your song sounds in the new key. The preview updates in real-time as
+                    you adjust the slider. Keep adjusting until you find the perfect key for your needs.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 bg-bg-card border border-divider rounded-lg p-5">
+                <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white font-bold">5</div>
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-white">Download Your Transposed Song</h3>
+                  <p className="text-sm">
+                    Happy with the result? Click "Process Audio" to render the final file, then download your transposed song
+                    as a high-quality WAV file. The original tempo and timing are perfectly preserved.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Common Transpositions */}
+          <section id="common-transpositions" className="space-y-4">
+            <h2 className="text-2xl font-semibold text-white">Common Transposition Examples</h2>
+            <p>
+              Here are some typical scenarios and the recommended semitone adjustments:
+            </p>
+            <div className="bg-bg-card border border-divider rounded-lg p-6 space-y-4">
+              <div className="grid gap-4">
+                <div className="flex justify-between items-center py-2 border-b border-divider/50">
+                  <span>Lower for male vocals (baritone/bass)</span>
+                  <span className="text-accent font-mono font-bold">-2 to -4</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-divider/50">
+                  <span>Raise for female vocals (soprano)</span>
+                  <span className="text-accent font-mono font-bold">+2 to +4</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-divider/50">
+                  <span>Match guitar capo on 2nd fret</span>
+                  <span className="text-accent font-mono font-bold">+2</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-divider/50">
+                  <span>Transpose from Eb to C (for easier playing)</span>
+                  <span className="text-accent font-mono font-bold">-3</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-divider/50">
+                  <span>Up one whole step (e.g., C to D)</span>
+                  <span className="text-accent font-mono font-bold">+2</span>
+                </div>
+                <div className="flex justify-between items-center py-2">
+                  <span>Down a perfect fourth (e.g., G to D)</span>
+                  <span className="text-accent font-mono font-bold">-5</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* FAQ */}
+          <section id="faq" className="space-y-4">
+            <h2 className="text-2xl font-semibold text-white">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Does changing the key affect the tempo/speed?</h3>
+                <p className="text-sm">
+                  No. PitchChanger.io uses professional-grade pitch-shifting that preserves the original tempo. A 3-minute
+                  song will still be exactly 3 minutes after transposition. This is different from simply speeding up or
+                  slowing down a record, which would change both pitch and tempo together.
+                </p>
+              </div>
+
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Is there any quality loss when transposing?</h3>
+                <p className="text-sm">
+                  Modern pitch-shifting algorithms produce excellent results. For shifts of 1-4 semitones, most listeners
+                  won't notice any quality difference. Larger shifts (8+ semitones) may introduce subtle artifacts, but
+                  the results are still very usable for practice, karaoke, and most applications.
+                </p>
+              </div>
+
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Is PitchChanger.io really free?</h3>
+                <p className="text-sm">
+                  Yes, completely free. There's no premium tier, no feature limits, and no account required.
+                  The service is supported by advertising, which helps keep it free for everyone.
+                </p>
+              </div>
+
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Are my files private?</h3>
+                <p className="text-sm">
+                  100% private. All processing happens locally in your web browser using JavaScript. Your audio files
+                  are never uploaded to any server. When you close the page, the audio data is gone.
+                </p>
+              </div>
+
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">What if I don't know what key my song is in?</h3>
+                <p className="text-sm">
+                  You don't need to know the original key. Just experiment with the pitch slider until the song sits
+                  comfortably in your vocal range or matches your instrument. Start by trying small adjustments (+2 or -2)
+                  and listen to the preview.
+                </p>
+              </div>
+
+              <div className="bg-bg-card border border-divider rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-white">Can I change pitch and speed independently?</h3>
+                <p className="text-sm">
+                  Yes! PitchChanger.io has separate controls for pitch and speed. You can transpose a song to a new key
+                  AND slow it down for practice (or speed it up) — all independently.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* CTA */}
+          <div className="text-center py-8 border-t border-divider space-y-4">
+            <p className="text-xl text-white font-medium">Ready to transpose your song?</p>
+            <Link href="/" className="inline-block px-8 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors">
+              Try PitchChanger.io Free →
+            </Link>
+          </div>
+
+          {/* Related Links */}
+          <div className="flex gap-4 text-sm flex-wrap">
+            <Link href="/" className="text-accent hover:underline">← Back to Home</Link>
+            <Link href="/audio-pitch-changer" className="text-accent hover:underline">Audio Pitch Changer</Link>
+            <Link href="/change-pitch-online" className="text-accent hover:underline">Change Pitch Online</Link>
+            <Link href="/mp3-pitch-changer" className="text-accent hover:underline">MP3 Pitch Changer</Link>
+            <Link href="/resources" className="text-accent hover:underline">All Resources</Link>
+          </div>
+        </article>
       </div>
-    </div>
     </>
   )
 }
