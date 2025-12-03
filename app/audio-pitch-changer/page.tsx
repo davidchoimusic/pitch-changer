@@ -35,7 +35,7 @@ export default function AudioPitchChangerPage() {
     <div className="container mx-auto px-4 py-12">
       <article className="max-w-3xl mx-auto space-y-10 text-gray-300">
         {/* Hero */}
-        <header className="text-center">
+        <header className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white">
             🎹 Free Online Audio Pitch Changer
           </h1>
@@ -147,22 +147,22 @@ export default function AudioPitchChangerPage() {
           </div>
 
           {/* Why Quality Varies */}
-          <div className="bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-500/30 rounded-xl p-5 space-y-3">
-            <h3 className="text-lg font-semibold text-orange-300">💡 Why Quality Varies Between Tools</h3>
+          <div className="bg-gradient-to-r from-teal-500/10 to-emerald-500/10 border border-teal-500/30 rounded-xl p-5 space-y-3">
+            <h3 className="text-lg font-semibold text-teal-300">💡 Why Quality Varies Between Tools</h3>
             <p className="text-sm">
               The difference between good and bad pitch shifters comes down to:
             </p>
             <ul className="text-sm space-y-1">
               <li className="flex gap-2">
-                <span className="text-orange-400">•</span>
+                <span className="text-teal-400">•</span>
                 <span><strong className="text-white">Frame size & overlap</strong> — smaller frames = more temporal accuracy, but more frequency smearing</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-orange-400">•</span>
+                <span className="text-teal-400">•</span>
                 <span><strong className="text-white">Phase coherence</strong> — keeping phases aligned between frames prevents "phasiness"</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-orange-400">•</span>
+                <span className="text-teal-400">•</span>
                 <span><strong className="text-white">Transient handling</strong> — drums and percussive sounds need special treatment to stay punchy</span>
               </li>
             </ul>
@@ -190,10 +190,10 @@ export default function AudioPitchChangerPage() {
             </div>
 
             {/* 1950s-1960s */}
-            <div className="bg-gradient-to-br from-yellow-900/30 to-amber-900/30 border border-yellow-500/30 rounded-xl p-5 space-y-2">
+            <div className="bg-gradient-to-br from-indigo-900/30 to-blue-900/30 border border-indigo-500/30 rounded-xl p-5 space-y-2">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">🎞️</span>
-                <h3 className="text-lg font-semibold text-yellow-300">1950s–1960s: Varispeed & The Beatles</h3>
+                <h3 className="text-lg font-semibold text-indigo-300">1950s–1960s: Varispeed & The Beatles</h3>
               </div>
               <p className="text-sm">
                 Studio engineers discovered they could tweak reel-to-reel tape recorder <strong className="text-white">varispeed</strong> for crude pitch control. The technique became popular in the '60s — many <strong className="text-white">Beatles tracks</strong> used analog pitch-shifting effects. The Eltro "Information Rate Changer" (a rotary tape head device) was famously used for <strong className="text-white">HAL 9000's voice</strong> in <em>2001: A Space Odyssey</em>.
