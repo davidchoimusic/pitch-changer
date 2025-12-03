@@ -115,8 +115,8 @@ export default function AudioPitchChangerPage() {
           <p className="text-sm mb-4">Related tools and guides:</p>
           <div className="flex gap-4 text-sm flex-wrap">
             <Link href="/" className="text-accent hover:underline">← Back to Home</Link>
-            <Link href="/mp3-pitch-changer" className="text-accent hover:underline">MP3 Pitch Changer</Link>
             <Link href="/how-to-change-the-key-of-a-song" className="text-accent hover:underline">How to Change Key</Link>
+            <Link href="/change-pitch-online" className="text-accent hover:underline">Change Pitch Online</Link>
             <Link href="/resources" className="text-accent hover:underline">All Resources</Link>
           </div>
         </div>

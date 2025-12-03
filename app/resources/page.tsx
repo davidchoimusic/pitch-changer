@@ -19,26 +19,8 @@ export default function ResourcesPage() {
     {
       title: 'Audio Speed Changer',
       href: '/audio-speed-changer',
-      description: 'Change audio speed without affecting pitch. Ideal for practice, transcription, and learning.',
+      description: 'Speed up or slow down audio without affecting pitch. Ideal for practice, transcription, and learning.',
       icon: '⏱️'
-    },
-    {
-      title: 'MP3 Pitch Changer',
-      href: '/mp3-pitch-changer',
-      description: 'Change the pitch of MP3 files instantly. Works with any MP3 audio file up to 250MB.',
-      icon: '🎧'
-    },
-    {
-      title: 'Slow Down Audio',
-      href: '/slow-down-audio',
-      description: 'Slow down songs and recordings for practice. Learn complex solos and passages at your own pace.',
-      icon: '🐢'
-    },
-    {
-      title: 'Speed Up Audio',
-      href: '/speed-up-audio',
-      description: 'Make audio faster without changing pitch. Great for podcasts, lectures, and audiobooks.',
-      icon: '🚀'
     },
   ]
 
@@ -54,18 +36,6 @@ export default function ResourcesPage() {
       href: '/how-to-change-the-key-of-a-song',
       description: 'Learn to transpose music online for different vocal ranges. Includes semitone reference chart and common examples.',
       readTime: '8 min read'
-    },
-    {
-      title: 'How to Slow Down Audio',
-      href: '/how-to-slow-down-audio',
-      description: 'Step-by-step guide to slowing down audio files without changing pitch. Perfect for musicians learning new songs.',
-      readTime: '4 min read'
-    },
-    {
-      title: 'How to Speed Up Audio',
-      href: '/how-to-speed-up-audio',
-      description: 'Learn to increase playback speed effectively while maintaining audio quality and pitch.',
-      readTime: '4 min read'
     },
     {
       title: 'Change Pitch vs Change Speed',

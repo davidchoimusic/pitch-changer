@@ -385,7 +385,7 @@ export default function HowToChangeKeyPage() {
             <Link href="/" className="text-gray-400 hover:text-white transition-colors">← Home</Link>
             <Link href="/audio-pitch-changer" className="text-gray-400 hover:text-white transition-colors">Audio Pitch Changer</Link>
             <Link href="/change-pitch-online" className="text-gray-400 hover:text-white transition-colors">Change Pitch Online</Link>
-            <Link href="/mp3-pitch-changer" className="text-gray-400 hover:text-white transition-colors">MP3 Pitch Changer</Link>
+            <Link href="/audio-speed-changer" className="text-gray-400 hover:text-white transition-colors">Audio Speed Changer</Link>
             <Link href="/resources" className="text-gray-400 hover:text-white transition-colors">Resources</Link>
           </div>
         </article>

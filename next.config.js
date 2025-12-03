@@ -4,6 +4,35 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/mp3-pitch-changer',
+        destination: '/audio-pitch-changer',
+        permanent: true,
+      },
+      {
+        source: '/slow-down-audio',
+        destination: '/audio-speed-changer',
+        permanent: true,
+      },
+      {
+        source: '/speed-up-audio',
+        destination: '/audio-speed-changer',
+        permanent: true,
+      },
+      {
+        source: '/how-to-slow-down-audio',
+        destination: '/audio-speed-changer',
+        permanent: true,
+      },
+      {
+        source: '/how-to-speed-up-audio',
+        destination: '/audio-speed-changer',
+        permanent: true,
+      },
+    ]
+  },
   async headers() {
     return [
       {

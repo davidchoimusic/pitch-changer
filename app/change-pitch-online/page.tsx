@@ -177,7 +177,7 @@ export default function ChangePitchOnlinePage() {
               </div>
               <div>
                 <h3 className="font-semibold text-white">Change pitch of MP3 backing tracks</h3>
-                <p className="text-sm mt-1">Load an <Link href="/mp3-pitch-changer" className="text-accent hover:underline">MP3</Link>, shift the pitch to match your band or choir, and export the new track for rehearsal.</p>
+                <p className="text-sm mt-1">Load an MP3, shift the pitch to match your band or choir, and export the new track for rehearsal.</p>
               </div>
             </div>
           </section>
@@ -225,7 +225,6 @@ export default function ChangePitchOnlinePage() {
             <div className="flex gap-4 text-sm flex-wrap">
               <Link href="/" className="text-accent hover:underline">← Back to Home</Link>
               <Link href="/audio-pitch-changer" className="text-accent hover:underline">Audio Pitch Changer</Link>
-              <Link href="/mp3-pitch-changer" className="text-accent hover:underline">MP3 Pitch Changer</Link>
               <Link href="/how-to-change-the-key-of-a-song" className="text-accent hover:underline">How to Change Key</Link>
             </div>
           </div>

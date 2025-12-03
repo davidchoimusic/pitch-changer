@@ -14,62 +14,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Tool Landing Pages (High Priority)
     {
       url: `${baseUrl}/audio-pitch-changer`,
-      lastModified: '2025-12-01',
+      lastModified: '2025-12-02',
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/audio-speed-changer`,
-      lastModified: '2025-11-25',
+      lastModified: '2025-12-02',
       changeFrequency: 'weekly',
       priority: 0.9,
     },
-    {
-      url: `${baseUrl}/mp3-pitch-changer`,
-      lastModified: '2025-11-25',
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/slow-down-audio`,
-      lastModified: '2025-11-25',
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/speed-up-audio`,
-      lastModified: '2025-11-25',
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    // Resource Pages (Medium Priority)
+    // Guide Pages (Medium Priority)
     {
       url: `${baseUrl}/change-pitch-online`,
-      lastModified: '2025-12-01',
+      lastModified: '2025-12-02',
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/how-to-change-the-key-of-a-song`,
-      lastModified: '2025-11-25',
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/how-to-slow-down-audio`,
-      lastModified: '2025-11-25',
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/how-to-speed-up-audio`,
-      lastModified: '2025-11-25',
+      lastModified: '2025-12-02',
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/change-pitch-vs-change-speed`,
-      lastModified: '2025-11-25',
+      lastModified: '2025-12-02',
       changeFrequency: 'monthly',
       priority: 0.8,
     },
