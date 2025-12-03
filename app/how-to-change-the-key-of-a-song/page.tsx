@@ -92,33 +92,6 @@ export default function HowToChangeKeyPage() {
             </p>
           </header>
 
-          {/* Who uses this? Use case cards */}
-          <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-white text-center">✨ Who Changes Keys?</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
-                <span className="text-4xl">🎤</span>
-                <p className="font-semibold text-white mt-2">Singers</p>
-                <p className="text-xs text-gray-400 mt-1">Match your vocal range</p>
-              </div>
-              <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
-                <span className="text-4xl">🎧</span>
-                <p className="font-semibold text-white mt-2">DJs</p>
-                <p className="text-xs text-gray-400 mt-1">Mix tracks in harmony</p>
-              </div>
-              <div className="bg-gradient-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
-                <span className="text-4xl">🎸</span>
-                <p className="font-semibold text-white mt-2">Guitarists</p>
-                <p className="text-xs text-gray-400 mt-1">Match capo positions</p>
-              </div>
-              <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-4 text-center hover:scale-105 transition-transform">
-                <span className="text-4xl">📚</span>
-                <p className="font-semibold text-white mt-2">Teachers</p>
-                <p className="text-xs text-gray-400 mt-1">Adapt songs for students</p>
-              </div>
-            </div>
-          </section>
-
           {/* What is a Musical Key */}
           <section id="what-is-key" className="space-y-4">
             <h2 className="text-2xl font-semibold text-white">🎹 What's a Musical Key?</h2>
@@ -337,15 +310,12 @@ export default function HowToChangeKeyPage() {
                   <text x="150" y="158" textAnchor="middle" fill="#64748b" style={{ fontSize: '10px' }}>
                     from C
                   </text>
-
-                  {/* Arrows showing direction */}
-                  <text x="150" y="35" textAnchor="middle" fill="#4ade80" style={{ fontSize: '9px' }}>
-                    ↻ clockwise = +7
-                  </text>
-                  <text x="150" y="270" textAnchor="middle" fill="#fb923c" style={{ fontSize: '9px' }}>
-                    ↺ counter = -5
-                  </text>
                 </svg>
+              </div>
+              {/* Direction labels outside the circle */}
+              <div className="flex justify-center gap-6 text-sm">
+                <span className="text-green-400">↻ clockwise = +7</span>
+                <span className="text-orange-400">↺ counter = -5</span>
               </div>
               <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-3 text-center">
                 <p className="text-sm">
