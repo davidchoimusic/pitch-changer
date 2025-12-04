@@ -264,7 +264,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
 
       const pitchShift = new Tone.PitchShift({
         pitch: compensatedPitch,
-        windowSize: 0.1, // Low latency for responsive preview
+        windowSize: 0.05, // Smaller grains to reduce harmonic artifacts
       }).toDestination()
 
       player.connect(pitchShift)

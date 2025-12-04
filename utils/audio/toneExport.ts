@@ -44,7 +44,7 @@ export async function exportWithTone(
     // Create pitch shift effect (match preview config exactly)
     pitchShift = new Tone.PitchShift({
       pitch: compensatedPitch,
-      windowSize: 0.1, // Match preview exactly - proven to work without delay artifacts
+      windowSize: 0.05, // Smaller grains to reduce harmonic artifacts
     }).toDestination()
 
     // Connect chain
