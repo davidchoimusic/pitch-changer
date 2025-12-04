@@ -258,8 +258,12 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
       player.loop = false
       playerRef.current = player
 
+      // Compensate for pitch shift caused by playbackRate
+      const speedPitchOffset = 12 * Math.log2(speedValue)
+      const compensatedPitch = pitchValue - speedPitchOffset
+
       const pitchShift = new Tone.PitchShift({
-        pitch: pitchValue,
+        pitch: compensatedPitch,
         windowSize: 0.25,
       }).toDestination()
 
@@ -272,9 +276,12 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     } else {
       if (!playerRef.current) return
 
-      // Apply current settings
+      // Apply current settings with pitch compensation
       if (pitchShiftRef.current) {
-        pitchShiftRef.current.pitch = pitchValue
+        // Compensate for pitch shift caused by playbackRate
+        const speedPitchOffset = 12 * Math.log2(speedValue)
+        const compensatedPitch = pitchValue - speedPitchOffset
+        pitchShiftRef.current.pitch = compensatedPitch
       }
       playerRef.current.playbackRate = speedValue
 
@@ -339,7 +346,10 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
     setPitchValue(newPitch)
 
     if (pitchShiftRef.current) {
-      pitchShiftRef.current.pitch = newPitch
+      // Compensate for pitch shift caused by current playbackRate
+      const speedPitchOffset = 12 * Math.log2(speedValue)
+      const compensatedPitch = newPitch - speedPitchOffset
+      pitchShiftRef.current.pitch = compensatedPitch
     }
 
     if (typeof window !== 'undefined' && window.gtag) {
@@ -356,6 +366,13 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
 
     if (playerRef.current) {
       playerRef.current.playbackRate = newSpeed
+
+      // Update pitch compensation for new speed
+      if (pitchShiftRef.current) {
+        const speedPitchOffset = 12 * Math.log2(newSpeed)
+        const compensatedPitch = pitchValue - speedPitchOffset
+        pitchShiftRef.current.pitch = compensatedPitch
+      }
 
       // If playing, restart to apply speed change smoothly
       if (isPlaying) {

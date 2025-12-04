@@ -36,9 +36,14 @@ export async function exportWithTone(
     player = new Tone.Player(audioBuffer)
     player.playbackRate = speed
 
+    // Compensate for pitch shift caused by playbackRate
+    // playbackRate changes both speed AND pitch, so we compensate in the opposite direction
+    const speedPitchOffset = 12 * Math.log2(speed)
+    const compensatedPitch = semitones - speedPitchOffset
+
     // Create pitch shift effect (match preview config exactly)
     pitchShift = new Tone.PitchShift({
-      pitch: semitones,
+      pitch: compensatedPitch,
       windowSize: 0.25,
     }).toDestination()
 
