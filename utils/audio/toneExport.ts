@@ -42,10 +42,11 @@ export async function exportWithTone(
     const compensatedPitch = semitones - speedPitchOffset
 
     // Create pitch shift effect
-    // Note: windowSize 0.25 for high quality export (preview uses 0.1 for low latency)
+    // Note: windowSize 0.15 for export quality balance (preview uses 0.1 for low latency)
+    // 0.25 caused delay artifacts in final file, 0.15 is sweet spot
     pitchShift = new Tone.PitchShift({
       pitch: compensatedPitch,
-      windowSize: 0.25, // Higher quality for final export (offline rendering = no latency concern)
+      windowSize: 0.15, // Balanced quality without delay artifacts
     }).toDestination()
 
     // Connect chain
