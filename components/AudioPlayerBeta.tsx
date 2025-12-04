@@ -260,7 +260,7 @@ export function AudioPlayerBeta({ file, onBack }: AudioPlayerBetaProps) {
 
       const pitchShift = new Tone.PitchShift({
         pitch: pitchValue,
-        windowSize: 0.1,
+        windowSize: 0.25,
       }).toDestination()
 
       player.connect(pitchShift)

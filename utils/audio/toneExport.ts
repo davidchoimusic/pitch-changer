@@ -39,7 +39,7 @@ export async function exportWithTone(
     // Create pitch shift effect (match preview config exactly)
     pitchShift = new Tone.PitchShift({
       pitch: semitones,
-      windowSize: 0.1,
+      windowSize: 0.25,
     }).toDestination()
 
     // Connect chain
