@@ -19,6 +19,7 @@ export class SoundTouchPlayer {
   private audioBuffer: AudioBuffer
   private _isPlaying: boolean = false
   private _currentTime: number = 0
+  private _seekOffset: number = 0 // Track seek offset for correct time reporting
   private playEventBound: boolean = false
 
   constructor(private options: SoundTouchPlayerOptions) {
@@ -52,11 +53,15 @@ export class SoundTouchPlayer {
     if (!this.shifter || this.playEventBound) return
 
     // Time tracking via play event
+    // Add seek offset to get absolute time in original buffer
     this.shifter.on('play', (detail) => {
-      this._currentTime = detail.timePlayed
+      this._currentTime = this._seekOffset + detail.timePlayed
 
       if (this.options.onTimeUpdate) {
-        this.options.onTimeUpdate(detail.timePlayed, detail.percentagePlayed)
+        // Calculate percentage based on original buffer duration
+        const totalDuration = this.audioBuffer.duration
+        const percentPlayed = (this._currentTime / totalDuration) * 100
+        this.options.onTimeUpdate(this._currentTime, percentPlayed)
       }
     })
 
@@ -119,6 +124,66 @@ export class SoundTouchPlayer {
   }
 
   /**
+   * Seek to a specific time
+   * Note: SoundTouch doesn't support native seeking, so we recreate the player
+   */
+  async seek(targetTime: number) {
+    const wasPlaying = this._isPlaying
+
+    // Stop current playback
+    if (this.shifter) {
+      this.shifter.off()
+      this.shifter.disconnect()
+    }
+
+    // Create a new buffer starting at the target time
+    const startSample = Math.floor(targetTime * this.audioBuffer.sampleRate)
+    const remainingSamples = this.audioBuffer.length - startSample
+
+    if (remainingSamples <= 0) {
+      this._currentTime = 0
+      this._isPlaying = false
+      return
+    }
+
+    // Create a new AudioBuffer with the remaining audio
+    const seekBuffer = this.audioContext.createBuffer(
+      this.audioBuffer.numberOfChannels,
+      remainingSamples,
+      this.audioBuffer.sampleRate
+    )
+
+    // Copy audio data from the seek position
+    for (let channel = 0; channel < this.audioBuffer.numberOfChannels; channel++) {
+      const sourceData = this.audioBuffer.getChannelData(channel)
+      const destData = seekBuffer.getChannelData(channel)
+      for (let i = 0; i < remainingSamples; i++) {
+        destData[i] = sourceData[startSample + i]
+      }
+    }
+
+    // Recreate PitchShifter with the new buffer
+    const bufferSize = 1024
+    this.shifter = new PitchShifter(this.audioContext, seekBuffer, bufferSize)
+    this.shifter.tempo = this.options.tempo
+    this.shifter.pitch = Math.pow(2, this.options.semitones / 12)
+
+    // Set up event listeners again
+    this.playEventBound = false
+    this.setupEventListeners()
+
+    // Update current time and seek offset
+    this._currentTime = targetTime
+    this._seekOffset = targetTime
+
+    // Resume playback if it was playing
+    if (wasPlaying) {
+      this.shifter.connect(this.audioContext.destination)
+      this._isPlaying = true
+    }
+  }
+
+  /**
    * Update tempo (speed) in real-time
    */
   updateTempo(tempo: number) {
@@ -168,6 +233,7 @@ export class SoundTouchPlayer {
     }
     this._isPlaying = false
     this._currentTime = 0
+    this._seekOffset = 0
     this.playEventBound = false
   }
 }

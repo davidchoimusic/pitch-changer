@@ -142,8 +142,8 @@ export function AudioPlayerSoundTouch({ file, onBack }: AudioPlayerSoundTouchPro
   }
 
   // Click on waveform to seek
-  const handleWaveformClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!waveformCanvasRef.current || !audioBufferRef.current) return
+  const handleWaveformClick = async (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!waveformCanvasRef.current || !audioBufferRef.current || !soundTouchPlayerRef.current) return
 
     const canvas = waveformCanvasRef.current
     const rect = canvas.getBoundingClientRect()
@@ -151,11 +151,15 @@ export function AudioPlayerSoundTouch({ file, onBack }: AudioPlayerSoundTouchPro
     const percentageClicked = clickX / rect.width
     const newTime = percentageClicked * duration
 
+    // Update time immediately for visual feedback
     setCurrentTime(newTime)
 
-    // TODO: Implement seeking for SoundTouch
-    // Note: SoundTouch seeking may require stopping and restarting
-    // For now, just update the time display
+    // Seek using SoundTouch player
+    try {
+      await soundTouchPlayerRef.current.seek(newTime)
+    } catch (error) {
+      console.error('Seek error:', error)
+    }
   }
 
   // Update refs for spacebar handler

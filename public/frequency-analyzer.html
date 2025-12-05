@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequency Analyzer</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #1a1a1a;
+      color: #fff;
+    }
+    h1 {
+      color: #3b82f6;
+    }
+    .drop-zone {
+      border: 3px dashed #3b82f6;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      margin: 20px 0;
+      background: #2a2a2a;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .drop-zone:hover {
+      background: #333;
+      border-color: #60a5fa;
+    }
+    .drop-zone.drag-over {
+      background: #1e3a5f;
+      border-color: #60a5fa;
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    .result {
+      margin: 20px 0;
+      padding: 20px;
+      background: #2a2a2a;
+      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+    }
+    .result h3 {
+      margin-top: 0;
+      color: #60a5fa;
+    }
+    .frequency-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .frequency-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: #1a1a1a;
+      border-radius: 6px;
+    }
+    .frequency-bar {
+      flex: 1;
+      height: 20px;
+      background: linear-gradient(to right, #3b82f6, #10b981);
+      border-radius: 4px;
+      margin: 0 10px;
+      position: relative;
+    }
+    .frequency-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, #60a5fa, #34d399);
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+    canvas {
+      width: 100%;
+      height: 200px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      background: #2a2a2a;
+    }
+    .note-name {
+      display: inline-block;
+      padding: 4px 8px;
+      background: #3b82f6;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    input[type="number"] {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background: #2a2a2a;
+      color: white;
+      font-size: 14px;
+      width: 100px;
+    }
+    .control-group {
+      margin: 20px 0;
+      padding: 15px;
+      background: #2a2a2a;
+      border-radius: 8px;
+    }
+    label {
+      display: inline-block;
+      margin-right: 10px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔬 Frequency Analyzer</h1>
+  <p>Upload processed audio files to see which frequencies are present.</p>
+
+  <div class="control-group">
+    <label>Expected Frequency (Hz):</label>
+    <input type="number" id="expectedFreq" value="440" min="20" max="20000" step="0.01">
+    <small style="color: #888; margin-left: 10px;">The frequency of your original test tone</small>
+  </div>
+
+  <div class="drop-zone" id="dropZone">
+    <h2>📁 Drop WAV files here or click to browse</h2>
+    <p>You can upload multiple files at once</p>
+    <input type="file" id="fileInput" accept="audio/wav,audio/wave" multiple style="display: none;">
+  </div>
+
+  <button onclick="clearResults()" style="background: #ef4444;">Clear Results</button>
+  <button onclick="exportResults()" style="background: #10b981;">Export Analysis (JSON)</button>
+
+  <div id="results"></div>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const resultsDiv = document.getElementById('results');
+    let allResults = [];
+
+    // Click to browse
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    // Drag and drop handlers
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('drag-over');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    async function handleFiles(files) {
+      for (const file of files) {
+        if (file.type === 'audio/wav' || file.type === 'audio/wave' || file.name.endsWith('.wav')) {
+          await analyzeFile(file);
+        }
+      }
+    }
+
+    async function analyzeFile(file) {
+      const statusDiv = document.createElement('div');
+      statusDiv.className = 'status';
+      statusDiv.textContent = `Analyzing ${file.name}...`;
+      resultsDiv.insertBefore(statusDiv, resultsDiv.firstChild);
+
+      try {
+        // Read file
+        const arrayBuffer = await file.arrayBuffer();
+
+        // Decode audio
+        const audioContext = new AudioContext();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+        // Perform FFT analysis
+        const frequencies = performFFT(audioBuffer);
+
+        // Get expected frequency
+        const expectedFreq = parseFloat(document.getElementById('expectedFreq').value);
+
+        // Display results
+        displayResults(file.name, frequencies, audioBuffer, expectedFreq);
+
+        // Store results
+        allResults.push({
+          filename: file.name,
+          expectedFreq,
+          frequencies,
+          duration: audioBuffer.duration,
+          sampleRate: audioBuffer.sampleRate
+        });
+
+        statusDiv.remove();
+      } catch (error) {
+        statusDiv.textContent = `❌ Error analyzing ${file.name}: ${error.message}`;
+        statusDiv.style.background = '#7f1d1d';
+      }
+    }
+
+    function performFFT(audioBuffer) {
+      // Get first channel
+      const channelData = audioBuffer.getChannelData(0);
+
+      // Use middle section for analysis (avoid start/end artifacts)
+      const startSample = Math.floor(audioBuffer.sampleRate * 2); // Skip first 2 seconds
+      const fftSize = 32768; // MUCH higher resolution for precision
+      const samples = channelData.slice(startSample, startSample + fftSize);
+
+      // Apply Hann window to reduce spectral leakage
+      const windowed = new Float32Array(fftSize);
+      for (let i = 0; i < fftSize; i++) {
+        const windowValue = 0.5 * (1 - Math.cos(2 * Math.PI * i / fftSize));
+        windowed[i] = (samples[i] || 0) * windowValue;
+      }
+
+      // Perform FFT using Web Audio API
+      const offlineContext = new OfflineAudioContext(1, fftSize, audioBuffer.sampleRate);
+      const analyser = offlineContext.createAnalyser();
+      analyser.fftSize = fftSize;
+      analyser.smoothingTimeConstant = 0;
+
+      // Create buffer source
+      const source = offlineContext.createBufferSource();
+      const buffer = offlineContext.createBuffer(1, fftSize, audioBuffer.sampleRate);
+      buffer.copyToChannel(windowed, 0);
+      source.buffer = buffer;
+      source.connect(analyser);
+      analyser.connect(offlineContext.destination);
+      source.start(0);
+
+      // Get frequency data
+      const frequencyData = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(frequencyData);
+
+      // Find peaks
+      const peaks = findPeaks(frequencyData, audioBuffer.sampleRate, analyser.frequencyBinCount);
+
+      return peaks;
+    }
+
+    function findPeaks(frequencyData, sampleRate, binCount) {
+      const peaks = [];
+      const minAmplitude = 1; // EXTREMELY low threshold - catch everything
+      const binWidth = sampleRate / 2 / binCount;
+
+      // Find local maxima with more sensitive detection
+      for (let i = 5; i < frequencyData.length - 5; i++) {
+        const amplitude = frequencyData[i];
+
+        if (amplitude < minAmplitude) continue;
+
+        // Check if local maximum (smaller window for more peaks)
+        let isPeak = true;
+        for (let j = -2; j <= 2; j++) {
+          if (j !== 0 && frequencyData[i + j] > amplitude) {
+            isPeak = false;
+            break;
+          }
+        }
+
+        if (isPeak) {
+          const frequency = i * binWidth;
+          // Only include frequencies above 20 Hz (sub-audio) and below 10000 Hz
+          if (frequency >= 20 && frequency <= 10000) {
+            peaks.push({ frequency, amplitude });
+          }
+        }
+      }
+
+      // Sort by amplitude (loudest first)
+      peaks.sort((a, b) => b.amplitude - a.amplitude);
+
+      // Return top 50 peaks - show EVERYTHING significant
+      return peaks.slice(0, 50);
+    }
+
+    function frequencyToNote(freq) {
+      const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+      const a4 = 440;
+      const c0 = a4 * Math.pow(2, -4.75);
+
+      if (freq < 20) return 'Sub-audio';
+
+      const halfSteps = 12 * Math.log2(freq / c0);
+      const octave = Math.floor(halfSteps / 12);
+      const note = Math.round(halfSteps) % 12;
+
+      return `${noteNames[note]}${octave}`;
+    }
+
+    function drawSpectrum(frequencies, expectedFreq) {
+      if (frequencies.length === 0) return '';
+
+      const width = 1000;
+      const height = 150;
+      const maxFreq = Math.max(...frequencies.map(f => f.frequency));
+      const maxAmp = Math.max(...frequencies.map(f => f.amplitude));
+
+      let svg = `<svg width="${width}" height="${height}" style="background: #1a1a1a; border-radius: 8px; margin: 15px 0;">`;
+
+      // Draw frequency bars
+      frequencies.forEach(peak => {
+        const x = (peak.frequency / maxFreq) * width;
+        const barHeight = (peak.amplitude / maxAmp) * (height - 20);
+        const isExpected = Math.abs(peak.frequency - expectedFreq) < 1;
+        const color = isExpected ? '#10b981' : '#ef4444';
+
+        svg += `<line x1="${x}" y1="${height}" x2="${x}" y2="${height - barHeight}" stroke="${color}" stroke-width="2" opacity="0.8"/>`;
+      });
+
+      // Mark expected frequency
+      const expectedX = (expectedFreq / maxFreq) * width;
+      svg += `<line x1="${expectedX}" y1="0" x2="${expectedX}" y2="${height}" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>`;
+      svg += `<text x="${expectedX + 5}" y="15" fill="#3b82f6" font-size="12">Expected: ${expectedFreq}Hz</text>`;
+
+      svg += '</svg>';
+      return svg;
+    }
+
+    function displayResults(filename, frequencies, audioBuffer, expectedFreq) {
+      const resultDiv = document.createElement('div');
+      resultDiv.className = 'result';
+
+      let html = `<h3>📊 ${filename}</h3>`;
+      html += `<p><strong>Duration:</strong> ${audioBuffer.duration.toFixed(2)}s | <strong>Sample Rate:</strong> ${audioBuffer.sampleRate} Hz | <strong>Expected:</strong> ${expectedFreq} Hz</p>`;
+
+      // Draw spectrum visualization
+      html += drawSpectrum(frequencies, expectedFreq);
+
+      if (frequencies.length === 0) {
+        html += `<p style="color: #ef4444;">⚠️ No significant frequencies detected</p>`;
+      } else {
+        html += `<div class="frequency-list">`;
+
+        frequencies.forEach((peak, index) => {
+          const freqDiff = Math.abs(peak.frequency - expectedFreq);
+          const isExpected = freqDiff < 1; // Very tight tolerance
+          const color = isExpected ? '#10b981' : '#ef4444';
+          const label = isExpected ? '✓ Expected' : '⚠️ Artifact';
+          const note = frequencyToNote(peak.frequency);
+          const percent = (peak.amplitude / 255 * 100).toFixed(1);
+          const harmonic = (peak.frequency / expectedFreq).toFixed(3);
+          const cents = 1200 * Math.log2(peak.frequency / expectedFreq);
+          const centsFormatted = cents.toFixed(1);
+
+          html += `
+            <div class="frequency-item">
+              <span style="min-width: 100px;"><strong>${peak.frequency.toFixed(2)} Hz</strong></span>
+              <span class="note-name" style="background: ${color};">${note}</span>
+              <span style="min-width: 80px; font-size: 11px; color: #888;">${harmonic}x</span>
+              <span style="min-width: 80px; font-size: 11px; color: #888;">${centsFormatted}¢</span>
+              <div class="frequency-bar">
+                <div class="frequency-bar-fill" style="width: ${percent}%; background: ${color};"></div>
+              </div>
+              <span style="min-width: 60px;">${percent}%</span>
+              <span style="min-width: 100px; color: ${color}; font-size: 12px;">${label}</span>
+            </div>
+          `;
+        });
+
+        html += `</div>`;
+
+        // Summary
+        const artifacts = frequencies.filter(f => Math.abs(f.frequency - expectedFreq) >= 5);
+        if (artifacts.length > 0) {
+          html += `<p style="margin-top: 15px; padding: 10px; background: #7f1d1d; border-radius: 6px;">`;
+          html += `<strong>🔴 ${artifacts.length} artifact frequencies detected:</strong><br>`;
+          artifacts.forEach(a => {
+            const harmonic = (a.frequency / expectedFreq).toFixed(2);
+            html += `${a.frequency.toFixed(2)} Hz (${harmonic}x the fundamental)<br>`;
+          });
+          html += `</p>`;
+        } else {
+          html += `<p style="margin-top: 15px; padding: 10px; background: #065f46; border-radius: 6px;">`;
+          html += `<strong>✅ Clean! Only the expected frequency detected.</strong>`;
+          html += `</p>`;
+        }
+      }
+
+      resultDiv.innerHTML = html;
+      resultsDiv.insertBefore(resultDiv, resultsDiv.firstChild);
+    }
+
+    function clearResults() {
+      resultsDiv.innerHTML = '';
+      allResults = [];
+    }
+
+    function exportResults() {
+      if (allResults.length === 0) {
+        alert('No results to export yet!');
+        return;
+      }
+
+      const json = JSON.stringify(allResults, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `frequency-analysis-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
