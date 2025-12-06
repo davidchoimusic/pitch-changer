@@ -319,9 +319,9 @@ export function AudioPlayerSoundTouch({ file, onBack }: AudioPlayerSoundTouchPro
       return
     }
 
-    // Check browser support for SoundTouch export
+    // Warn if not on recommended browser (but still try)
     if (!isSoundTouchExportSupported()) {
-      setProcessError('Offline export works best on Chrome or Edge. Preview playback works on all browsers.')
+      console.warn('Export works best on Chrome/Edge. Attempting on this browser anyway...')
     }
 
     stopPlayback()

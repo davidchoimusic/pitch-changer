@@ -11,53 +11,23 @@ export async function exportWithSoundTouch(
   onProgress?: (progress: number) => void
 ): Promise<AudioBuffer> {
   try {
-    // Create a temporary AudioContext for the PitchShifter
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-
-    // Calculate expected output duration
-    const expectedDuration = audioBuffer.duration / speed
-    const expectedSamples = Math.ceil(expectedDuration * audioBuffer.sampleRate)
-
-    // Use larger buffer size for offline processing (reduces overhead)
-    const bufferSize = 4096
-
-    // Create PitchShifter
-    // NOTE: We'll use this differently - not for real-time, but to process offline
-    const shifter = new PitchShifter(audioContext, audioBuffer, bufferSize)
-
-    // Set tempo and pitch (NO compensation needed!)
-    shifter.tempo = speed
-    shifter.pitch = Math.pow(2, semitones / 12)
-
-    // For offline processing, we need to manually drive the PitchShifter
-    // by connecting it and capturing output
-    // This is a workaround since SoundTouch doesn't have a built-in offline mode
-
-    // Create a destination to capture output
-    const destination = audioContext.createMediaStreamDestination()
-    shifter.connect(destination)
-
-    // Use MediaRecorder to capture the output
-    // NOTE: This approach works but might produce WebM instead of WAV
-    // We'll need to test and potentially use a different approach
-
-    // Alternative approach: Use OfflineAudioContext despite Safari issues
-    // We'll implement both and choose based on browser
-
-    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edge/.test(navigator.userAgent)
-    const isEdge = /Edge/.test(navigator.userAgent)
-
-    if (isChrome || isEdge) {
-      // Use OfflineAudioContext approach (works on Chrome/Edge)
-      return await exportWithOfflineContext(audioBuffer, semitones, speed, onProgress)
-    } else {
-      // For Safari/Firefox: Show error for now
-      // TODO: Implement pure sample processing approach
-      throw new Error('Offline export on this browser requires Chrome or Edge. Preview playback works on all browsers.')
-    }
-
+    // Try OfflineAudioContext approach on all browsers
+    // It should work on most modern browsers despite some known quirks
+    return await exportWithOfflineContext(audioBuffer, semitones, speed, onProgress)
   } catch (error) {
     console.error('SoundTouch export error:', error)
+
+    // Provide helpful error message
+    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)
+    const isFirefox = /Firefox/.test(navigator.userAgent)
+
+    if (isSafari || isFirefox) {
+      throw new Error(
+        'Export failed on this browser. Chrome or Edge recommended for best results. ' +
+        'Preview playback works on all browsers.'
+      )
+    }
+
     throw error
   }
 }
@@ -143,12 +113,13 @@ async function exportWithOfflineContext(
 }
 
 /**
- * Check if browser supports reliable SoundTouch offline export
+ * Check if browser is recommended for SoundTouch offline export
+ * Note: Export may still work on other browsers, but Chrome/Edge are most reliable
  */
 export function isSoundTouchExportSupported(): boolean {
   const ua = navigator.userAgent
-  const isChrome = /Chrome/.test(ua) && !/Edge/.test(ua)
-  const isEdge = /Edge/.test(ua)
+  const isChrome = /Chrome/.test(ua) && !/Safari/.test(ua)
+  const isEdge = /Edg/.test(ua) // Modern Edge uses "Edg" in UA
 
   return isChrome || isEdge
 }
