@@ -5,7 +5,7 @@ import Script from 'next/script'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FileUpload } from '@/components/FileUpload'
-import { AudioPlayerBeta } from '@/components/AudioPlayerBeta'
+import { AudioPlayerSoundTouch } from '@/components/AudioPlayerSoundTouch'
 import { Button } from '@/components/ui/Button'
 
 // Deterministic spectrum analyzer values (no Math.random for hydration)
@@ -363,7 +363,7 @@ export default function Home() {
             </div>
           </div>
 
-          <AudioPlayerBeta
+          <AudioPlayerSoundTouch
             file={selectedFile}
             onBack={() => setSelectedFile(null)}
           />
